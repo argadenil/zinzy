@@ -23,7 +23,12 @@ class HorizontalLearningCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(40),
-        border: Border.all(color: borderColor, width: 4),
+        border: Border(
+          top: BorderSide(color: borderColor, width: 8),
+          left: BorderSide(color: borderColor, width: 8),
+          right: BorderSide(color: borderColor, width: 8),
+          bottom: BorderSide.none,
+        ),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),

@@ -25,8 +25,8 @@ class HomeScreen extends StatelessWidget {
                 HorizontalLearningCard(
                   title: 'Top Learning',
                   icon: Icons.man_2_sharp,
-                  backgroundColor: Colors.red,
-                  borderColor: Colors.redAccent,
+                  backgroundColor: Color.fromARGB(255, 242, 99, 28),
+                  borderColor: Color(0xffA52A2A),
                 ),
                 const SizedBox(height: 16),
                 Expanded(
@@ -56,12 +56,12 @@ class HomeScreen extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 80,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFFFFD539),
+                              color: Color(0xFFfcbe10),
                             ),
                           ),
                         ),
                         label: 'Numbers',
-                        backgroundColor: const Color(0xfff85c3d),
+                        backgroundColor: const Color(0xffff4200),
                         borderColor: const Color(0xffed5030),
                       ),
                       buildUniformCard(
