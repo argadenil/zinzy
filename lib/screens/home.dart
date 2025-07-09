@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:zinzy/widgets/horizontalCard.dart';
-import '../widgets/learningCard.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -29,180 +28,70 @@ class HomeScreen extends StatelessWidget {
                   backgroundColor: Colors.red,
                   borderColor: Colors.redAccent,
                 ),
-                const SizedBox(height: 16), // Spacing between card and grid
-                // GridView section
+                const SizedBox(height: 16),
                 Expanded(
                   child: GridView.count(
                     crossAxisCount: 2,
                     crossAxisSpacing: 5,
                     mainAxisSpacing: 5,
                     children: [
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(42),
-                        ),
-                        color: Color(0xff10bca6),
-                        elevation: 6,
-                        child: Container(
-                          margin: const EdgeInsets.all(0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
-                            border: Border.all(
-                              color: Color(0xff03a49a), // Inner border color
-                              width: 7,
-                            ),
-                          ),
-                          child: Center(
-                            child: Column(
-                              children: [
-                                Center(
-                                  child: SizedBox(
-                                    child: Text(
-                                      '🐶',
-                                      style: TextStyle(fontSize: 95),
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  'Animals',
-                                  style: const TextStyle(
-                                    fontSize: 40,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
+                      buildUniformCard(
+                        content: Transform.scale(
+                          scale: 2,
+                          child: Image.asset(
+                            'assets/images/cat.png',
+                            width: 100,
+                            height: 100,
                           ),
                         ),
+                        label: 'Animals',
+                        backgroundColor: const Color(0xff20b2aa),
+                        borderColor: const Color(0xff03a49a),
                       ),
-
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(42),
-                        ),
-                        color: Color(0xfff85c3d),
-                        elevation: 6,
-                        child: Container(
-                          margin: const EdgeInsets.all(0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
-                            border: Border.all(
-                              color: Color(0xffed5030), // Inner border color
-                              width: 7,
-                            ),
-                          ),
-                          child: Center(
-                            child: Column(
-                              children: [
-                                Center(
-                                  child: SizedBox(
-                                    child: Text(
-                                      '3',
-                                      style: TextStyle(
-                                        fontSize: 95,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFFFFD539),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  'Animals',
-                                  style: const TextStyle(
-                                    fontSize: 40,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
+                      buildUniformCard(
+                        content: Transform.scale(
+                          scale: 2,
+                          child: const Text(
+                            '3',
+                            style: TextStyle(
+                              fontSize: 80,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFFFFD539),
                             ),
                           ),
                         ),
+                        label: 'Numbers',
+                        backgroundColor: const Color(0xfff85c3d),
+                        borderColor: const Color(0xffed5030),
                       ),
-
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(42),
-                        ),
-                        color: Color(0xfffebf15),
-                        elevation: 6,
-                        child: Container(
-                          margin: const EdgeInsets.all(0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
-                            border: Border.all(
-                              color: Color(0xfffda90e), // Inner border color
-                              width: 7,
-                            ),
-                          ),
-                          child: Center(
-                            child: Column(
-                              children: [
-                                Center(
-                                  child: SizedBox(
-                                    child: Text(
-                                      'A',
-                                      style: TextStyle(
-                                        fontSize: 95,
-
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF1883d9),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  'Animals',
-                                  style: const TextStyle(
-                                    fontSize: 40,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
+                      buildUniformCard(
+                        content: Transform.scale(
+                          scale: 2,
+                          child: const Text(
+                            'A',
+                            style: TextStyle(
+                              fontSize: 80,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF1883d9),
                             ),
                           ),
                         ),
+                        label: 'Alphabet',
+                        backgroundColor: const Color(0xfffebf15),
+                        borderColor: const Color(0xfffda90e),
                       ),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(42),
-                        ),
-                        color: Color(0xff3ebc4e),
-                        elevation: 6,
-                        child: Container(
-                          margin: const EdgeInsets.all(0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
-                            border: Border.all(
-                              color: Color(0xff42a839), // Inner border color
-                              width: 7,
-                            ),
-                          ),
-                          child: Center(
-                            child: Column(
-                              children: [
-                                Center(
-                                  child: SizedBox(
-                                    child: Text(
-                                      '',
-                                      style: TextStyle(fontSize: 95),
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  'Animals',
-                                  style: const TextStyle(
-                                    fontSize: 40,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
+                      buildUniformCard(
+                        content: Container(
+                          width: 100,
+                          height: 100,
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
                           ),
                         ),
+                        label: 'Colors',
+                        backgroundColor: const Color(0xff3ebc4e),
+                        borderColor: const Color(0xff42a839),
                       ),
                     ],
                   ),
@@ -210,6 +99,41 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildUniformCard({
+    required Widget content,
+    required String label,
+    required Color backgroundColor,
+    required Color borderColor,
+  }) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(42)),
+      color: backgroundColor,
+      elevation: 6,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(40),
+          border: Border.all(color: borderColor, width: 7),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: FittedBox(fit: BoxFit.scaleDown, child: content),
+            ),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 40,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ],
         ),
       ),
     );
