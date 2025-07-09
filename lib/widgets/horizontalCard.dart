@@ -17,11 +17,12 @@ class HorizontalLearningCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 220, // Horizontal width
+      width: double.infinity, // Horizontal width
+      height: 150,
       margin: const EdgeInsets.symmetric(horizontal: 8),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(32),
+        borderRadius: BorderRadius.circular(40),
         border: Border.all(color: borderColor, width: 4),
       ),
       child: Padding(

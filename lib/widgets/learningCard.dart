@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class LearningCard extends StatelessWidget {
   final String title;
-  final IconData icon;
+  final Widget icon;
   final Color backgroundColor;
   final Color borderColor;
 
@@ -33,12 +33,12 @@ class LearningCard extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(icon, size: 48, color: Colors.white),
+              SizedBox(height: 100, width: 100, child: icon),
               const SizedBox(height: 10),
               Text(
                 title,
                 style: const TextStyle(
-                  fontSize: 20,
+                  fontSize: 40,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
