@@ -142,8 +142,13 @@ class HomeScreen extends StatelessWidget {
                                 Center(
                                   child: SizedBox(
                                     child: Text(
-                                      '🐶',
-                                      style: TextStyle(fontSize: 95),
+                                      'A',
+                                      style: TextStyle(
+                                        fontSize: 95,
+
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF1883d9),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -181,7 +186,7 @@ class HomeScreen extends StatelessWidget {
                                 Center(
                                   child: SizedBox(
                                     child: Text(
-                                      '🐶',
+                                      '',
                                       style: TextStyle(fontSize: 95),
                                     ),
                                   ),
