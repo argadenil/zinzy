@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
                   title: 'Top Learning',
                   icon: Icons.man_2_sharp,
                   backgroundColor: Color.fromARGB(255, 242, 99, 28),
-                  borderColor: Color(0xffA52A2A),
+                  borderColor: Color(0xffb54a18),
                 ),
                 const SizedBox(height: 16),
                 Expanded(
@@ -62,7 +62,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                         label: 'Numbers',
                         backgroundColor: const Color(0xffff4200),
-                        borderColor: const Color(0xffed5030),
+                        borderColor: const Color.fromARGB(255, 215, 51, 14),
                       ),
                       buildUniformCard(
                         content: Transform.scale(
