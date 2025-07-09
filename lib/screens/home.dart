@@ -36,58 +36,168 @@ class HomeScreen extends StatelessWidget {
                     crossAxisCount: 2,
                     crossAxisSpacing: 5,
                     mainAxisSpacing: 5,
-                    children: const [
-                      LearningCard(
-                        title: 'Animals',
-                        icon: Text(
-                          'A',
-                          style: TextStyle(
-                            fontSize: 80,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.redAccent,
+                    children: [
+                      Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(42),
+                        ),
+                        color: Color(0xff10bca6),
+                        elevation: 6,
+                        child: Container(
+                          margin: const EdgeInsets.all(0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40),
+                            border: Border.all(
+                              color: Color(0xff03a49a), // Inner border color
+                              width: 7,
+                            ),
+                          ),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Center(
+                                  child: SizedBox(
+                                    child: Text(
+                                      '🐶',
+                                      style: TextStyle(fontSize: 95),
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  'Animals',
+                                  style: const TextStyle(
+                                    fontSize: 40,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        backgroundColor: Color(0xff10bca6),
-                        borderColor: Color(0xff03a49a),
                       ),
-                      LearningCard(
-                        title: 'Numbers',
-                        icon: Text(
-                          '3',
-                          style: TextStyle(
-                            fontSize: 80,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+
+                      Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(42),
+                        ),
+                        color: Color(0xfff85c3d),
+                        elevation: 6,
+                        child: Container(
+                          margin: const EdgeInsets.all(0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40),
+                            border: Border.all(
+                              color: Color(0xffed5030), // Inner border color
+                              width: 7,
+                            ),
+                          ),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Center(
+                                  child: SizedBox(
+                                    child: Text(
+                                      '3',
+                                      style: TextStyle(
+                                        fontSize: 95,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFFFFD539),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  'Animals',
+                                  style: const TextStyle(
+                                    fontSize: 40,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        backgroundColor: Color(0xfff85c3d),
-                        borderColor: Color(0xffed5030),
                       ),
-                      LearningCard(
-                        title: 'Alphabet',
-                        icon: Text(
-                          'A',
-                          style: TextStyle(
-                            fontSize: 80,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+
+                      Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(42),
+                        ),
+                        color: Color(0xfffebf15),
+                        elevation: 6,
+                        child: Container(
+                          margin: const EdgeInsets.all(0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40),
+                            border: Border.all(
+                              color: Color(0xfffda90e), // Inner border color
+                              width: 7,
+                            ),
+                          ),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Center(
+                                  child: SizedBox(
+                                    child: Text(
+                                      '🐶',
+                                      style: TextStyle(fontSize: 95),
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  'Animals',
+                                  style: const TextStyle(
+                                    fontSize: 40,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        backgroundColor: Color(0xfffebf15),
-                        borderColor: Color(0xfffda90e),
                       ),
-                      LearningCard(
-                        title: 'Colors',
-                        icon: Text(
-                          'A',
-                          style: TextStyle(
-                            fontSize: 80,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                      Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(42),
+                        ),
+                        color: Color(0xff3ebc4e),
+                        elevation: 6,
+                        child: Container(
+                          margin: const EdgeInsets.all(0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40),
+                            border: Border.all(
+                              color: Color(0xff42a839), // Inner border color
+                              width: 7,
+                            ),
+                          ),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Center(
+                                  child: SizedBox(
+                                    child: Text(
+                                      '🐶',
+                                      style: TextStyle(fontSize: 95),
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  'Animals',
+                                  style: const TextStyle(
+                                    fontSize: 40,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        backgroundColor: Color(0xff3ebc4e),
-                        borderColor: Color(0xff42a839),
                       ),
                     ],
                   ),
