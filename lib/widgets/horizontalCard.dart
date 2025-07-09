@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 
 class HorizontalLearningCard extends StatelessWidget {
   final String title;
-  final IconData icon;
   final Color backgroundColor;
   final Color borderColor;
 
   const HorizontalLearningCard({
     super.key,
     required this.title,
-    required this.icon,
     required this.backgroundColor,
     required this.borderColor,
   });
@@ -34,13 +32,12 @@ class HorizontalLearningCard extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Row(
           children: [
-            Icon(icon, size: 40, color: Colors.white),
             const SizedBox(width: 12),
             Expanded(
               child: Text(
                 title,
                 style: const TextStyle(
-                  fontSize: 20,
+                  fontSize: 35,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
