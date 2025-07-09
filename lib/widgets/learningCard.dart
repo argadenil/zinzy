@@ -33,7 +33,7 @@ class LearningCard extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(height: 100, width: 100, child: icon),
+              Center(child: SizedBox(child: icon)),
               const SizedBox(height: 10),
               Text(
                 title,

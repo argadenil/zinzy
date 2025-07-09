@@ -20,12 +20,12 @@ class HomeScreen extends StatelessWidget {
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(5),
             child: Column(
               children: [
                 HorizontalLearningCard(
-                  title: 'sdfvs',
-                  icon: Icons.ac_unit_outlined,
+                  title: 'Top Learning',
+                  icon: Icons.man_2_sharp,
                   backgroundColor: Colors.red,
                   borderColor: Colors.redAccent,
                 ),
@@ -34,17 +34,17 @@ class HomeScreen extends StatelessWidget {
                 Expanded(
                   child: GridView.count(
                     crossAxisCount: 2,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
+                    crossAxisSpacing: 5,
+                    mainAxisSpacing: 5,
                     children: const [
                       LearningCard(
                         title: 'Animals',
                         icon: Text(
                           'A',
                           style: TextStyle(
-                            fontSize: 48,
+                            fontSize: 80,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: Colors.redAccent,
                           ),
                         ),
                         backgroundColor: Color(0xff10bca6),
@@ -55,7 +55,7 @@ class HomeScreen extends StatelessWidget {
                         icon: Text(
                           '3',
                           style: TextStyle(
-                            fontSize: 48,
+                            fontSize: 80,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
@@ -68,7 +68,7 @@ class HomeScreen extends StatelessWidget {
                         icon: Text(
                           'A',
                           style: TextStyle(
-                            fontSize: 48,
+                            fontSize: 80,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
@@ -81,7 +81,7 @@ class HomeScreen extends StatelessWidget {
                         icon: Text(
                           'A',
                           style: TextStyle(
-                            fontSize: 48,
+                            fontSize: 80,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
