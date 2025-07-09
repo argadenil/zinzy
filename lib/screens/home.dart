@@ -38,89 +38,102 @@ class HomeScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
 
-                  // GridView (wrapped in Expanded)
+                  // GridView + character
                   Expanded(
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        Positioned(
-                          top:
-                              -200, // Adjust this to fine-tune vertical position
-                          left: MediaQuery.of(context).size.width / 2 - 50,
-                          child: Image.asset(
-                            'assets/images/cat_standing.png',
-                            width: 350,
-                            height: 350,
-                          ),
-                        ),
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        final cardSize = constraints.maxWidth * 0.4;
+                        final charWidth = constraints.maxWidth * 0.5;
+                        final charTopOffset = -charWidth * 0.9;
 
-                        // 👇 GridView above character
-                        GridView.count(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 5,
-                          mainAxisSpacing: 5,
+                        return Stack(
+                          clipBehavior: Clip.none,
                           children: [
-                            buildUniformCard(
-                              content: Transform.scale(
-                                scale: 2,
-                                child: Image.asset(
-                                  'assets/images/cat.png',
-                                  width: 100,
-                                  height: 100,
-                                ),
+                            // Character behind grid
+                            Positioned(
+                              top: charTopOffset,
+                              left:
+                                  constraints.maxWidth / 2 - charWidth / 2 + 50,
+                              child: Image.asset(
+                                'assets/images/cat_standing.png',
+                                width: charWidth * 1.5,
+                                height: charWidth * 1.5,
                               ),
-                              label: 'Animals',
-                              backgroundColor: const Color(0xff20b2aa),
-                              borderColor: const Color(0xff008080),
                             ),
-                            buildUniformCard(
-                              content: Transform.scale(
-                                scale: 2,
-                                child: const Text(
-                                  '3',
-                                  style: TextStyle(
-                                    fontSize: 80,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFFfcbe10),
+
+                            // Grid
+                            GridView.count(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 5,
+                              mainAxisSpacing: 5,
+                              children: [
+                                buildUniformCard(
+                                  content: Transform.scale(
+                                    scale: 2,
+                                    child: Image.asset(
+                                      'assets/images/cat.png',
+                                      width: cardSize * 0.5,
+                                      height: cardSize * 0.5,
+                                    ),
                                   ),
+                                  label: 'Animals',
+                                  backgroundColor: const Color(0xff20b2aa),
+                                  borderColor: const Color(0xff008080),
+                                  fontSize: cardSize * 0.25,
                                 ),
-                              ),
-                              label: 'Numbers',
-                              backgroundColor: const Color(0xffff4200),
-                              borderColor: const Color(0xffed5030),
-                            ),
-                            buildUniformCard(
-                              content: Transform.scale(
-                                scale: 2,
-                                child: const Text(
-                                  'A',
-                                  style: TextStyle(
-                                    fontSize: 80,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF1883d9),
+                                buildUniformCard(
+                                  content: Transform.scale(
+                                    scale: 2,
+                                    child: Text(
+                                      '3',
+                                      style: TextStyle(
+                                        fontSize: cardSize * 0.4,
+                                        fontWeight: FontWeight.bold,
+                                        color: const Color(0xFFfcbe10),
+                                      ),
+                                    ),
                                   ),
+                                  label: 'Numbers',
+                                  backgroundColor: const Color(0xffff4200),
+                                  borderColor: const Color(0xffed5030),
+                                  fontSize: cardSize * 0.25,
                                 ),
-                              ),
-                              label: 'Alphabet',
-                              backgroundColor: const Color(0xfffebf15),
-                              borderColor: const Color(0xfffda90e),
-                            ),
-                            buildUniformCard(
-                              content: Container(
-                                width: 100,
-                                height: 100,
-                                decoration: const BoxDecoration(
-                                  color: Colors.red,
-                                  shape: BoxShape.circle,
+                                buildUniformCard(
+                                  content: Transform.scale(
+                                    scale: 2,
+                                    child: Text(
+                                      'A',
+                                      style: TextStyle(
+                                        fontSize: cardSize * 0.4,
+                                        fontWeight: FontWeight.bold,
+                                        color: const Color(0xFF1883d9),
+                                      ),
+                                    ),
+                                  ),
+                                  label: 'Alphabet',
+                                  backgroundColor: const Color(0xfffebf15),
+                                  borderColor: const Color(0xfffda90e),
+                                  fontSize: cardSize * 0.25,
                                 ),
-                              ),
-                              label: 'Colors',
-                              backgroundColor: const Color(0xff3ebc4e),
-                              borderColor: const Color(0xff42a839),
+                                buildUniformCard(
+                                  content: Container(
+                                    width: cardSize * 0.5,
+                                    height: cardSize * 0.5,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                  label: 'Colors',
+                                  backgroundColor: const Color(0xff3ebc4e),
+                                  borderColor: const Color(0xff42a839),
+                                  fontSize: cardSize * 0.25,
+                                ),
+                              ],
                             ),
                           ],
-                        ),
-                      ],
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -137,6 +150,7 @@ class HomeScreen extends StatelessWidget {
     required String label,
     required Color backgroundColor,
     required Color borderColor,
+    required double fontSize,
   }) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(42)),
@@ -155,8 +169,8 @@ class HomeScreen extends StatelessWidget {
             ),
             Text(
               label,
-              style: const TextStyle(
-                fontSize: 40,
+              style: TextStyle(
+                fontSize: fontSize,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
