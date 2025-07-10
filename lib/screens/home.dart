@@ -271,7 +271,7 @@ class _HomeScreenState extends State<HomeScreen> {
               style: TextStyle(
                 fontSize: fontSize,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Color(0xfffffcc9),
               ),
             ),
           ],
@@ -304,7 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
             style: TextStyle(
               fontSize: 36,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: Color(0xfffffcc9),
               height: 1.0, // Keeps vertical centering crisp
             ),
           ),
