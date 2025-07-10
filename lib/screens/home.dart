@@ -117,13 +117,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 buildUniformCard(
                                   content: Transform.scale(
                                     scale: 2,
-                                    child: Text(
-                                      '3',
-                                      style: TextStyle(
-                                        fontSize: cardSize * 0.4,
-                                        fontWeight: FontWeight.bold,
-                                        color: const Color(0xFFfcbe10),
-                                      ),
+                                    child: Image.asset(
+                                      'assets/images/numbers1.png',
+                                      width: cardSize * 0.5,
+                                      height: cardSize * 0.5,
                                     ),
                                   ),
                                   label: 'Numbers',
@@ -134,13 +131,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 buildUniformCard(
                                   content: Transform.scale(
                                     scale: 2,
-                                    child: Text(
-                                      'A',
-                                      style: TextStyle(
-                                        fontSize: cardSize * 0.4,
-                                        fontWeight: FontWeight.bold,
-                                        color: const Color(0xFF1883d9),
-                                      ),
+                                    child: Image.asset(
+                                      'assets/images/alphabet.png',
+                                      width: cardSize * 0.5,
+                                      height: cardSize * 0.5,
                                     ),
                                   ),
                                   label: 'Alphabet',
