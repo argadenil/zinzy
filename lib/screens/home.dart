@@ -145,12 +145,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fontSize: cardSize * 0.25,
                                 ),
                                 buildUniformCard(
-                                  content: Container(
-                                    width: cardSize * 0.5,
-                                    height: cardSize * 0.5,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.red,
-                                      shape: BoxShape.circle,
+                                  content: Transform.scale(
+                                    scale: 2,
+                                    child: Image.asset(
+                                      'assets/images/colors.png',
+                                      width: cardSize * 0.5,
+                                      height: cardSize * 0.5,
                                     ),
                                   ),
                                   label: 'Colors',
