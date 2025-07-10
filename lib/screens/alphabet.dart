@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Alphabet extends StatefulWidget {
   const Alphabet({super.key});
@@ -119,7 +120,6 @@ class _AlphabetState extends State<Alphabet> {
                           fit: BoxFit.contain,
                         ),
                       ),
-                      const SizedBox(height: 20),
 
                       // Top "A" + "Tracing" Cards
                       SizedBox(
@@ -131,12 +131,13 @@ class _AlphabetState extends State<Alphabet> {
                               child: _buildMainCard(
                                 _selectedLetter,
                                 "assets/images/cat.png",
-                                fontSize * 2.5,
-                                imageSize * 3,
+                                fontSize * 3.2, // increased text size
+                                imageSize * 3.5, // increased image size
                                 layout: Axis.horizontal,
                                 cardColor: _kidColors[_selectedIndex],
                               ),
                             ),
+
                             const SizedBox(width: 10),
                             Expanded(
                               flex: 1,
@@ -153,12 +154,12 @@ class _AlphabetState extends State<Alphabet> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 20),
                       Expanded(
                         child: GridView.count(
-                          crossAxisCount: 5,
-                          mainAxisSpacing: 12,
-                          crossAxisSpacing: 12,
+                          crossAxisCount: 4,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 20,
                           children: List.generate(26, (index) {
                             String letter = String.fromCharCode(65 + index);
                             return GestureDetector(
@@ -175,9 +176,12 @@ class _AlphabetState extends State<Alphabet> {
                                   borderRadius: BorderRadius.circular(50),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black26,
-                                      blurRadius: 6,
-                                      offset: Offset(2, 2),
+                                      color: Colors.black.withOpacity(0.5),
+                                      blurRadius: 10,
+                                      offset: Offset(
+                                        0,
+                                        10,
+                                      ), // 👈 only vertical shadow (bottom)
                                     ),
                                   ],
                                 ),
@@ -236,7 +240,7 @@ class _AlphabetState extends State<Alphabet> {
     final textWidget = Flexible(
       child: Text(
         title,
-        style: TextStyle(
+        style: GoogleFonts.baloo2(
           color: const Color(0xfffffcc9),
           fontSize: fontSize,
           fontWeight: FontWeight.bold,
@@ -244,30 +248,44 @@ class _AlphabetState extends State<Alphabet> {
       ),
     );
 
-    return Card(
-      color: layout == Axis.horizontal ? cardColor : const Color(0xff18a68b),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      child: SizedBox.expand(
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: layout == Axis.horizontal
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    imageWidget,
-                    const SizedBox(width: 16),
-                    textWidget,
-                  ],
-                )
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    imageWidget,
-                    const SizedBox(height: 12),
-                    textWidget,
-                  ],
-                ),
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.25),
+            blurRadius: 8,
+            spreadRadius: 1,
+            offset: Offset(2, 6), // shadow towards bottom-right
+          ),
+        ],
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Card(
+        color: layout == Axis.horizontal ? cardColor : const Color(0xff18a68b),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        elevation: 0, // disable default elevation
+        child: SizedBox.expand(
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: layout == Axis.horizontal
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      imageWidget,
+                      const SizedBox(width: 16),
+                      textWidget,
+                    ],
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      imageWidget,
+                      const SizedBox(height: 12),
+                      textWidget,
+                    ],
+                  ),
+          ),
         ),
       ),
     );
