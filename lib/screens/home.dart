@@ -111,21 +111,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   label: 'Animals',
                                   backgroundColor: const Color(0xff20b2aa),
-                                  borderColor: const Color(0xff008080),
+                                  borderColor: const Color(0xff3c2815),
                                   fontSize: cardSize * 0.25,
                                 ),
                                 buildUniformCard(
                                   content: Transform.scale(
                                     scale: 2,
                                     child: Image.asset(
-                                      'assets/images/numbers1.png',
+                                      'assets/images/numbers.png',
                                       width: cardSize * 0.5,
                                       height: cardSize * 0.5,
                                     ),
                                   ),
                                   label: 'Numbers',
                                   backgroundColor: const Color(0xffff4200),
-                                  borderColor: const Color(0xffDE3163),
+                                  borderColor: const Color(0xff3c2815),
+
                                   fontSize: cardSize * 0.25,
                                 ),
                                 buildUniformCard(
@@ -139,7 +140,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   label: 'Alphabet',
                                   backgroundColor: const Color(0xfffebf15),
-                                  borderColor: const Color(0xfffda90e),
+                                  borderColor: const Color(0xff3c2815),
+
                                   fontSize: cardSize * 0.25,
                                 ),
                                 buildUniformCard(
@@ -153,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   label: 'Colors',
                                   backgroundColor: const Color(0xff3ebc4e),
-                                  borderColor: const Color(0xff42a839),
+                                  borderColor: const Color(0xff3c2815),
                                   fontSize: cardSize * 0.25,
                                 ),
                                 buildUniformCard(
@@ -167,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   label: 'Science',
                                   backgroundColor: const Color(0xfffda503),
-                                  borderColor: const Color(0xff008080),
+                                  borderColor: const Color(0xff3c2815),
                                   fontSize: cardSize * 0.25,
                                 ),
                                 buildUniformCard(
@@ -181,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   label: 'Games',
                                   backgroundColor: const Color(0xfffa6f15),
-                                  borderColor: const Color(0xffDE3163),
+                                  borderColor: const Color(0xff3c2815),
                                   fontSize: cardSize * 0.25,
                                 ),
                                 buildUniformCard(
@@ -195,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   label: 'Music',
                                   backgroundColor: const Color(0xffffb507),
-                                  borderColor: const Color(0xfffda90e),
+                                  borderColor: const Color(0xff3c2815),
                                   fontSize: cardSize * 0.25,
                                 ),
                                 buildUniformCard(
@@ -209,7 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   label: 'Shapes',
                                   backgroundColor: const Color(0xff9fb020),
-                                  borderColor: const Color(0xff42a839),
+                                  borderColor: const Color(0xff3c2815),
                                   fontSize: cardSize * 0.25,
                                 ),
                                 buildUniformCard(
@@ -223,7 +225,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   label: 'Stories',
                                   backgroundColor: const Color(0xff3d9aab),
-                                  borderColor: const Color(0xff42a839),
+                                  borderColor: const Color(0xff3c2815),
                                   fontSize: cardSize * 0.25,
                                 ),
                               ],
