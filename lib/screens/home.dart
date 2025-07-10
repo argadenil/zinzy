@@ -166,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   content: Transform.scale(
                                     scale: 2,
                                     child: Image.asset(
-                                      'assets/images/cat.png',
+                                      'assets/images/science.png',
                                       width: cardSize * 0.5,
                                       height: cardSize * 0.5,
                                     ),
@@ -179,13 +179,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 buildUniformCard(
                                   content: Transform.scale(
                                     scale: 2,
-                                    child: Text(
-                                      '3',
-                                      style: TextStyle(
-                                        fontSize: cardSize * 0.4,
-                                        fontWeight: FontWeight.bold,
-                                        color: const Color(0xFFfcbe10),
-                                      ),
+                                    child: Image.asset(
+                                      'assets/images/games.png',
+                                      width: cardSize * 0.5,
+                                      height: cardSize * 0.5,
                                     ),
                                   ),
                                   label: 'Games',
@@ -196,13 +193,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 buildUniformCard(
                                   content: Transform.scale(
                                     scale: 2,
-                                    child: Text(
-                                      'A',
-                                      style: TextStyle(
-                                        fontSize: cardSize * 0.4,
-                                        fontWeight: FontWeight.bold,
-                                        color: const Color(0xFF1883d9),
-                                      ),
+                                    child: Image.asset(
+                                      'assets/images/music.png',
+                                      width: cardSize * 0.5,
+                                      height: cardSize * 0.5,
                                     ),
                                   ),
                                   label: 'Music',
@@ -211,12 +205,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fontSize: cardSize * 0.25,
                                 ),
                                 buildUniformCard(
-                                  content: Container(
-                                    width: cardSize * 0.5,
-                                    height: cardSize * 0.5,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.red,
-                                      shape: BoxShape.circle,
+                                  content: Transform.scale(
+                                    scale: 2,
+                                    child: Image.asset(
+                                      'assets/images/shapes.png',
+                                      width: cardSize * 0.5,
+                                      height: cardSize * 0.5,
                                     ),
                                   ),
                                   label: 'Shapes',
@@ -225,12 +219,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fontSize: cardSize * 0.25,
                                 ),
                                 buildUniformCard(
-                                  content: Container(
-                                    width: cardSize * 0.5,
-                                    height: cardSize * 0.5,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.red,
-                                      shape: BoxShape.circle,
+                                  content: Transform.scale(
+                                    scale: 2,
+                                    child: Image.asset(
+                                      'assets/images/stories.png',
+                                      width: cardSize * 0.5,
+                                      height: cardSize * 0.5,
                                     ),
                                   ),
                                   label: 'Stories',
