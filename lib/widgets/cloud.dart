@@ -59,8 +59,8 @@ class _AnimatedCloudsState extends State<AnimatedClouds>
               top: widget.screenHeight * (0.05 + index * 0.15),
             ),
             child: SizedBox(
-              width: 300,
-              height: 360,
+              width: 400,
+              height: 400,
               child: Image.asset(
                 'assets/images/cloud.png',
                 fit: BoxFit.contain,

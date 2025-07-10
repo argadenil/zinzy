@@ -162,6 +162,82 @@ class _HomeScreenState extends State<HomeScreen> {
                                   borderColor: const Color(0xff42a839),
                                   fontSize: cardSize * 0.25,
                                 ),
+                                buildUniformCard(
+                                  content: Transform.scale(
+                                    scale: 2,
+                                    child: Image.asset(
+                                      'assets/images/cat.png',
+                                      width: cardSize * 0.5,
+                                      height: cardSize * 0.5,
+                                    ),
+                                  ),
+                                  label: 'Science',
+                                  backgroundColor: const Color(0xfffda503),
+                                  borderColor: const Color(0xff008080),
+                                  fontSize: cardSize * 0.25,
+                                ),
+                                buildUniformCard(
+                                  content: Transform.scale(
+                                    scale: 2,
+                                    child: Text(
+                                      '3',
+                                      style: TextStyle(
+                                        fontSize: cardSize * 0.4,
+                                        fontWeight: FontWeight.bold,
+                                        color: const Color(0xFFfcbe10),
+                                      ),
+                                    ),
+                                  ),
+                                  label: 'Games',
+                                  backgroundColor: const Color(0xfffa6f15),
+                                  borderColor: const Color(0xffDE3163),
+                                  fontSize: cardSize * 0.25,
+                                ),
+                                buildUniformCard(
+                                  content: Transform.scale(
+                                    scale: 2,
+                                    child: Text(
+                                      'A',
+                                      style: TextStyle(
+                                        fontSize: cardSize * 0.4,
+                                        fontWeight: FontWeight.bold,
+                                        color: const Color(0xFF1883d9),
+                                      ),
+                                    ),
+                                  ),
+                                  label: 'Music',
+                                  backgroundColor: const Color(0xffffb507),
+                                  borderColor: const Color(0xfffda90e),
+                                  fontSize: cardSize * 0.25,
+                                ),
+                                buildUniformCard(
+                                  content: Container(
+                                    width: cardSize * 0.5,
+                                    height: cardSize * 0.5,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                  label: 'Shapes',
+                                  backgroundColor: const Color(0xff9fb020),
+                                  borderColor: const Color(0xff42a839),
+                                  fontSize: cardSize * 0.25,
+                                ),
+                                buildUniformCard(
+                                  content: Container(
+                                    width: cardSize * 0.5,
+                                    height: cardSize * 0.5,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                  label: 'Stories',
+                                  backgroundColor: const Color(0xff3d9aab),
+                                  borderColor: const Color(0xff42a839),
+                                  fontSize: cardSize * 0.25,
+                                ),
                               ],
                             ),
                           ],
