@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   HorizontalLearningCard(
                     title: 'Categories',
                     backgroundColor: const Color.fromARGB(255, 242, 99, 28),
-                    borderColor: const Color(0xffb54a18),
+                    borderColor: const Color(0xff3c2815),
                   ),
                   const SizedBox(height: 16),
                   Expanded(
@@ -124,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                   label: 'Numbers',
-                                  backgroundColor: const Color(0xffff4200),
+                                  backgroundColor: const Color(0xffFF7043),
                                   borderColor: const Color(0xff3c2815),
 
                                   fontSize: cardSize * 0.25,
@@ -139,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                   label: 'Alphabet',
-                                  backgroundColor: const Color(0xfffebf15),
+                                  backgroundColor: const Color(0xffF06292),
                                   borderColor: const Color(0xff3c2815),
 
                                   fontSize: cardSize * 0.25,
@@ -196,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                   label: 'Music',
-                                  backgroundColor: const Color(0xffffb507),
+                                  backgroundColor: const Color(0xffBA68C8),
                                   borderColor: const Color(0xff3c2815),
                                   fontSize: cardSize * 0.25,
                                 ),
