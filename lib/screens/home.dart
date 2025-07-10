@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:zinzy/widgets/cloud.dart';
 import 'package:zinzy/widgets/horizontalCard.dart';
-import 'package:zinzy/widgets/shakeWidget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-
+          AnimatedClouds(screenWidth: screenWidth, screenHeight: screenHeight),
           // Main UI
           SafeArea(
             child: Padding(
@@ -101,14 +101,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               mainAxisSpacing: cardSpacing,
                               children: [
                                 buildUniformCard(
-                                  content: ShakeWidget(
-                                    child: Transform.scale(
-                                      scale: 2,
-                                      child: Image.asset(
-                                        'assets/images/cat.png',
-                                        width: cardSize * 0.5,
-                                        height: cardSize * 0.5,
-                                      ),
+                                  content: Transform.scale(
+                                    scale: 2,
+                                    child: Image.asset(
+                                      'assets/images/cat.png',
+                                      width: cardSize * 0.5,
+                                      height: cardSize * 0.5,
                                     ),
                                   ),
                                   label: 'Animals',
@@ -119,14 +117,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 buildUniformCard(
                                   content: Transform.scale(
                                     scale: 2,
-                                    child: ShakeWidget(
-                                      child: Text(
-                                        '3',
-                                        style: TextStyle(
-                                          fontSize: cardSize * 0.4,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0xFFfcbe10),
-                                        ),
+                                    child: Text(
+                                      '3',
+                                      style: TextStyle(
+                                        fontSize: cardSize * 0.4,
+                                        fontWeight: FontWeight.bold,
+                                        color: const Color(0xFFfcbe10),
                                       ),
                                     ),
                                   ),
@@ -138,14 +134,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 buildUniformCard(
                                   content: Transform.scale(
                                     scale: 2,
-                                    child: ShakeWidget(
-                                      child: Text(
-                                        'A',
-                                        style: TextStyle(
-                                          fontSize: cardSize * 0.4,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0xFF1883d9),
-                                        ),
+                                    child: Text(
+                                      'A',
+                                      style: TextStyle(
+                                        fontSize: cardSize * 0.4,
+                                        fontWeight: FontWeight.bold,
+                                        color: const Color(0xFF1883d9),
                                       ),
                                     ),
                                   ),
@@ -155,14 +149,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fontSize: cardSize * 0.25,
                                 ),
                                 buildUniformCard(
-                                  content: ShakeWidget(
-                                    child: Container(
-                                      width: cardSize * 0.5,
-                                      height: cardSize * 0.5,
-                                      decoration: const BoxDecoration(
-                                        color: Colors.red,
-                                        shape: BoxShape.circle,
-                                      ),
+                                  content: Container(
+                                    width: cardSize * 0.5,
+                                    height: cardSize * 0.5,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle,
                                     ),
                                   ),
                                   label: 'Colors',
