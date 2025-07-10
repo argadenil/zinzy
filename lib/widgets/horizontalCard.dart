@@ -37,9 +37,9 @@ class HorizontalLearningCard extends StatelessWidget {
               child: Text(
                 title,
                 style: const TextStyle(
-                  fontSize: 35,
+                  fontSize: 40,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: Color(0xfffffcc9),
                 ),
               ),
             ),
