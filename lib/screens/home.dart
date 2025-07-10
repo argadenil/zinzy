@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zinzy/screens/alphabet.dart';
 import 'package:zinzy/widgets/cloud.dart';
 import 'package:zinzy/widgets/horizontalCard.dart';
 
@@ -113,6 +114,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   backgroundColor: const Color(0xff0d5ea6),
                                   borderColor: const Color(0xff3c2815),
                                   fontSize: cardSize * 0.25,
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => Alphabet(),
+                                      ),
+                                    );
+                                  },
                                 ),
                                 buildUniformCard(
                                   content: Transform.scale(
@@ -128,6 +137,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   borderColor: const Color(0xff3c2815),
 
                                   fontSize: cardSize * 0.25,
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => Alphabet(),
+                                      ),
+                                    );
+                                  },
                                 ),
                                 buildUniformCard(
                                   content: Transform.scale(
@@ -141,8 +158,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                   label: 'Alphabet',
                                   backgroundColor: const Color(0xff0ead69),
                                   borderColor: const Color(0xff3c2815),
-
                                   fontSize: cardSize * 0.25,
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => Alphabet(),
+                                      ),
+                                    );
+                                  },
                                 ),
                                 buildUniformCard(
                                   content: Transform.scale(
@@ -157,6 +181,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   backgroundColor: const Color(0xffc32501),
                                   borderColor: const Color(0xff3c2815),
                                   fontSize: cardSize * 0.25,
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => Alphabet(),
+                                      ),
+                                    );
+                                  },
                                 ),
                                 buildUniformCard(
                                   content: Transform.scale(
@@ -171,6 +203,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   backgroundColor: const Color(0xfffda503),
                                   borderColor: const Color(0xff3c2815),
                                   fontSize: cardSize * 0.25,
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => Alphabet(),
+                                      ),
+                                    );
+                                  },
                                 ),
                                 buildUniformCard(
                                   content: Transform.scale(
@@ -185,6 +225,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   backgroundColor: const Color(0xfffa6f15),
                                   borderColor: const Color(0xff3c2815),
                                   fontSize: cardSize * 0.25,
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => Alphabet(),
+                                      ),
+                                    );
+                                  },
                                 ),
                                 buildUniformCard(
                                   content: Transform.scale(
@@ -199,6 +247,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   backgroundColor: const Color(0xffBA68C8),
                                   borderColor: const Color(0xff3c2815),
                                   fontSize: cardSize * 0.25,
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => Alphabet(),
+                                      ),
+                                    );
+                                  },
                                 ),
                                 buildUniformCard(
                                   content: Transform.scale(
@@ -213,6 +269,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   backgroundColor: const Color(0xff9fb020),
                                   borderColor: const Color(0xff3c2815),
                                   fontSize: cardSize * 0.25,
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => Alphabet(),
+                                      ),
+                                    );
+                                  },
                                 ),
                                 buildUniformCard(
                                   content: Transform.scale(
@@ -227,6 +291,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   backgroundColor: const Color(0xff3d9aab),
                                   borderColor: const Color(0xff3c2815),
                                   fontSize: cardSize * 0.25,
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => Alphabet(),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ],
                             ),
@@ -250,31 +322,35 @@ class _HomeScreenState extends State<HomeScreen> {
     required Color backgroundColor,
     required Color borderColor,
     required double fontSize,
+    required VoidCallback onTap,
   }) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(42)),
-      color: backgroundColor,
-      elevation: 6,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(40),
-          border: Border.all(color: borderColor, width: 7),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-              child: FittedBox(fit: BoxFit.scaleDown, child: content),
-            ),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: fontSize,
-                fontWeight: FontWeight.bold,
-                color: Color(0xfffffcc9),
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(42)),
+        color: backgroundColor,
+        elevation: 6,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(40),
+            border: Border.all(color: borderColor, width: 7),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: FittedBox(fit: BoxFit.scaleDown, child: content),
               ),
-            ),
-          ],
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: fontSize,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xfffffcc9),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
