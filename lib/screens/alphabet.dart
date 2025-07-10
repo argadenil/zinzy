@@ -1,5 +1,6 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:zinzy/widgets/horizontalCard.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class Alphabet extends StatefulWidget {
   const Alphabet({super.key});
@@ -9,6 +10,48 @@ class Alphabet extends StatefulWidget {
 }
 
 class _AlphabetState extends State<Alphabet> {
+  final List<Color> _kidColors = [
+    Color(0xFFf4581a), // F
+    Color(0xFF8e49a2), // A
+    Color(0xFF77c00d), // B
+    Color(0xFF139d86), // C
+    Color(0xFFffc10d), // D
+    Color(0xFF1b75b5), // E
+    Color(0xFFffc10d), // G
+    Color(0xFF8e49a2), // H
+    Color(0xFFf4581a), // I
+    Color(0xFF139d86), // J
+    Color(0xFF1b75b5), // K
+    Color(0xFF77c00d), // L
+    Color(0xFFffc10d), // M
+    Color(0xFF8e49a2), // N
+    Color(0xFF1b75b5), // O
+    Color(0xFFf4581a), // P
+    Color(0xFF77c00d), // Q
+    Color(0xFF139d86), // R
+    Color(0xFFffc10d), // S
+    Color(0xFF8e49a2), // T
+    Color(0xFF139d86), // U
+    Color(0xFF1b75b5), // V
+    Color(0xFFf4581a), // W
+    Color(0xFF77c00d), // X
+    Color(0xFF8e49a2), // Y
+    Color(0xFFffc10d), // Z
+  ];
+
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  String _selectedLetter = 'A';
+  int _selectedIndex = 0;
+
+  Future<void> _playSound(String letter) async {
+    final lowercase = letter.toLowerCase();
+    try {
+      await _audioPlayer.play(AssetSource('audio/$lowercase.mp3'));
+    } catch (e) {
+      print('Error playing sound for $letter: $e');
+    }
+  }
+
   List<double> _saturationMatrix(double saturation) {
     final double invSat = 1 - saturation;
     final double r = 0.213 * invSat;
@@ -45,7 +88,6 @@ class _AlphabetState extends State<Alphabet> {
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
-          // Background with saturation
           Positioned.fill(
             child: ColorFiltered(
               colorFilter: ColorFilter.matrix(_saturationMatrix(1.5)),
@@ -55,122 +97,178 @@ class _AlphabetState extends State<Alphabet> {
               ),
             ),
           ),
-
           SafeArea(
             child: LayoutBuilder(
               builder: (context, constraints) {
-                // Calculate dynamic sizes
                 final isSmallScreen = constraints.maxWidth < 400;
                 final imageSize = isSmallScreen ? 40.0 : 60.0;
                 final fontSize = isSmallScreen ? 30.0 : 30.0;
-                final cardHeight = isSmallScreen ? 120.0 : 150.0;
 
-                return Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Back Button
-                        GestureDetector(
-                          onTap: () => Navigator.pop(context),
-                          child: Image.asset(
-                            'assets/images/back_button.png',
-                            width: isSmallScreen ? 60 : 80,
-                            height: isSmallScreen ? 60 : 80,
-                            fit: BoxFit.contain,
-                          ),
+                return Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Back button
+                      GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: Image.asset(
+                          'assets/images/back_button.png',
+                          width: isSmallScreen ? 60 : 80,
+                          height: isSmallScreen ? 60 : 80,
+                          fit: BoxFit.contain,
                         ),
-                        SizedBox(height: isSmallScreen ? 10 : 20),
+                      ),
+                      const SizedBox(height: 20),
 
-                        // Card Row
-                        SizedBox(
-                          height: cardHeight,
-                          child: Row(
-                            children: [
-                              // Card 1
-                              Expanded(
-                                flex: 2,
-                                child: Card(
-                                  color: const Color(0xff18a68b),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(12),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Image.asset(
-                                          'assets/images/cat.png',
-                                          width: imageSize,
-                                          height: imageSize,
-                                          fit: BoxFit.contain,
-                                        ),
-                                        SizedBox(height: 10),
-                                        Text(
-                                          "A",
-                                          style: TextStyle(
-                                            color: const Color(0xfffffcc9),
-                                            fontSize: fontSize,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
+                      // Top "A" + "Tracing" Cards
+                      SizedBox(
+                        height: 150,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: _buildMainCard(
+                                _selectedLetter,
+                                "assets/images/cat.png",
+                                fontSize * 2.5,
+                                imageSize * 3,
+                                layout: Axis.horizontal,
+                                cardColor: _kidColors[_selectedIndex],
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              flex: 1,
+                              child: _buildMainCard(
+                                "Tracing",
+                                "assets/images/pencil.png",
+                                fontSize,
+                                imageSize,
+                                scaleImage: true,
+                                layout: Axis.vertical,
+                                cardColor: _kidColors[_selectedIndex],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      Expanded(
+                        child: GridView.count(
+                          crossAxisCount: 5,
+                          mainAxisSpacing: 12,
+                          crossAxisSpacing: 12,
+                          children: List.generate(26, (index) {
+                            String letter = String.fromCharCode(65 + index);
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _selectedLetter = letter;
+                                  _selectedIndex = index;
+                                });
+                                _playSound(letter);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: _kidColors[index],
+                                  borderRadius: BorderRadius.circular(50),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black26,
+                                      blurRadius: 6,
+                                      offset: Offset(2, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: Center(
+                                  child: Transform.scale(
+                                    scale: 1.5,
+                                    child: Text(
+                                      letter,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: fontSize,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                              SizedBox(width: 10),
-                              Expanded(
-                                flex: 1,
-                                child: Card(
-                                  color: const Color(0xff18a68b),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(12),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Transform.scale(
-                                          scale: 2,
-                                          child: Image.asset(
-                                            'assets/images/pencil.png',
-                                            width: imageSize,
-                                            height: imageSize,
-                                            fit: BoxFit.contain,
-                                          ),
-                                        ),
-                                        SizedBox(height: 10),
-                                        Text(
-                                          "Tracing",
-                                          style: TextStyle(
-                                            color: const Color(0xfffffcc9),
-                                            fontSize: fontSize,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                            );
+                          }),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 );
               },
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildMainCard(
+    String title,
+    String imagePath,
+    double fontSize,
+    double imageSize, {
+    bool scaleImage = false,
+    Axis layout = Axis.vertical,
+    Color? cardColor,
+  }) {
+    final imageWidget = Flexible(
+      child: scaleImage
+          ? Transform.scale(
+              scale: 2,
+              child: Image.asset(imagePath, fit: BoxFit.contain),
+            )
+          : Image.asset(
+              imagePath,
+              width: imageSize,
+              height: imageSize,
+              fit: BoxFit.contain,
+            ),
+    );
+
+    final textWidget = Flexible(
+      child: Text(
+        title,
+        style: TextStyle(
+          color: const Color(0xfffffcc9),
+          fontSize: fontSize,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+
+    return Card(
+      color: layout == Axis.horizontal ? cardColor : const Color(0xff18a68b),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: SizedBox.expand(
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: layout == Axis.horizontal
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    imageWidget,
+                    const SizedBox(width: 16),
+                    textWidget,
+                  ],
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    imageWidget,
+                    const SizedBox(height: 12),
+                    textWidget,
+                  ],
+                ),
+        ),
       ),
     );
   }
