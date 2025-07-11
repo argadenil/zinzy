@@ -37,7 +37,7 @@ class _AlphabetState extends State<Alphabet> with TickerProviderStateMixin {
     Color(0xFFf4581a), // W
     Color(0xFF77c00d), // X
     Color(0xFF8e49a2), // Y
-    Color(0xFFffc10d), // Z
+    Color(0xFFf4581a), // Z
   ];
 
   final AudioPlayer _audioPlayer = AudioPlayer();
@@ -206,7 +206,7 @@ class _AlphabetState extends State<Alphabet> with TickerProviderStateMixin {
                                         borderRadius: BorderRadius.circular(50),
                                         border: isSelected
                                             ? Border.all(
-                                                color: Color(0xfff06292),
+                                                color: Color(0xff3c2815),
                                                 width: 6,
                                               )
                                             : null,
