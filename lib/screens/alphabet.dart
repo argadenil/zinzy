@@ -130,9 +130,9 @@ class _AlphabetState extends State<Alphabet> {
                               flex: 2,
                               child: _buildMainCard(
                                 _selectedLetter,
-                                "assets/images/cat.png",
-                                fontSize * 3.2, // increased text size
-                                imageSize * 3.5, // increased image size
+                                'assets/images/alphabets/${_selectedLetter.toLowerCase()}.png',
+                                fontSize * 3.2,
+                                imageSize * 3.5,
                                 layout: Axis.horizontal,
                                 cardColor: _kidColors[_selectedIndex],
                               ),
@@ -227,13 +227,30 @@ class _AlphabetState extends State<Alphabet> {
       child: scaleImage
           ? Transform.scale(
               scale: 2,
-              child: Image.asset(imagePath, fit: BoxFit.contain),
+              child: Image.asset(
+                imagePath,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  return Icon(
+                    Icons.image_not_supported,
+                    size: imageSize,
+                    color: Colors.white,
+                  );
+                },
+              ),
             )
           : Image.asset(
               imagePath,
               width: imageSize,
               height: imageSize,
               fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                return Icon(
+                  Icons.image_not_supported,
+                  size: 29,
+                  color: Colors.white,
+                );
+              },
             ),
     );
 
