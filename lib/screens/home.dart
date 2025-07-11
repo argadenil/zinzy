@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zinzy/screens/alphabet/alphabet.dart';
+import 'package:zinzy/screens/animals/animal.dart';
 import 'package:zinzy/widgets/card.dart';
 import 'package:zinzy/widgets/cloud.dart';
 import 'package:zinzy/widgets/horizontalCard.dart';
@@ -119,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (_) => Alphabet(),
+                                        builder: (_) => AnimalScreen(),
                                       ),
                                     );
                                   },
