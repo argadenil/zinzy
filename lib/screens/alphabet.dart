@@ -10,7 +10,7 @@ class Alphabet extends StatefulWidget {
   State<Alphabet> createState() => _AlphabetState();
 }
 
-class _AlphabetState extends State<Alphabet> {
+class _AlphabetState extends State<Alphabet> with TickerProviderStateMixin {
   final List<Color> _kidColors = [
     Color(0xFFf4581a), // F
     Color(0xFF8e49a2), // A
@@ -43,6 +43,30 @@ class _AlphabetState extends State<Alphabet> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   String _selectedLetter = 'A';
   int _selectedIndex = 0;
+  late AnimationController _shakeController;
+  late Animation<double> _shakeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _shakeController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+
+    _shakeAnimation = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 0, end: -8), weight: 1),
+      TweenSequenceItem(tween: Tween(begin: -8, end: 8), weight: 2),
+      TweenSequenceItem(tween: Tween(begin: 8, end: -8), weight: 2),
+      TweenSequenceItem(tween: Tween(begin: -8, end: 0), weight: 1),
+    ]).animate(_shakeController);
+  }
+
+  @override
+  void dispose() {
+    _shakeController.dispose();
+    super.dispose();
+  }
 
   Future<void> _playSound(String letter) async {
     final lowercase = letter.toLowerCase();
@@ -110,7 +134,6 @@ class _AlphabetState extends State<Alphabet> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Back button
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: Image.asset(
@@ -120,8 +143,6 @@ class _AlphabetState extends State<Alphabet> {
                           fit: BoxFit.contain,
                         ),
                       ),
-
-                      // Top "A" + "Tracing" Cards
                       SizedBox(
                         height: 150,
                         child: Row(
@@ -137,7 +158,6 @@ class _AlphabetState extends State<Alphabet> {
                                 cardColor: _kidColors[_selectedIndex],
                               ),
                             ),
-
                             const SizedBox(width: 10),
                             Expanded(
                               flex: 1,
@@ -162,6 +182,8 @@ class _AlphabetState extends State<Alphabet> {
                           crossAxisSpacing: 20,
                           children: List.generate(26, (index) {
                             String letter = String.fromCharCode(65 + index);
+                            bool isSelected = _selectedIndex == index;
+
                             return GestureDetector(
                               onTap: () {
                                 setState(() {
@@ -169,35 +191,51 @@ class _AlphabetState extends State<Alphabet> {
                                   _selectedIndex = index;
                                 });
                                 _playSound(letter);
+                                _shakeController.forward(from: 0);
                               },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: _kidColors[index],
-                                  borderRadius: BorderRadius.circular(50),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.5),
-                                      blurRadius: 10,
-                                      offset: Offset(
-                                        0,
-                                        10,
-                                      ), // 👈 only vertical shadow (bottom)
-                                    ),
-                                  ],
-                                ),
-                                child: Center(
-                                  child: Transform.scale(
-                                    scale: 1.5,
-                                    child: Text(
-                                      letter,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: fontSize,
-                                        fontWeight: FontWeight.bold,
+                              child: AnimatedBuilder(
+                                animation: _shakeAnimation,
+                                builder: (context, child) {
+                                  return Transform.translate(
+                                    offset: isSelected
+                                        ? Offset(_shakeAnimation.value, 0)
+                                        : Offset.zero,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: _kidColors[index],
+                                        borderRadius: BorderRadius.circular(50),
+                                        border: isSelected
+                                            ? Border.all(
+                                                color: Color(0xfff06292),
+                                                width: 6,
+                                              )
+                                            : null,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(
+                                              0.5,
+                                            ),
+                                            blurRadius: 10,
+                                            offset: Offset(0, 10),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Center(
+                                        child: Transform.scale(
+                                          scale: 1.5,
+                                          child: Text(
+                                            letter,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: fontSize,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
+                                  );
+                                },
                               ),
                             );
                           }),
@@ -272,7 +310,7 @@ class _AlphabetState extends State<Alphabet> {
             color: Colors.black.withOpacity(0.25),
             blurRadius: 8,
             spreadRadius: 1,
-            offset: Offset(2, 6), // shadow towards bottom-right
+            offset: Offset(2, 6),
           ),
         ],
         borderRadius: BorderRadius.circular(20),
@@ -280,7 +318,7 @@ class _AlphabetState extends State<Alphabet> {
       child: Card(
         color: layout == Axis.horizontal ? cardColor : const Color(0xff18a68b),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        elevation: 0, // disable default elevation
+        elevation: 0,
         child: SizedBox.expand(
           child: Padding(
             padding: const EdgeInsets.all(12),
