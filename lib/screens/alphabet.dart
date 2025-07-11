@@ -226,7 +226,7 @@ class _AlphabetState extends State<Alphabet> with TickerProviderStateMixin {
                                           child: Text(
                                             letter,
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: Color(0xfffffcc9),
                                               fontSize: fontSize,
                                               fontWeight: FontWeight.bold,
                                             ),
