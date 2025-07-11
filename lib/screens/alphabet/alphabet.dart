@@ -71,7 +71,7 @@ class _AlphabetState extends State<Alphabet> with TickerProviderStateMixin {
   Future<void> _playSound(String letter) async {
     final lowercase = letter.toLowerCase();
     try {
-      await _audioPlayer.play(AssetSource('audio/$lowercase.mp3'));
+      await _audioPlayer.play(AssetSource('audio/alphabets/$lowercase.mp3'));
     } catch (e) {
       print('Error playing sound for $letter: $e');
     }
