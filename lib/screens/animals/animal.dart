@@ -132,7 +132,7 @@ class _AnimalScreenState extends State<AnimalScreen> with SingleTickerProviderSt
                               decoration: BoxDecoration(
                                 color: Colors.primaries[index % Colors.primaries.length].shade200.withOpacity(0.9),
                                 borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: Colors.white, width: 3),
+                                border: Border.all(color: Color(0xff3c2815), width: 5),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.2),
@@ -161,7 +161,7 @@ class _AnimalScreenState extends State<AnimalScreen> with SingleTickerProviderSt
                                     child: Text(
                                       animal['name']!,
                                       style: const TextStyle(
-                                        fontSize: 22,
+                                        fontSize: 30,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
                                       ),
