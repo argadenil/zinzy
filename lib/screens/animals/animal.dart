@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class AnimalScreen extends StatefulWidget {
   const AnimalScreen({super.key});
@@ -8,8 +9,10 @@ class AnimalScreen extends StatefulWidget {
   State<AnimalScreen> createState() => _AnimalScreenState();
 }
 
-class _AnimalScreenState extends State<AnimalScreen> {
+class _AnimalScreenState extends State<AnimalScreen> with SingleTickerProviderStateMixin {
   final AudioPlayer _audioPlayer = AudioPlayer();
+  final FlutterTts _flutterTts = FlutterTts();
+  int? _tappedIndex;
 
   final List<Map<String, String>> _animals = [
     {'name': 'Cat', 'image': 'assets/images/animals/cat.png', 'sound': 'cat.mp3'},
@@ -36,12 +39,23 @@ class _AnimalScreenState extends State<AnimalScreen> {
     ];
   }
 
-  Future<void> _playAnimalSound(String fileName) async {
+  Future<void> _playAnimalSound(String fileName, String animalName) async {
     try {
-      await _audioPlayer.play(AssetSource('audio/$fileName'));
+      await _audioPlayer.stop(); // Stop if playing
+      await _audioPlayer.play(AssetSource('audio/animals/$fileName'));
+      await _flutterTts.setLanguage("en-US");
+      await _flutterTts.setPitch(1.2);
+      await _flutterTts.speak(animalName);
     } catch (e) {
-      print('Error playing sound: $e');
+      print('Error playing sound or TTS: $e');
     }
+  }
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+    _flutterTts.stop();
+    super.dispose();
   }
 
   @override
@@ -82,7 +96,7 @@ class _AnimalScreenState extends State<AnimalScreen> {
                         style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: Color(0xfffffcc9),
                         ),
                       ),
                     ],
@@ -91,57 +105,74 @@ class _AnimalScreenState extends State<AnimalScreen> {
 
                   // Animal Grid
                   Expanded(
-                    child: GridView.count(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 20,
-                      crossAxisSpacing: 20,
-                      childAspectRatio: 1,
-                      children: _animals.map((animal) {
+                    child: GridView.builder(
+                      itemCount: _animals.length,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 20,
+                        crossAxisSpacing: 20,
+                        childAspectRatio: 1,
+                      ),
+                      itemBuilder: (context, index) {
+                        final animal = _animals[index];
+                        final isTapped = _tappedIndex == index;
+
                         return GestureDetector(
-                          onTap: () => _playAnimalSound(animal['sound']!),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: Colors.white, width: 3),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  blurRadius: 8,
-                                  offset: Offset(4, 6),
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  flex: 6,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Image.asset(
-                                      animal['image']!,
-                                      fit: BoxFit.contain,
-                                      errorBuilder: (context, error, stackTrace) => Icon(Icons.image, size: 60),
+                          onTap: () async {
+                            setState(() => _tappedIndex = index);
+                            await _playAnimalSound(animal['sound']!, animal['name']!);
+                            Future.delayed(const Duration(milliseconds: 500), () {
+                              if (mounted) setState(() => _tappedIndex = null);
+                            });
+                          },
+                          child: AnimatedScale(
+                            scale: isTapped ? 1.1 : 1.0,
+                            duration: const Duration(milliseconds: 200),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.primaries[index % Colors.primaries.length].shade200.withOpacity(0.9),
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(color: Colors.white, width: 3),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.2),
+                                    blurRadius: 8,
+                                    offset: const Offset(4, 6),
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    flex: 6,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Image.asset(
+                                        animal['image']!,
+                                        fit: BoxFit.contain,
+                                        errorBuilder: (context, error, stackTrace) =>
+                                            const Icon(Icons.image, size: 60),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: Text(
-                                    animal['name']!,
-                                    style: TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      animal['name']!,
+                                      style: const TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         );
-                      }).toList(),
+                      },
                     ),
                   ),
                 ],
