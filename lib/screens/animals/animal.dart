@@ -169,61 +169,64 @@ class _AnimalScreenState extends State<AnimalScreen> with TickerProviderStateMix
                         final animal = _animals[index];
                         final isTapped = _tappedIndex == index;
 
-                        return GestureDetector(
-                          onTap: () async {
-                            setState(() => _tappedIndex = index);
-                            await _playAnimalSound(
-                              animal['sound']!,
-                              animal['name']!,
-                              animal['image']!,
-                            );
-                            Future.delayed(const Duration(milliseconds: 500), () {
-                              if (mounted) setState(() => _tappedIndex = null);
-                            });
-                          },
-                          child: AnimatedScale(
-                            scale: isTapped ? 1.1 : 1.0,
-                            duration: const Duration(milliseconds: 200),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.primaries[index % Colors.primaries.length]
-                                    .shade200
-                                    .withOpacity(0.9),
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: const Color(0xff3c2815), width: 5),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    blurRadius: 8,
-                                    offset: const Offset(4, 6),
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    flex: 6,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Image.asset(
-                                        animal['image']!,
-                                        fit: BoxFit.contain,
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 6.0), // Fix clipping
+                          child: GestureDetector(
+                            onTap: () async {
+                              setState(() => _tappedIndex = index);
+                              await _playAnimalSound(
+                                animal['sound']!,
+                                animal['name']!,
+                                animal['image']!,
+                              );
+                              Future.delayed(const Duration(milliseconds: 500), () {
+                                if (mounted) setState(() => _tappedIndex = null);
+                              });
+                            },
+                            child: AnimatedScale(
+                              scale: isTapped ? 1.05 : 1.0,
+                              duration: const Duration(milliseconds: 200),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.primaries[index % Colors.primaries.length]
+                                      .shade200
+                                      .withOpacity(0.9),
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(color: const Color(0xff3c2815), width: 5),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.2),
+                                      blurRadius: 8,
+                                      offset: const Offset(4, 6),
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                      flex: 6,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Image.asset(
+                                          animal['image']!,
+                                          fit: BoxFit.contain,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text(
-                                      animal['name']!,
-                                      style: const TextStyle(
-                                        fontSize: 30,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
+                                    Expanded(
+                                      flex: 2,
+                                      child: Text(
+                                        animal['name']!,
+                                        style: const TextStyle(
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),
