@@ -9,7 +9,7 @@ class AnimalScreen extends StatefulWidget {
   State<AnimalScreen> createState() => _AnimalScreenState();
 }
 
-class _AnimalScreenState extends State<AnimalScreen> with SingleTickerProviderStateMixin {
+class _AnimalScreenState extends State<AnimalScreen> with TickerProviderStateMixin {
   final AudioPlayer _audioPlayer = AudioPlayer();
   final FlutterTts _flutterTts = FlutterTts();
   int? _tappedIndex;
@@ -25,6 +25,54 @@ class _AnimalScreenState extends State<AnimalScreen> with SingleTickerProviderSt
     {'name': 'Zebra', 'image': 'assets/images/animals/zebra.png', 'sound': 'zebra.mp3'},
   ];
 
+  String? _selectedAnimalImage;
+  AnimationController? _walkController;
+  Animation<Offset>? _walkAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _walkController = AnimationController(
+      duration: const Duration(seconds: 4),
+      vsync: this,
+    );
+
+    _walkAnimation = Tween<Offset>(
+      begin: const Offset(-1.5, 1.2),
+      end: const Offset(1.5, 1.2),
+    ).animate(CurvedAnimation(
+      parent: _walkController!,
+      curve: Curves.linear,
+    ));
+
+    _walkController?.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        setState(() {
+          _selectedAnimalImage = null;
+        });
+        _walkController?.reset();
+      }
+    });
+  }
+
+  Future<void> _playAnimalSound(String fileName, String animalName, String imagePath) async {
+    try {
+      await _audioPlayer.stop();
+      await _audioPlayer.play(AssetSource('audio/animals/$fileName'));
+      await _flutterTts.setLanguage("en-US");
+      await _flutterTts.setPitch(1.2);
+      await _flutterTts.speak(animalName);
+
+      // Trigger walking animation
+      setState(() {
+        _selectedAnimalImage = imagePath;
+      });
+      _walkController?.forward();
+    } catch (e) {
+      print('Error playing sound or TTS: $e');
+    }
+  }
+
   List<double> _saturationMatrix(double saturation) {
     final invSat = 1 - saturation;
     final r = 0.213 * invSat;
@@ -39,22 +87,11 @@ class _AnimalScreenState extends State<AnimalScreen> with SingleTickerProviderSt
     ];
   }
 
-  Future<void> _playAnimalSound(String fileName, String animalName) async {
-    try {
-      await _audioPlayer.stop(); // Stop if playing
-      await _audioPlayer.play(AssetSource('audio/animals/$fileName'));
-      await _flutterTts.setLanguage("en-US");
-      await _flutterTts.setPitch(1.2);
-      await _flutterTts.speak(animalName);
-    } catch (e) {
-      print('Error playing sound or TTS: $e');
-    }
-  }
-
   @override
   void dispose() {
     _audioPlayer.dispose();
     _flutterTts.stop();
+    _walkController?.dispose();
     super.dispose();
   }
 
@@ -74,12 +111,27 @@ class _AnimalScreenState extends State<AnimalScreen> with SingleTickerProviderSt
               ),
             ),
           ),
+
+          // Walking animal animation
+          if (_selectedAnimalImage != null)
+            SlideTransition(
+              position: _walkAnimation!,
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: Image.asset(
+                  _selectedAnimalImage!,
+                  height: 120,
+                ),
+              ),
+            ),
+
+          // Foreground UI
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
                 children: [
-                  // Back button and title
+                  // Header
                   Row(
                     children: [
                       GestureDetector(
@@ -91,7 +143,7 @@ class _AnimalScreenState extends State<AnimalScreen> with SingleTickerProviderSt
                         ),
                       ),
                       const SizedBox(width: 10),
-                      Text(
+                      const Text(
                         'Learn Animals',
                         style: TextStyle(
                           fontSize: 28,
@@ -120,7 +172,11 @@ class _AnimalScreenState extends State<AnimalScreen> with SingleTickerProviderSt
                         return GestureDetector(
                           onTap: () async {
                             setState(() => _tappedIndex = index);
-                            await _playAnimalSound(animal['sound']!, animal['name']!);
+                            await _playAnimalSound(
+                              animal['sound']!,
+                              animal['name']!,
+                              animal['image']!,
+                            );
                             Future.delayed(const Duration(milliseconds: 500), () {
                               if (mounted) setState(() => _tappedIndex = null);
                             });
@@ -130,9 +186,11 @@ class _AnimalScreenState extends State<AnimalScreen> with SingleTickerProviderSt
                             duration: const Duration(milliseconds: 200),
                             child: Container(
                               decoration: BoxDecoration(
-                                color: Colors.primaries[index % Colors.primaries.length].shade200.withOpacity(0.9),
+                                color: Colors.primaries[index % Colors.primaries.length]
+                                    .shade200
+                                    .withOpacity(0.9),
                                 borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: Color(0xff3c2815), width: 5),
+                                border: Border.all(color: const Color(0xff3c2815), width: 5),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.2),
@@ -151,8 +209,6 @@ class _AnimalScreenState extends State<AnimalScreen> with SingleTickerProviderSt
                                       child: Image.asset(
                                         animal['image']!,
                                         fit: BoxFit.contain,
-                                        errorBuilder: (context, error, stackTrace) =>
-                                            const Icon(Icons.image, size: 60),
                                       ),
                                     ),
                                   ),
