@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rive/rive.dart' as rive_pkg;
 import 'package:zinzy/screens/alphabet/alphabet.dart';
 import 'package:zinzy/screens/animals/animal.dart';
+import 'package:zinzy/screens/numbers/numebers.dart';
 import 'package:zinzy/widgets/card.dart';
 import 'package:zinzy/widgets/cloud.dart';
 import 'package:zinzy/widgets/horizontalCard.dart';
@@ -116,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     "label": "Numbers",
                                     "img": "assets/images/numbers.png",
                                     "bg": const Color(0xffFF7043),
-                                    "route": const Alphabet(),
+                                    "route": const NumbersScreen(),
                                   },
                                   {
                                     "label": "Alphabet",
