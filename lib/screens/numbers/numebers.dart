@@ -86,9 +86,9 @@ class NumbersScreen extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          'Number Activities',
+                          'Number',
                           style: TextStyle(
-                            fontSize: fontSize + 4,
+                            fontSize: fontSize + 24,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
