@@ -96,12 +96,14 @@ class NumbersScreen extends StatelessWidget {
                       elevation: 5,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
+                        side: const BorderSide(
+                          color: const Color(0xff3c2815),
+                          width: 7,
+                        ),
                       ),
                       color: activity['color'],
                       child: InkWell(
                         borderRadius: BorderRadius.circular(30),
-
-                        /// 👉 ADD NAVIGATION HERE
                         onTap: () {
                           switch (activity['title']) {
                             case 'Number Tracing':
@@ -113,41 +115,9 @@ class NumbersScreen extends StatelessWidget {
                                 ),
                               );
                               break;
-
-                            case 'Count the Objects':
-                              // TODO: Add count objects screen
-                              break;
-
-                            case 'Number Matching':
-                              // TODO: Add matching screen
-                              break;
-
-                            case 'Number Coloring':
-                              // TODO: Add coloring screen
-                              break;
-
-                            case 'Number Puzzle':
-                              // TODO: Add puzzle screen
-                              break;
-
-                            case 'Finger Counting':
-                              // TODO: Add finger counting screen
-                              break;
-
-                            case 'Number Ordering':
-                              // TODO: Add ordering screen
-                              break;
-
-                            case 'Addition & Subtraction':
-                              // TODO: Add addition/subtraction screen
-                              break;
-
-                            case 'Songs & Rhymes':
-                              // TODO: Add rhymes screen
-                              break;
+                            // TODO: Handle other cases
                           }
                         },
-
                         child: Padding(
                           padding: EdgeInsets.all(mainPadding * 0.8),
                           child: Column(
