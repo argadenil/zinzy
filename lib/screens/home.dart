@@ -32,6 +32,18 @@ class _HomeScreenState extends State<HomeScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
+    // RESPONSIVE BREAKPOINTS
+    int crossAxisCount;
+    if (screenWidth < 500) {
+      crossAxisCount = 2; // Small Phones
+    } else if (screenWidth < 900) {
+      crossAxisCount = 3; // Large Phones / Small Tablets
+    } else if (screenWidth < 1200) {
+      crossAxisCount = 4; // Tablets / iPads
+    } else {
+      crossAxisCount = 5; // Large iPads / Desktop
+    }
+
     return Scaffold(
       backgroundColor: Colors.blue.shade50,
       bottomNavigationBar: BottomAppBar(
@@ -42,7 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Stack(
         clipBehavior: Clip.none,
         children: [
-          // Background gradient
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -68,13 +79,65 @@ class _HomeScreenState extends State<HomeScreen> {
                   Expanded(
                     child: LayoutBuilder(
                       builder: (context, constraints) {
-                        final cardSpacing = 5.0;
-                        final cardSize = constraints.maxWidth * 0.4;
-                        final charWidth = constraints.maxWidth * 0.5;
-                        final cardWidth =
-                            (constraints.maxWidth - cardSpacing) / 2;
-                        final characterLeft =
-                            cardWidth + (cardWidth - charWidth) / 2;
+                        final items = [
+                          {
+                            "label": "Animals",
+                            "img": "assets/images/cat.png",
+                            "bg": const Color(0xff0d5ea6),
+                            "route": const AnimalScreen(),
+                          },
+                          {
+                            "label": "Numbers",
+                            "img": "assets/images/numbers.png",
+                            "bg": const Color(0xffFF7043),
+                            "route": const NumbersScreen(),
+                          },
+                          {
+                            "label": "Alphabet",
+                            "img": "assets/images/alphabet.png",
+                            "bg": const Color(0xff0ead69),
+                            "route": const Alphabet(),
+                          },
+                          {
+                            "label": "Colors",
+                            "img": "assets/images/colors.png",
+                            "bg": const Color(0xffc32501),
+                            "route": const Alphabet(),
+                          },
+                          {
+                            "label": "Science",
+                            "img": "assets/images/science.png",
+                            "bg": const Color(0xfffda503),
+                            "route": const Alphabet(),
+                          },
+                          {
+                            "label": "Games",
+                            "img": "assets/images/games.png",
+                            "bg": const Color(0xfffa6f15),
+                            "route": const Alphabet(),
+                          },
+                          {
+                            "label": "Music",
+                            "img": "assets/images/music.png",
+                            "bg": const Color(0xffBA68C8),
+                            "route": const Alphabet(),
+                          },
+                          {
+                            "label": "Shapes",
+                            "img": "assets/images/shapes.png",
+                            "bg": const Color(0xff9fb020),
+                            "route": const Alphabet(),
+                          },
+                          {
+                            "label": "Stories",
+                            "img": "assets/images/stories.png",
+                            "bg": const Color(0xff3d9aab),
+                            "route": const Alphabet(),
+                          },
+                        ];
+
+                        final cardWidth = constraints.maxWidth / crossAxisCount;
+                        final cardHeight = cardWidth * 1.15; // PERFECT RATIO
 
                         return Stack(
                           clipBehavior: Clip.none,
@@ -82,10 +145,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             AnimatedPositioned(
                               duration: const Duration(milliseconds: 2000),
                               curve: Curves.easeOutBack,
-                              left: characterLeft,
-                              top: animateCat
-                                  ? -charWidth * 0.85
-                                  : screenHeight * 0.35,
+                              left: (constraints.maxWidth - 220) / 2,
+                              top: animateCat ? -110 : screenHeight * 0.35,
                               child: SizedBox(
                                 width: 220,
                                 height: 220,
@@ -95,94 +156,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                             ),
+
                             GridView.builder(
-                              padding: const EdgeInsets.all(8),
+                              padding: const EdgeInsets.all(12),
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: screenWidth < 600 ? 2 : 3,
-                                    crossAxisSpacing: cardSpacing,
-                                    mainAxisSpacing: cardSpacing,
-                                    childAspectRatio: 1,
-                                  ),
-                              itemCount: 9,
+                                crossAxisCount: crossAxisCount,
+                                crossAxisSpacing: 12,
+                                mainAxisSpacing: 12,
+                                childAspectRatio: cardWidth / cardHeight,
+                              ),
+                              itemCount: items.length,
                               itemBuilder: (context, index) {
-                                final items = [
-                                  {
-                                    "label": "Animals",
-                                    "img": "assets/images/cat.png",
-                                    "bg": const Color(0xff0d5ea6),
-                                    "route": const AnimalScreen(),
-                                  },
-                                  {
-                                    "label": "Numbers",
-                                    "img": "assets/images/numbers.png",
-                                    "bg": const Color(0xffFF7043),
-                                    "route": const NumbersScreen(),
-                                  },
-                                  {
-                                    "label": "Alphabet",
-                                    "img": "assets/images/alphabet.png",
-                                    "bg": const Color(0xff0ead69),
-                                    "route": const Alphabet(),
-                                  },
-                                  {
-                                    "label": "Colors",
-                                    "img": "assets/images/colors.png",
-                                    "bg": const Color(0xffc32501),
-                                    "route": const Alphabet(),
-                                  },
-                                  {
-                                    "label": "Science",
-                                    "img": "assets/images/science.png",
-                                    "bg": const Color(0xfffda503),
-                                    "route": const Alphabet(),
-                                  },
-                                  {
-                                    "label": "Games",
-                                    "img": "assets/images/games.png",
-                                    "bg": const Color(0xfffa6f15),
-                                    "route": const Alphabet(),
-                                  },
-                                  {
-                                    "label": "Music",
-                                    "img": "assets/images/music.png",
-                                    "bg": const Color(0xffBA68C8),
-                                    "route": const Alphabet(),
-                                  },
-                                  {
-                                    "label": "Shapes",
-                                    "img": "assets/images/shapes.png",
-                                    "bg": const Color(0xff9fb020),
-                                    "route": const Alphabet(),
-                                  },
-                                  {
-                                    "label": "Stories",
-                                    "img": "assets/images/stories.png",
-                                    "bg": const Color(0xff3d9aab),
-                                    "route": const Alphabet(),
-                                  },
-                                ];
-
                                 final item = items[index];
 
                                 return buildUniformCard(
-                                  content: Transform.scale(
-                                    scale: screenWidth < 400 ? 1.6 : 2.0,
-                                    child: Image.asset(
-                                      item["img"] as String,
-                                      width: cardSize * 0.5,
-                                      height: cardSize * 0.5,
-                                    ),
+                                  content: Image.asset(
+                                    item["img"] as String,
+                                    width: 180,
+                                    height: 180,
+                                    fit: BoxFit.contain,
                                   ),
                                   label: item["label"] as String,
                                   backgroundColor: item["bg"] as Color,
                                   borderColor: const Color(0xff3c2815),
-                                  fontSize: cardSize * 0.22,
+                                  fontSize: screenWidth < 500 ? 16 : 20,
                                   onTap: () {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (_) => item["route"] as Widget,
+                                        builder: (_) =>
+                                            item["route"] as Widget,
                                       ),
                                     );
                                   },
@@ -203,6 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // PROFILE BUTTON UI
   Widget buildProfileButton(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
