@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          AnimatedClouds(screenWidth: screenWidth, screenHeight: screenHeight),
+          // AnimatedClouds(screenWidth: screenWidth, screenHeight: screenHeight),
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(5),
@@ -145,8 +145,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             AnimatedPositioned(
                               duration: const Duration(milliseconds: 2000),
                               curve: Curves.easeOutBack,
-                              left: (constraints.maxWidth - 220) / 2,
-                              top: animateCat ? -110 : screenHeight * 0.35,
+                              right: 0,
+                              top: -190,
                               child: SizedBox(
                                 width: 220,
                                 height: 220,
