@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zinzy/screens/numbers/subscreens/numberTracing.dart';
 
 class NumbersScreen extends StatelessWidget {
   const NumbersScreen({super.key});
@@ -63,7 +64,7 @@ class NumbersScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /// BACK BUTTON (same alignment as Alphabet Screen)
+              /// BACK BUTTON
               GestureDetector(
                 onTap: () => Navigator.pop(context),
                 child: Align(
@@ -90,6 +91,7 @@ class NumbersScreen extends StatelessWidget {
                   ),
                   itemBuilder: (context, index) {
                     final activity = activities[index];
+
                     return Card(
                       elevation: 5,
                       shape: RoundedRectangleBorder(
@@ -97,8 +99,55 @@ class NumbersScreen extends StatelessWidget {
                       ),
                       color: activity['color'],
                       child: InkWell(
-                        onTap: () {},
                         borderRadius: BorderRadius.circular(30),
+
+                        /// 👉 ADD NAVIGATION HERE
+                        onTap: () {
+                          switch (activity['title']) {
+                            case 'Number Tracing':
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      NumberTracingScreen(number: 1),
+                                ),
+                              );
+                              break;
+
+                            case 'Count the Objects':
+                              // TODO: Add count objects screen
+                              break;
+
+                            case 'Number Matching':
+                              // TODO: Add matching screen
+                              break;
+
+                            case 'Number Coloring':
+                              // TODO: Add coloring screen
+                              break;
+
+                            case 'Number Puzzle':
+                              // TODO: Add puzzle screen
+                              break;
+
+                            case 'Finger Counting':
+                              // TODO: Add finger counting screen
+                              break;
+
+                            case 'Number Ordering':
+                              // TODO: Add ordering screen
+                              break;
+
+                            case 'Addition & Subtraction':
+                              // TODO: Add addition/subtraction screen
+                              break;
+
+                            case 'Songs & Rhymes':
+                              // TODO: Add rhymes screen
+                              break;
+                          }
+                        },
+
                         child: Padding(
                           padding: EdgeInsets.all(mainPadding * 0.8),
                           child: Column(
