@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:zinzy/widgets/cloud.dart';
 
 class NumbersScreen extends StatelessWidget {
   const NumbersScreen({super.key});
@@ -51,109 +50,85 @@ class NumbersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     final isTablet = screenWidth > 600;
-    final double padding = screenWidth * 0.03;
+    final double mainPadding = isTablet ? 24 : 16;
     final double iconSize = isTablet ? 64 : 48;
     final double fontSize = isTablet ? 20 : 16;
-    final double cardHeight = screenWidth * 0.4;
 
     return Scaffold(
       backgroundColor: const Color(0xFFffbb2d),
       body: SafeArea(
-        child: Stack(
-          children: [
-            AnimatedClouds(
-              screenWidth: screenWidth,
-              screenHeight: screenHeight,
-            ),
-            Column(
-              children: [
-                // Responsive Number Card Header
-                Padding(
-                  padding: EdgeInsets.all(padding),
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(42),
-                    ),
-                    color: const Color(0xfff36a1a),
-                    elevation: 6,
-                    child: Container(
-                      height: cardHeight,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
+        child: Padding(
+          padding: EdgeInsets.all(mainPadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /// BACK BUTTON (same alignment as Alphabet Screen)
+              GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Image.asset(
+                    'assets/images/back_button.png',
+                    width: isTablet ? 80 : 60,
+                    height: isTablet ? 80 : 60,
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 10),
+
+              /// MAIN GRID
+              Expanded(
+                child: GridView.builder(
+                  itemCount: activities.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: isTablet ? 3 : 2,
+                    childAspectRatio: isTablet ? 1.05 : 1.1,
+                    crossAxisSpacing: mainPadding,
+                    mainAxisSpacing: mainPadding,
+                  ),
+                  itemBuilder: (context, index) {
+                    final activity = activities[index];
+                    return Card(
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
                       ),
-                      child: Center(
-                        child: Text(
-                          'Number',
-                          style: TextStyle(
-                            fontSize: fontSize + 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                      color: activity['color'],
+                      child: InkWell(
+                        onTap: () {},
+                        borderRadius: BorderRadius.circular(30),
+                        child: Padding(
+                          padding: EdgeInsets.all(mainPadding * 0.8),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                activity['icon'],
+                                size: iconSize,
+                                color: Colors.white,
+                              ),
+                              SizedBox(height: mainPadding * 0.5),
+                              Text(
+                                activity['title'],
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: fontSize,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
-                // Responsive Grid
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: padding),
-                    child: GridView.builder(
-                      itemCount: activities.length,
-                      gridDelegate:
-                          SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: isTablet ? 3 : 2,
-                        childAspectRatio: isTablet ? 1.1 : 1.2,
-                        crossAxisSpacing: padding,
-                        mainAxisSpacing: padding,
-                      ),
-                      itemBuilder: (context, index) {
-                        final activity = activities[index];
-                        return Card(
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          color: activity['color'],
-                          child: InkWell(
-                            onTap: () {
-                              // TODO: Add navigation or audio
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.all(padding),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    activity['icon'],
-                                    size: iconSize,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(height: padding / 2),
-                                  Text(
-                                    activity['title'],
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: fontSize,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
