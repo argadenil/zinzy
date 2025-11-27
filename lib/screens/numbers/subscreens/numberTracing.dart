@@ -21,11 +21,15 @@ class _NumberTracingScreenState extends State<NumberTracingScreen>
 
   double buttonScale = 1;
 
+  /// Accuracy system
+  List<Offset> targetShape = [];
+  double accuracy = 0.0;
+
   @override
   void initState() {
     super.initState();
 
-    /// Confetti Controller
+    /// Confetti
     _confettiController = ConfettiController(
       duration: const Duration(seconds: 2),
     );
@@ -37,6 +41,11 @@ class _NumberTracingScreenState extends State<NumberTracingScreen>
       lowerBound: 0.45,
       upperBound: 1.0,
     )..repeat(reverse: true);
+
+    /// Create number outline
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _generateTargetShape(widget.number);
+    });
   }
 
   @override
@@ -46,19 +55,88 @@ class _NumberTracingScreenState extends State<NumberTracingScreen>
     super.dispose();
   }
 
+  // ---------------------- RESET ----------------------
   void _reset() {
     setState(() {
       points.clear();
       isCompleted = false;
+      accuracy = 0;
     });
     _glowController.repeat();
   }
 
+  // ---------------------- COMPLETE ----------------------
   void _markCompleted() {
+    accuracy = _calculateAccuracy();
+
     setState(() => isCompleted = true);
+
     _confettiController.play();
     _glowController.stop();
   }
+
+  // =====================================================
+  //                ACCURACY SYSTEM
+  // =====================================================
+
+  /// SIMPLE SHAPES FOR KIDS LEARNING
+  void _generateTargetShape(int number) {
+    final size = MediaQuery.of(context).size;
+
+    double cx = size.width * 0.5;
+    double top = size.height * 0.23;
+    double height = size.height * 0.45;
+
+    targetShape = [];
+
+    switch (number) {
+      case 1:
+        targetShape = List.generate(
+          90,
+          (i) => Offset(cx, top + (height / 90) * i),
+        );
+        break;
+
+      case 2:
+        targetShape = [
+          for (double t = 0; t < 1; t += 0.02)
+            Offset(cx + 100 * (1 - t), top + 180 * (t * t)),
+          for (double t = 0; t < 1; t += 0.02)
+            Offset(cx - 120 + 240 * t, top + 200 + 200 * t),
+        ];
+        break;
+
+      default:
+        targetShape = List.generate(
+          80,
+          (i) => Offset(cx, top + (height / 80) * i),
+        );
+    }
+  }
+
+  /// Compares child's stroke to target shape
+  double _calculateAccuracy() {
+    if (points.isEmpty) return 0;
+
+    int matched = 0;
+    const tolerance = 35.0; // EASY FOR KIDS
+
+    final userPoints = points.where((e) => e != null).cast<Offset>().toList();
+
+    for (final tp in targetShape) {
+      for (final up in userPoints) {
+        if ((tp - up).distance <= tolerance) {
+          matched++;
+          break;
+        }
+      }
+    }
+
+    double percent = (matched / targetShape.length) * 100;
+    return percent.clamp(0, 100);
+  }
+
+  // =====================================================
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +147,7 @@ class _NumberTracingScreenState extends State<NumberTracingScreen>
       body: SafeArea(
         child: Stack(
           children: [
-            /// -------------- BACK BUTTON ----------------
+            /// BACK BUTTON
             Positioned(
               top: 12,
               left: 12,
@@ -92,12 +170,12 @@ class _NumberTracingScreenState extends State<NumberTracingScreen>
               ),
             ),
 
-            /// ------------------- MAIN TRACING AREA ----------------
+            /// MAIN AREA
             Center(
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  /// ---- Number Glow ----
+                  /// GLOW NUMBER
                   AnimatedBuilder(
                     animation: _glowController,
                     builder: (_, __) {
@@ -115,11 +193,11 @@ class _NumberTracingScreenState extends State<NumberTracingScreen>
                                     color: Colors.yellowAccent.withOpacity(
                                       _glowController.value,
                                     ),
-                                    blurRadius: 50,
+                                    blurRadius: 60,
                                   ),
                                   const Shadow(
                                     color: Colors.orangeAccent,
-                                    blurRadius: 80,
+                                    blurRadius: 90,
                                   ),
                                 ]
                               : [],
@@ -128,14 +206,13 @@ class _NumberTracingScreenState extends State<NumberTracingScreen>
                     },
                   ),
 
-                  /// ---- Drawing Canvas ----
+                  /// DRAWING CANVAS
                   GestureDetector(
                     onPanUpdate: (details) {
                       RenderBox box = context.findRenderObject() as RenderBox;
 
                       Offset p = box.globalToLocal(details.globalPosition);
 
-                      // clamp to screen (avoid out-of-bound pixel errors)
                       p = Offset(
                         p.dx.clamp(0.0, box.size.width),
                         p.dy.clamp(0.0, box.size.height),
@@ -145,7 +222,7 @@ class _NumberTracingScreenState extends State<NumberTracingScreen>
                         points.add(p);
                       });
 
-                      if (points.length > 260 && !isCompleted) {
+                      if (points.length > 250 && !isCompleted) {
                         _markCompleted();
                       }
                     },
@@ -159,22 +236,48 @@ class _NumberTracingScreenState extends State<NumberTracingScreen>
                     ),
                   ),
 
-                  /// ---- CONFETTI ----
+                  /// CONFETTI
                   IgnorePointer(
                     child: ConfettiWidget(
                       confettiController: _confettiController,
                       blastDirectionality: BlastDirectionality.explosive,
                       emissionFrequency: 0.06,
                       numberOfParticles: 35,
-                      maxBlastForce: 9,
-                      minBlastForce: 4,
+                      maxBlastForce: 10,
+                      minBlastForce: 5,
                       gravity: 0.45,
                     ),
                   ),
+
+                  /// ACCURACY BADGE
+                  if (isCompleted)
+                    Positioned(
+                      top: 20,
+                      right: 20,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 18,
+                          vertical: 12,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.black54,
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: Text(
+                          "Accuracy: ${accuracy.toStringAsFixed(1)}%",
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
 
+            /// NAV BUTTONS
             _buildBottomButtons(context),
           ],
         ),
@@ -182,7 +285,7 @@ class _NumberTracingScreenState extends State<NumberTracingScreen>
     );
   }
 
-  /// ----------------- Navigation Buttons -----------------
+  // ------------------- Bottom Buttons -------------------
   Widget _buildBottomButtons(BuildContext context) {
     return Positioned(
       bottom: 40,
@@ -202,9 +305,7 @@ class _NumberTracingScreenState extends State<NumberTracingScreen>
               );
             }
           }),
-
           _circleButton(Icons.refresh, () => _reset()),
-
           _circleButton(Icons.arrow_forward, () {
             if (widget.number < 9) {
               Navigator.pushReplacement(
@@ -247,7 +348,7 @@ class _NumberTracingScreenState extends State<NumberTracingScreen>
   }
 }
 
-/// ------------------------ Painter ------------------------
+/// ---------------- PAINTER -------------------
 class TracingPainter extends CustomPainter {
   final List<Offset?> points;
   TracingPainter(this.points);
@@ -265,6 +366,7 @@ class TracingPainter extends CustomPainter {
     for (int i = 0; i < points.length - 1; i++) {
       final p1 = points[i];
       final p2 = points[i + 1];
+
       if (p1 != null && p2 != null) {
         canvas.drawLine(p1, p2, paint);
       }
