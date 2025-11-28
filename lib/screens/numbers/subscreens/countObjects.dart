@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
+import 'package:lottie/lottie.dart';
 
 class CountObjectsScreen extends StatefulWidget {
   const CountObjectsScreen({super.key});
@@ -12,14 +13,12 @@ class CountObjectsScreen extends StatefulWidget {
 
 class _CountObjectsScreenState extends State<CountObjectsScreen>
     with TickerProviderStateMixin {
-
   final Random _random = Random();
 
   int _objectCount = 0;
   bool _showSuccess = false;
   bool _showWrong = false;
   bool _confettiPlayed = false;
-
 
   final List<String> _objectImages = [
     'assets/images/alphabets/a.png',
@@ -56,86 +55,91 @@ class _CountObjectsScreenState extends State<CountObjectsScreen>
     _generateObjects();
   }
 
-void _generateObjects() {
-  setState(() {
-    _showSuccess = false;
-    _showWrong = false;
+  void _generateObjects() {
+    setState(() {
+      _showSuccess = false;
+      _showWrong = false;
 
-    _objectCount = _random.nextInt(9) + 1;
-    _currentObject = _objectImages[_random.nextInt(_objectImages.length)];
+      _objectCount = _random.nextInt(9) + 1;
+      _currentObject = _objectImages[_random.nextInt(_objectImages.length)];
 
-    _positions.clear();
+      _positions.clear();
 
-    const double minDistance = 0.18; // space between objects
-    const int maxTries = 100;
+      const double minDistance = 0.18;
+      const int maxTries = 100;
 
-    for (int i = 0; i < _objectCount; i++) {
-      bool placed = false;
+      for (int i = 0; i < _objectCount; i++) {
+        bool placed = false;
 
-      for (int t = 0; t < maxTries && !placed; t++) {
-        final Offset pos = Offset(
-          0.1 + _random.nextDouble() * 0.8,
-          0.1 + _random.nextDouble() * 0.8,
-        );
+        for (int t = 0; t < maxTries && !placed; t++) {
+          final Offset pos = Offset(
+            0.1 + _random.nextDouble() * 0.8,
+            0.1 + _random.nextDouble() * 0.8,
+          );
 
-        bool overlaps = false;
+          bool overlaps = false;
 
-        for (final existing in _positions) {
-          final double dx = (pos.dx - existing.dx);
-          final double dy = (pos.dy - existing.dy);
-          final double dist = sqrt(dx * dx + dy * dy);
+          for (final existing in _positions) {
+            final double dx = pos.dx - existing.dx;
+            final double dy = pos.dy - existing.dy;
+            final double dist = sqrt(dx * dx + dy * dy);
 
-          if (dist < minDistance) {
-            overlaps = true;
-            break;
+            if (dist < minDistance) {
+              overlaps = true;
+              break;
+            }
+          }
+
+          if (!overlaps) {
+            _positions.add(pos);
+            placed = true;
           }
         }
 
-        if (!overlaps) {
-          _positions.add(pos);
-          placed = true;
+        if (!placed) {
+          _positions.add(
+            Offset(
+              0.1 + _random.nextDouble() * 0.8,
+              0.1 + _random.nextDouble() * 0.8,
+            ),
+          );
         }
       }
-
-      // Fallback if no good position found
-      if (!placed) {
-        _positions.add(
-          Offset(
-            0.1 + _random.nextDouble() * 0.8,
-            0.1 + _random.nextDouble() * 0.8,
-          ),
-        );
-      }
-    }
-  });
-}
-
-
-void _checkAnswer(int selected) {
-  if (selected == _objectCount) {
-    if (_confettiPlayed) return; // prevent double fire
-
-    setState(() {
-      _showSuccess = true;
-      _showWrong = false;
-      _confettiPlayed = true;
-    });
-
-    // stop any running animation before playing
-    _confettiController.stop();
-    _confettiController.play();
-
-    Future.delayed(const Duration(seconds: 1), () {
-      _confettiPlayed = false; // reset for next round
-      _generateObjects();
-    });
-  } else {
-    setState(() {
-      _showWrong = true;
-      _showSuccess = false;
     });
   }
-}
+
+  void _checkAnswer(int selected) {
+    if (selected == _objectCount) {
+      if (_confettiPlayed) return;
+
+      setState(() {
+        _showSuccess = true;
+        _showWrong = false;
+        _confettiPlayed = true;
+      });
+
+      _confettiController
+        ..stop()
+        ..play();
+
+      Future.delayed(const Duration(milliseconds: 1200), () {
+        setState(() {
+          _showSuccess = false;
+          _confettiPlayed = false;
+        });
+        _generateObjects();
+      });
+    } else {
+      setState(() {
+        _showWrong = true;
+        _showSuccess = false;
+      });
+
+      Future.delayed(const Duration(milliseconds: 1200), () {
+        setState(() => _showWrong = false);
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -184,7 +188,6 @@ void _checkAnswer(int selected) {
               children: [
                 const SizedBox(height: 10),
 
-                /// Back
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Align(
@@ -202,7 +205,7 @@ void _checkAnswer(int selected) {
 
                 const SizedBox(height: 10),
 
-                /// Glass container with objects
+                /// Objects box
                 Expanded(
                   flex: 6,
                   child: Container(
@@ -223,30 +226,25 @@ void _checkAnswer(int selected) {
                           child: LayoutBuilder(
                             builder: (context, constraints) {
                               final boxWidth = constraints.maxWidth;
-                              final boxHeight = constraints.maxHeight;
-
-                              return RepaintBoundary(
-                                child: Stack(
-                                  children: List.generate(_objectCount, (index) {
-                                    final pos = _positions[index];
-
-                                    return Positioned(
-                                      left: pos.dx * (boxWidth - 100),
-                                      top: pos.dy * (boxHeight - 100),
-                                      child: ScaleTransition(
-                                        scale: Tween<double>(
-                                          begin: 0.95,
-                                          end: 1.1,
-                                        ).animate(_pulseController),
-                                        child: Image.asset(
-                                          _currentObject,
-                                          width: 95,
-                                          height: 95,
-                                        ),
+                              return Stack(
+                                children: List.generate(_objectCount, (index) {
+                                  final pos = _positions[index];
+                                  return Positioned(
+                                    left: pos.dx * (boxWidth - 100),
+                                    top: pos.dy * (boxWidth - 100),
+                                    child: ScaleTransition(
+                                      scale: Tween<double>(
+                                        begin: 0.95,
+                                        end: 1.1,
+                                      ).animate(_pulseController),
+                                      child: Image.asset(
+                                        _currentObject,
+                                        width: 95,
+                                        height: 95,
                                       ),
-                                    );
-                                  }),
-                                ),
+                                    ),
+                                  );
+                                }),
                               );
                             },
                           ),
@@ -255,29 +253,6 @@ void _checkAnswer(int selected) {
                     ),
                   ),
                 ),
-
-                /// Feedback
-                if (_showSuccess)
-                  const Text(
-                    "✨ Perfect!",
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-
-                if (_showWrong)
-                  const Text(
-                    "❌ Try again",
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-
-                const SizedBox(height: 10),
 
                 /// Number buttons
                 Expanded(
@@ -325,7 +300,29 @@ void _checkAnswer(int selected) {
             ),
           ),
 
-          /// ✅ Optimized Confetti (no freeze)
+          /// ✅ Lottie Popup Overlay
+          if (_showSuccess || _showWrong)
+            Positioned.fill(
+              child: Container(
+                color: Colors.black.withOpacity(0.45),
+                child: Center(
+                  child: Container(
+                    width: 260,
+                    padding: const EdgeInsets.all(20),
+
+                    child: Lottie.asset(
+                      _showSuccess
+                          ? 'assets/images/success.json'
+                          : 'assets/images/fail.json',
+                      repeat: false,
+                      height: 180,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+          /// ✅ Confetti
           RepaintBoundary(
             child: Align(
               alignment: Alignment.topCenter,
@@ -333,9 +330,9 @@ void _checkAnswer(int selected) {
                 confettiController: _confettiController,
                 blastDirectionality: BlastDirectionality.explosive,
                 shouldLoop: false,
-                emissionFrequency: 0.04,    // lower load
-                numberOfParticles: 100,      // less particles
-                gravity: 0.1,             // smoother
+                emissionFrequency: 0.04,
+                numberOfParticles: 100,
+                gravity: 0.1,
                 maxBlastForce: 100,
                 minBlastForce: 50,
               ),
