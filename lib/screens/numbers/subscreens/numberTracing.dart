@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class NumberTracingScreen extends StatefulWidget {
   final int number;
@@ -14,38 +14,26 @@ class NumberTracingScreen extends StatefulWidget {
 class _NumberTracingScreenState extends State<NumberTracingScreen>
     with SingleTickerProviderStateMixin {
   List<Offset?> points = [];
-  bool isCompleted = false;
 
   late ConfettiController _confettiController;
   late AnimationController _glowController;
 
-  double buttonScale = 1;
-
-  /// Accuracy system
-  List<Offset> targetShape = [];
-  double accuracy = 0.0;
+  bool isCompleted = false;
+  double accuracy = 0;
 
   @override
   void initState() {
     super.initState();
 
-    /// Confetti
-    _confettiController = ConfettiController(
-      duration: const Duration(seconds: 2),
-    );
+    _confettiController =
+        ConfettiController(duration: const Duration(seconds: 2));
 
-    /// Glow animation
     _glowController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1200),
-      lowerBound: 0.45,
+      lowerBound: 0.4,
       upperBound: 1.0,
     )..repeat(reverse: true);
-
-    /// Create number outline
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _generateTargetShape(widget.number);
-    });
   }
 
   @override
@@ -55,7 +43,6 @@ class _NumberTracingScreenState extends State<NumberTracingScreen>
     super.dispose();
   }
 
-  // ---------------------- RESET ----------------------
   void _reset() {
     setState(() {
       points.clear();
@@ -65,118 +52,55 @@ class _NumberTracingScreenState extends State<NumberTracingScreen>
     _glowController.repeat();
   }
 
-  // ---------------------- COMPLETE ----------------------
   void _markCompleted() {
-    accuracy = _calculateAccuracy();
+    if (isCompleted) return;
 
-    setState(() => isCompleted = true);
+    setState(() {
+      accuracy = 100;
+      isCompleted = true;
+    });
 
-    _confettiController.play();
     _glowController.stop();
+    _confettiController.play();
   }
-
-  // =====================================================
-  //                ACCURACY SYSTEM
-  // =====================================================
-  void _generateTargetShape(int number) {
-    final size = MediaQuery.of(context).size;
-
-    double cx = size.width * 0.5;
-    double top = size.height * 0.23;
-    double height = size.height * 0.45;
-
-    targetShape = [];
-
-    switch (number) {
-      case 1:
-        targetShape = List.generate(
-          90,
-          (i) => Offset(cx, top + (height / 90) * i),
-        );
-        break;
-
-      case 2:
-        targetShape = [
-          for (double t = 0; t < 1; t += 0.02)
-            Offset(cx + 100 * (1 - t), top + 180 * (t * t)),
-          for (double t = 0; t < 1; t += 0.02)
-            Offset(cx - 120 + 240 * t, top + 200 + 200 * t),
-        ];
-        break;
-
-      default:
-        targetShape = List.generate(
-          80,
-          (i) => Offset(cx, top + (height / 80) * i),
-        );
-    }
-  }
-
-  double _calculateAccuracy() {
-    if (points.isEmpty) return 0;
-
-    int matched = 0;
-    const tolerance = 35.0; // EASY FOR KIDS
-
-    final userPoints = points.where((e) => e != null).cast<Offset>().toList();
-
-    for (final tp in targetShape) {
-      for (final up in userPoints) {
-        if ((tp - up).distance <= tolerance) {
-          matched++;
-          break;
-        }
-      }
-    }
-
-    double percent = (matched / targetShape.length) * 100;
-    return percent.clamp(0, 100);
-  }
-
-  // =====================================================
 
   @override
   Widget build(BuildContext context) {
     final numberText = widget.number.toString();
 
     return Scaffold(
-      backgroundColor: const Color(0xFFffb938),
+      backgroundColor: const Color(0xFFFFB938),
       body: SafeArea(
         child: Stack(
           fit: StackFit.expand,
           children: [
-            /// DRAWING CANVAS (bottom layer)
-            GestureDetector(
-              onPanUpdate: (details) {
-                RenderBox box = context.findRenderObject() as RenderBox;
-
-                Offset p = box.globalToLocal(details.globalPosition);
-
-                p = Offset(
-                  p.dx.clamp(0.0, box.size.width),
-                  p.dy.clamp(0.0, box.size.height),
-                );
-
+            // ✅ THIS PART IS THE MAIN FIX: FULLSCREEN LISTENER
+            Listener(
+              behavior: HitTestBehavior.opaque,
+              onPointerDown: (details) {
                 setState(() {
-                  points.add(p);
+                  points.add(details.localPosition);
+                });
+              },
+              onPointerMove: (details) {
+                setState(() {
+                  points.add(details.localPosition);
                 });
 
-                if (points.length > 250 && !isCompleted) {
+                if (points.length > 200) {
                   _markCompleted();
                 }
               },
-              onPanEnd: (_) => points.add(null),
-              behavior: HitTestBehavior.translucent,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(30),
-                child: CustomPaint(
-                  painter: TracingPainter(points),
-                  size: Size.infinite,
-                ),
+              onPointerUp: (_) {
+                points.add(null);
+              },
+              child: CustomPaint(
+                painter: TracingPainter(points),
+                size: Size.infinite,
               ),
             ),
 
-            /// GLOW NUMBER
+            /// Glow number
             Center(
               child: AnimatedBuilder(
                 animation: _glowController,
@@ -184,91 +108,62 @@ class _NumberTracingScreenState extends State<NumberTracingScreen>
                   return Text(
                     numberText,
                     style: GoogleFonts.baloo2(
-                      fontSize: 380,
+                      fontSize: 360,
                       fontWeight: FontWeight.bold,
-                      color: isCompleted
-                          ? Colors.white.withOpacity(_glowController.value)
-                          : Colors.white.withOpacity(.3),
-                      shadows: isCompleted
-                          ? [
-                              Shadow(
-                                color: Colors.yellowAccent.withOpacity(
-                                  _glowController.value,
-                                ),
-                                blurRadius: 60,
-                              ),
-                              const Shadow(
-                                color: Colors.orangeAccent,
-                                blurRadius: 90,
-                              ),
-                            ]
-                          : [],
+                      color: Colors.white.withOpacity(
+                        isCompleted ? _glowController.value : 0.25,
+                      ),
                     ),
                   );
                 },
               ),
             ),
 
-            /// CONFETTI
+            /// Confetti
             IgnorePointer(
               child: ConfettiWidget(
                 confettiController: _confettiController,
                 blastDirectionality: BlastDirectionality.explosive,
-                emissionFrequency: 0.06,
-                numberOfParticles: 35,
-                maxBlastForce: 10,
-                minBlastForce: 5,
-                gravity: 0.45,
+                emissionFrequency: 0.1,
+                numberOfParticles: 60,
+                maxBlastForce: 40,
+                minBlastForce: 20,
+                gravity: 0.3,
               ),
             ),
 
-            /// ACCURACY BADGE
+            /// Accuracy badge
             if (isCompleted)
               Positioned(
                 top: 20,
                 right: 20,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 18,
-                    vertical: 12,
-                  ),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.black54,
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
-                    "Accuracy: ${accuracy.toStringAsFixed(1)}%",
+                    "Accuracy: ${accuracy.toInt()}%",
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 26,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
               ),
 
-            /// TOP BACK BUTTON
+            /// Back
             Positioned(
               top: 12,
               left: 12,
-              child: GestureDetector(
-                onTap: () {
-                  HapticFeedback.lightImpact();
-                  Navigator.pop(context);
-                },
-                child: AnimatedScale(
-                  scale: buttonScale,
-                  duration: const Duration(milliseconds: 150),
-                  child: Image.asset(
-                    'assets/images/back_button.png',
-                    width: 70,
-                    height: 70,
-                  ),
-                ),
-              ),
+              child: _circleButton(Icons.arrow_back, () {
+                Navigator.pop(context);
+              }),
             ),
 
-            /// BOTTOM NAV BUTTONS
+            /// Bottom nav
             Positioned(
               bottom: 40,
               left: 20,
@@ -281,8 +176,8 @@ class _NumberTracingScreenState extends State<NumberTracingScreen>
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (_) =>
-                              NumberTracingScreen(number: widget.number - 1),
+                          builder: (_) => NumberTracingScreen(
+                              number: widget.number - 1),
                         ),
                       );
                     }
@@ -293,8 +188,8 @@ class _NumberTracingScreenState extends State<NumberTracingScreen>
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (_) =>
-                              NumberTracingScreen(number: widget.number + 1),
+                          builder: (_) => NumberTracingScreen(
+                              number: widget.number + 1),
                         ),
                       );
                     }
@@ -334,7 +229,6 @@ class _NumberTracingScreenState extends State<NumberTracingScreen>
   }
 }
 
-/// ---------------- PAINTER -------------------
 class TracingPainter extends CustomPainter {
   final List<Offset?> points;
   TracingPainter(this.points);
@@ -342,11 +236,11 @@ class TracingPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.red.shade400
-      ..strokeWidth = 30
-      ..style = PaintingStyle.stroke
+      ..color = Colors.red
+      ..strokeWidth = 26
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round
+      ..style = PaintingStyle.stroke
       ..isAntiAlias = true;
 
     for (int i = 0; i < points.length - 1; i++) {
@@ -360,5 +254,5 @@ class TracingPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+  bool shouldRepaint(TracingPainter oldDelegate) => true;
 }
