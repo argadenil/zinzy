@@ -9,20 +9,53 @@ class AnimalScreen extends StatefulWidget {
   State<AnimalScreen> createState() => _AnimalScreenState();
 }
 
-class _AnimalScreenState extends State<AnimalScreen> with TickerProviderStateMixin {
+class _AnimalScreenState extends State<AnimalScreen>
+    with TickerProviderStateMixin {
   final AudioPlayer _audioPlayer = AudioPlayer();
   final FlutterTts _flutterTts = FlutterTts();
   int? _tappedIndex;
 
   final List<Map<String, String>> _animals = [
-    {'name': 'Cat', 'image': 'assets/images/animals/cat.png', 'sound': 'cat.mp3'},
-    {'name': 'Dog', 'image': 'assets/images/animals/dog.png', 'sound': 'dog.mp3'},
-    {'name': 'Lion', 'image': 'assets/images/animals/lion.png', 'sound': 'lion.mp3'},
-    {'name': 'Elephant', 'image': 'assets/images/animals/elephant.png', 'sound': 'elephant.mp3'},
-    {'name': 'Tiger', 'image': 'assets/images/animals/tiger.png', 'sound': 'tiger.mp3'},
-    {'name': 'Monkey', 'image': 'assets/images/animals/monkey.png', 'sound': 'monkey.mp3'},
-    {'name': 'Giraffe', 'image': 'assets/images/animals/giraffe.png', 'sound': 'giraffe.mp3'},
-    {'name': 'Zebra', 'image': 'assets/images/animals/zebra.png', 'sound': 'zebra.mp3'},
+    {
+      'name': 'Cat',
+      'image': 'assets/images/animals/cat.png',
+      'sound': 'cat.mp3',
+    },
+    {
+      'name': 'Dog',
+      'image': 'assets/images/animals/dog.png',
+      'sound': 'dog.mp3',
+    },
+    {
+      'name': 'Lion',
+      'image': 'assets/images/animals/lion.png',
+      'sound': 'lion.mp3',
+    },
+    {
+      'name': 'Elephant',
+      'image': 'assets/images/animals/elephant.png',
+      'sound': 'elephant.mp3',
+    },
+    {
+      'name': 'Tiger',
+      'image': 'assets/images/animals/tiger.png',
+      'sound': 'tiger.mp3',
+    },
+    {
+      'name': 'Monkey',
+      'image': 'assets/images/animals/monkey.png',
+      'sound': 'monkey.mp3',
+    },
+    {
+      'name': 'Giraffe',
+      'image': 'assets/images/animals/giraffe.png',
+      'sound': 'giraffe.mp3',
+    },
+    {
+      'name': 'Zebra',
+      'image': 'assets/images/animals/zebra.png',
+      'sound': 'zebra.mp3',
+    },
   ];
 
   String? _selectedAnimalImage;
@@ -40,10 +73,7 @@ class _AnimalScreenState extends State<AnimalScreen> with TickerProviderStateMix
     _walkAnimation = Tween<Offset>(
       begin: const Offset(-1.5, 1.2),
       end: const Offset(1.5, 1.2),
-    ).animate(CurvedAnimation(
-      parent: _walkController!,
-      curve: Curves.linear,
-    ));
+    ).animate(CurvedAnimation(parent: _walkController!, curve: Curves.linear));
 
     _walkController?.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -55,7 +85,11 @@ class _AnimalScreenState extends State<AnimalScreen> with TickerProviderStateMix
     });
   }
 
-  Future<void> _playAnimalSound(String fileName, String animalName, String imagePath) async {
+  Future<void> _playAnimalSound(
+    String fileName,
+    String animalName,
+    String imagePath,
+  ) async {
     try {
       await _audioPlayer.stop();
       await _audioPlayer.play(AssetSource('audio/animals/$fileName'));
@@ -80,10 +114,26 @@ class _AnimalScreenState extends State<AnimalScreen> with TickerProviderStateMix
     final b = 0.072 * invSat;
 
     return <double>[
-      r + saturation, g, b, 0, 0,
-      r, g + saturation, b, 0, 0,
-      r, g, b + saturation, 0, 0,
-      0, 0, 0, 1, 0,
+      r + saturation,
+      g,
+      b,
+      0,
+      0,
+      r,
+      g + saturation,
+      b,
+      0,
+      0,
+      r,
+      g,
+      b + saturation,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
     ];
   }
 
@@ -118,10 +168,7 @@ class _AnimalScreenState extends State<AnimalScreen> with TickerProviderStateMix
               position: _walkAnimation!,
               child: Align(
                 alignment: Alignment.bottomLeft,
-                child: Image.asset(
-                  _selectedAnimalImage!,
-                  height: 120,
-                ),
+                child: Image.asset(_selectedAnimalImage!, height: 120),
               ),
             ),
 
@@ -159,18 +206,21 @@ class _AnimalScreenState extends State<AnimalScreen> with TickerProviderStateMix
                   Expanded(
                     child: GridView.builder(
                       itemCount: _animals.length,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 20,
-                        crossAxisSpacing: 20,
-                        childAspectRatio: 1,
-                      ),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 10,
+                            childAspectRatio: 1,
+                          ),
                       itemBuilder: (context, index) {
                         final animal = _animals[index];
                         final isTapped = _tappedIndex == index;
 
                         return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 6.0), // Fix clipping
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6.0,
+                          ), // Fix clipping
                           child: GestureDetector(
                             onTap: () async {
                               setState(() => _tappedIndex = index);
@@ -179,20 +229,29 @@ class _AnimalScreenState extends State<AnimalScreen> with TickerProviderStateMix
                                 animal['name']!,
                                 animal['image']!,
                               );
-                              Future.delayed(const Duration(milliseconds: 500), () {
-                                if (mounted) setState(() => _tappedIndex = null);
-                              });
+                              Future.delayed(
+                                const Duration(milliseconds: 500),
+                                () {
+                                  if (mounted)
+                                    setState(() => _tappedIndex = null);
+                                },
+                              );
                             },
                             child: AnimatedScale(
                               scale: isTapped ? 1.05 : 1.0,
                               duration: const Duration(milliseconds: 200),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: Colors.primaries[index % Colors.primaries.length]
+                                  color: Colors
+                                      .primaries[index %
+                                          Colors.primaries.length]
                                       .shade200
                                       .withOpacity(0.9),
                                   borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(color: const Color(0xff3c2815), width: 5),
+                                  border: Border.all(
+                                    color: const Color(0xff3c2815),
+                                    width: 5,
+                                  ),
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.black.withOpacity(0.2),
