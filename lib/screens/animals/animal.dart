@@ -189,15 +189,6 @@ class _AnimalScreenState extends State<AnimalScreen>
                           height: 60,
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      const Text(
-                        'Learn Animals',
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xfffffcc9),
-                        ),
-                      ),
                     ],
                   ),
                   const SizedBox(height: 20),
