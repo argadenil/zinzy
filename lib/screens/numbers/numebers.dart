@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zinzy/screens/numbers/subscreens/countObjects.dart';
 import 'package:zinzy/screens/numbers/subscreens/numberTracing.dart';
 
 class NumbersScreen extends StatelessWidget {
@@ -112,6 +113,14 @@ class NumbersScreen extends StatelessWidget {
                                 MaterialPageRoute(
                                   builder: (_) =>
                                       NumberTracingScreen(number: 1),
+                                ),
+                              );
+                              break;
+                            case 'Count the Objects':
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => CountObjectsScreen(),
                                 ),
                               );
                               break;
