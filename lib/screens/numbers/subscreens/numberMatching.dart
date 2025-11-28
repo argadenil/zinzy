@@ -11,9 +11,8 @@ class NumberMatchingScreen extends StatefulWidget {
 
 class _NumberMatchingScreenState extends State<NumberMatchingScreen>
     with SingleTickerProviderStateMixin {
-  final ConfettiController _confettiController = ConfettiController(
-    duration: const Duration(seconds: 2),
-  );
+  final ConfettiController _confettiController =
+      ConfettiController(duration: const Duration(seconds: 2));
 
   final List<int> numbers = List.generate(9, (i) => i + 1);
   late List<int> shuffledNumbers;
@@ -26,6 +25,9 @@ class _NumberMatchingScreenState extends State<NumberMatchingScreen>
   int stars = 0;
   bool showSuccess = false;
 
+  static const double pagePadding = 16;
+  static const double cardRadius = 22;
+
   @override
   void initState() {
     super.initState();
@@ -36,10 +38,8 @@ class _NumberMatchingScreenState extends State<NumberMatchingScreen>
       duration: const Duration(milliseconds: 600),
     );
 
-    _bounceAnimation = CurvedAnimation(
-      parent: _bounceController,
-      curve: Curves.elasticOut,
-    );
+    _bounceAnimation =
+        CurvedAnimation(parent: _bounceController, curve: Curves.elasticOut);
   }
 
   void _setupGame() {
@@ -84,141 +84,70 @@ class _NumberMatchingScreenState extends State<NumberMatchingScreen>
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFffbb2d),
+      backgroundColor: const Color(0xFFFFBB2D),
       body: Stack(
         children: [
-          /// MAIN GAME
           Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(pagePadding),
             child: SafeArea(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  /// HEADER ROW
+                  /// HEADER
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: Image.asset(
                           'assets/images/back_button.png',
-                          width: 70,
-                          height: 70,
+                          width: 60,
+                          height: 60,
                         ),
                       ),
-                      Spacer(),
-
-                      /// Star counter on the right
                       ScaleTransition(
                         scale: _bounceAnimation,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 8,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(30),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 6,
-                                offset: Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(
-                                Icons.star,
-                                color: Colors.amber,
-                                size: 32,
-                              ),
-                              const SizedBox(width: 6),
-                              Text(
-                                "$stars",
-                                style: const TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        child: _buildStarCounter(),
                       ),
                     ],
                   ),
 
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 16),
 
                   /// TARGET GRID
                   Expanded(
-                    child: GridView.count(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
-                      children: numbers.map((number) {
-                        return DragTarget<int>(
-                          onWillAccept: (data) => data == number,
-                          onAccept: (data) => _handleMatch(number),
-                          builder: (context, candidateData, rejectedData) {
-                            final isMatched = matched[number] ?? false;
-                            final isHighlighted = candidateData.isNotEmpty;
-
-                            return AnimatedContainer(
-                              duration: const Duration(milliseconds: 250),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: isMatched
-                                    ? Colors.green.shade400
-                                    : (isHighlighted
-                                          ? Colors.orange.shade100
-                                          : Colors.white),
-                                borderRadius: BorderRadius.circular(24),
-                                border: Border.all(
-                                  color: Colors.deepOrange,
-                                  width: 3,
-                                ),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Colors.black12,
-                                    blurRadius: 6,
-                                    offset: Offset(2, 3),
-                                  ),
-                                ],
-                              ),
-                              child: Text(
-                                isMatched ? "✅ $number" : "$number",
-                                style: const TextStyle(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      }).toList(),
+                    child: GridView.builder(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 12,
+                        mainAxisSpacing: 12,
+                      ),
+                      itemCount: numbers.length,
+                      itemBuilder: (context, index) {
+                        final number = numbers[index];
+                        return _buildTargetCard(number);
+                      },
                     ),
                   ),
 
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 12),
 
-                  const Text(
-                    "Drag & Drop",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  const Center(
+                    child: Text(
+                      "Drag & Drop",
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    ),
                   ),
 
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 10),
 
-                  /// DRAGGABLE AREA
+                  /// DRAGGABLE GRID
                   Container(
-                    height: size.height * 0.22,
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 6,
-                    ),
-                    padding: const EdgeInsets.all(10),
+                    height: size.height * 0.23,
+                    padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(24),
@@ -226,35 +155,36 @@ class _NumberMatchingScreenState extends State<NumberMatchingScreen>
                         BoxShadow(
                           color: Colors.black12,
                           blurRadius: 6,
-                          offset: Offset(0, 4),
-                        ),
+                          offset: Offset(0, 3),
+                        )
                       ],
                     ),
-                    child: GridView.count(
-                      crossAxisCount: 5,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      children: shuffledNumbers.map((number) {
+                    child: GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 5,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                      ),
+                      itemCount: shuffledNumbers.length,
+                      itemBuilder: (context, index) {
+                        final number = shuffledNumbers[index];
                         if (matched[number] == true) {
                           return const SizedBox();
                         }
+
                         return Draggable<int>(
                           data: number,
-
-                          /// BIGGER while dragging
                           feedback: Transform.scale(
-                            scale: 1.5,
+                            scale: 1.4,
                             child: _buildNumberCard(number, true),
                           ),
-
-                          childWhenDragging: _buildNumberCard(
-                            number,
-                            false,
-                            faded: true,
-                          ),
+                          childWhenDragging:
+                              _buildNumberCard(number, false, faded: true),
                           child: _buildNumberCard(number, false),
                         );
-                      }).toList(),
+                      },
                     ),
                   ),
                 ],
@@ -262,7 +192,7 @@ class _NumberMatchingScreenState extends State<NumberMatchingScreen>
             ),
           ),
 
-          /// 🎉 CONFETTI — ABOVE EVERYTHING
+          /// CONFETTI
           Positioned.fill(
             child: IgnorePointer(
               child: Align(
@@ -281,72 +211,57 @@ class _NumberMatchingScreenState extends State<NumberMatchingScreen>
             ),
           ),
 
-          /// 🎉 SUCCESS OVERLAY
-          if (showSuccess)
-            Container(
-              color: Colors.black54,
-              child: Center(
-                child: Container(
-                  padding: const EdgeInsets.all(24),
-                  margin: const EdgeInsets.symmetric(horizontal: 30),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text(
-                        "🎉 Level Complete!",
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.deepOrange,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        "You earned $stars ⭐",
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: _resetGame,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.deepOrange,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 30,
-                            vertical: 12,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                        child: const Text(
-                          "Play Again",
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+          /// SUCCESS SCREEN
+          if (showSuccess) _buildSuccessOverlay(),
         ],
       ),
     );
   }
 
-  Widget _buildNumberCard(int number, bool dragging, {bool faded = false}) {
-    return Opacity(
-      opacity: faded ? 0.4 : 1,
-      child: Material(
-        color: Colors.transparent,
-        child: Container(
+  /// STAR COUNTER
+  Widget _buildStarCounter() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: const [
+          BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 2)),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.star, color: Colors.amber, size: 30),
+          const SizedBox(width: 6),
+          Text(
+            "$stars",
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// TARGET CARD
+  Widget _buildTargetCard(int number) {
+    return DragTarget<int>(
+      onWillAccept: (data) => data == number,
+      onAccept: (_) => _handleMatch(number),
+      builder: (context, candidate, rejected) {
+        final isMatched = matched[number] ?? false;
+        final isHighlighted = candidate.isNotEmpty;
+
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: dragging ? Colors.orangeAccent : Colors.white,
-            borderRadius: BorderRadius.circular(20),
+            color: isMatched
+                ? Colors.green.shade400
+                : (isHighlighted
+                    ? Colors.orange.shade100
+                    : Colors.white),
+            borderRadius: BorderRadius.circular(cardRadius),
             border: Border.all(color: Colors.deepOrange, width: 3),
             boxShadow: const [
               BoxShadow(
@@ -357,8 +272,80 @@ class _NumberMatchingScreenState extends State<NumberMatchingScreen>
             ],
           ),
           child: Text(
-            "$number",
-            style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+            isMatched ? "✅ $number" : "$number",
+            style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          ),
+        );
+      },
+    );
+  }
+
+  /// DRAG CARD
+  Widget _buildNumberCard(int number, bool dragging, {bool faded = false}) {
+    return Opacity(
+      opacity: faded ? 0.4 : 1,
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: dragging ? Colors.orangeAccent : Colors.white,
+          borderRadius: BorderRadius.circular(cardRadius),
+          border: Border.all(color: Colors.deepOrange, width: 3),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 6,
+              offset: Offset(2, 3),
+            ),
+          ],
+        ),
+        child: Text(
+          "$number",
+          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+
+  /// SUCCESS OVERLAY
+  Widget _buildSuccessOverlay() {
+    return Container(
+      color: Colors.black54,
+      child: Center(
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          margin: const EdgeInsets.symmetric(horizontal: 32),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                "🎉 Level Complete!",
+                style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepOrange),
+              ),
+              const SizedBox(height: 10),
+              Text("You earned $stars ⭐",
+                  style: const TextStyle(fontSize: 20)),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _resetGame,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepOrange,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                child:
+                    const Text("Play Again", style: TextStyle(fontSize: 18)),
+              ),
+            ],
           ),
         ),
       ),
