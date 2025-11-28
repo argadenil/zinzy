@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zinzy/screens/numbers/subscreens/countObjects.dart';
 import 'package:zinzy/screens/numbers/subscreens/numberColoring.dart';
 import 'package:zinzy/screens/numbers/subscreens/numberMatching.dart';
+import 'package:zinzy/screens/numbers/subscreens/numberPuzzle.dart';
 import 'package:zinzy/screens/numbers/subscreens/numberTracing.dart';
 
 class NumbersScreen extends StatelessWidget {
@@ -19,11 +20,11 @@ class NumbersScreen extends StatelessWidget {
       'icon': Icons.link,
       'color': Color(0xFFef5350),
     },
-    {
-      'title': 'Number Coloring',
-      'icon': Icons.color_lens,
-      'color': Color(0xFFab47bc),
-    },
+    // {
+    //   'title': 'Number Coloring',
+    //   'icon': Icons.color_lens,
+    //   'color': Color(0xFFab47bc),
+    // },
     {
       'title': 'Number Puzzle',
       'icon': Icons.extension,
@@ -134,11 +135,11 @@ class NumbersScreen extends StatelessWidget {
                                 ),
                               );
                               break;
-                              case 'Number Coloring':
+                              case 'Number Puzzle':
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => NumberColoringScreen(),
+                                  builder: (_) =>  ModernNumberPuzzleScreen(),
                                 ),
                               );
                               break;
