@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zinzy/screens/numbers/subscreens/countObjects.dart';
+import 'package:zinzy/screens/numbers/subscreens/numberColoring.dart';
 import 'package:zinzy/screens/numbers/subscreens/numberMatching.dart';
 import 'package:zinzy/screens/numbers/subscreens/numberTracing.dart';
 
@@ -130,6 +131,14 @@ class NumbersScreen extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                   builder: (_) => NumberMatchingScreen(),
+                                ),
+                              );
+                              break;
+                              case 'Number Coloring':
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => NumberColoringScreen(),
                                 ),
                               );
                               break;
