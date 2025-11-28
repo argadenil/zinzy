@@ -1,5 +1,7 @@
 import 'dart:math';
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:confetti/confetti.dart';
 
 class CountObjectsScreen extends StatefulWidget {
   const CountObjectsScreen({super.key});
@@ -10,7 +12,9 @@ class CountObjectsScreen extends StatefulWidget {
 
 class _CountObjectsScreenState extends State<CountObjectsScreen>
     with TickerProviderStateMixin {
+
   final Random _random = Random();
+
   int _objectCount = 0;
   bool _showSuccess = false;
   bool _showWrong = false;
@@ -22,7 +26,7 @@ class _CountObjectsScreenState extends State<CountObjectsScreen>
     'assets/images/alphabets/h.png',
     'assets/images/alphabets/i.png',
     'assets/images/alphabets/k.png',
-    'assets/images/alphabets/pencil.png',
+    'assets/images/pencil.png',
     'assets/images/alphabets/m.png',
     'assets/images/alphabets/t.png',
     'assets/images/alphabets/v.png',
@@ -31,9 +35,22 @@ class _CountObjectsScreenState extends State<CountObjectsScreen>
   String _currentObject = "";
   List<Offset> _positions = [];
 
+  late final AnimationController _pulseController;
+  late final ConfettiController _confettiController;
+
   @override
   void initState() {
     super.initState();
+
+    _confettiController = ConfettiController(
+      duration: const Duration(seconds: 1),
+    );
+
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    )..repeat(reverse: true);
+
     _generateObjects();
   }
 
@@ -42,13 +59,17 @@ class _CountObjectsScreenState extends State<CountObjectsScreen>
       _showSuccess = false;
       _showWrong = false;
 
-      _objectCount = _random.nextInt(9) + 1; // 1–9 objects
+      _objectCount = _random.nextInt(9) + 1;
       _currentObject = _objectImages[_random.nextInt(_objectImages.length)];
 
       _positions.clear();
       for (int i = 0; i < _objectCount; i++) {
+        // LIMIT the spread range to keep items closer
         _positions.add(
-          Offset(_random.nextDouble() * 0.8, _random.nextDouble() * 0.6),
+          Offset(
+            0.1 + _random.nextDouble() * 0.8,
+            0.1 + _random.nextDouble() * 0.8,
+          ),
         );
       }
     });
@@ -61,7 +82,10 @@ class _CountObjectsScreenState extends State<CountObjectsScreen>
         _showWrong = false;
       });
 
-      Future.delayed(const Duration(seconds: 2), _generateObjects);
+      // play lighter confetti
+      _confettiController.play();
+
+      Future.delayed(const Duration(seconds: 1), _generateObjects);
     } else {
       setState(() {
         _showWrong = true;
@@ -71,107 +95,210 @@ class _CountObjectsScreenState extends State<CountObjectsScreen>
   }
 
   @override
+  void dispose() {
+    _pulseController.dispose();
+    _confettiController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFfffbf0),
-      body: SafeArea(
-        child: Column(
-          children: [
-            const SizedBox(height: 10),
-
-            /// Header
-            Row(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back, size: 30),
-                  onPressed: () => Navigator.pop(context),
-                ),
-                const Text(
-                  'Count the Objects',
-                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-                ),
-              ],
+      body: Stack(
+        children: [
+          /// Background
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFFFFE082), Color(0xFFFFC107)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
             ),
+          ),
 
-            const SizedBox(height: 10),
-
-            /// Objects Display Area
-            Expanded(
-              flex: 6,
+          /// Floating blobs
+          ...List.generate(8, (_) {
+            return Positioned(
+              top: _random.nextDouble() * size.height,
+              left: _random.nextDouble() * size.width,
               child: Container(
-                margin: const EdgeInsets.all(16),
+                width: 60,
+                height: 60,
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: Colors.brown, width: 4),
-                ),
-                child: Stack(
-                  children: List.generate(_objectCount, (index) {
-                    return Positioned(
-                      left:
-                          MediaQuery.of(context).size.width *
-                          _positions[index].dx,
-                      top:
-                          MediaQuery.of(context).size.height *
-                          0.45 *
-                          _positions[index].dy,
-                      child: Image.asset(_currentObject, width: 60, height: 60),
-                    );
-                  }),
+                  shape: BoxShape.circle,
+                  color: Colors.white.withOpacity(0.04),
                 ),
               ),
-            ),
+            );
+          }),
 
-            /// Success / Wrong Message
-            if (_showSuccess)
-              const Text(
-                "✅ Correct!",
-                style: TextStyle(fontSize: 30, color: Colors.green),
-              ),
-            if (_showWrong)
-              const Text(
-                "❌ Try Again!",
-                style: TextStyle(fontSize: 28, color: Colors.red),
-              ),
+          /// Main UI
+          SafeArea(
+            child: Column(
+              children: [
+                const SizedBox(height: 10),
 
-            const SizedBox(height: 10),
-
-            /// Number Buttons
-            Expanded(
-              flex: 3,
-              child: GridView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: 9,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 5,
-                  mainAxisSpacing: 12,
-                  crossAxisSpacing: 12,
-                ),
-                itemBuilder: (context, index) {
-                  final number = index + 1;
-                  return GestureDetector(
-                    onTap: () => _checkAnswer(number),
-                    child: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.orange.shade300,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.brown, width: 3),
+                /// Back
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Image.asset(
+                        'assets/images/back_button.png',
+                        width: 70,
+                        height: 70,
                       ),
-                      child: Text(
-                        "$number",
-                        style: const TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+
+                /// Glass container with objects
+                Expanded(
+                  flex: 6,
+                  child: Container(
+                    margin: const EdgeInsets.all(16),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(30),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            border: Border.all(
+                              color: const Color(0xff3c2815),
+                              width: 5,
+                            ),
+                            color: Colors.white.withOpacity(0.08),
+                          ),
+                          child: LayoutBuilder(
+                            builder: (context, constraints) {
+                              final boxWidth = constraints.maxWidth;
+                              final boxHeight = constraints.maxHeight;
+
+                              return RepaintBoundary(
+                                child: Stack(
+                                  children: List.generate(_objectCount, (index) {
+                                    final pos = _positions[index];
+
+                                    return Positioned(
+                                      left: pos.dx * (boxWidth - 100),
+                                      top: pos.dy * (boxHeight - 100),
+                                      child: ScaleTransition(
+                                        scale: Tween<double>(
+                                          begin: 0.95,
+                                          end: 1.1,
+                                        ).animate(_pulseController),
+                                        child: Image.asset(
+                                          _currentObject,
+                                          width: 95,
+                                          height: 95,
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),
-                  );
-                },
+                  ),
+                ),
+
+                /// Feedback
+                if (_showSuccess)
+                  const Text(
+                    "✨ Perfect!",
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+
+                if (_showWrong)
+                  const Text(
+                    "❌ Try again",
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+
+                const SizedBox(height: 10),
+
+                /// Number buttons
+                Expanded(
+                  flex: 3,
+                  child: GridView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: 9,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 5,
+                          mainAxisSpacing: 12,
+                          crossAxisSpacing: 12,
+                        ),
+                    itemBuilder: (context, index) {
+                      final number = index + 1;
+                      return GestureDetector(
+                        onTap: () => _checkAnswer(number),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xffE53935), Color(0xffB71C1C)],
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: const Color(0xff3c2815),
+                              width: 4,
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "$number",
+                              style: const TextStyle(
+                                fontSize: 50,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          /// ✅ Optimized Confetti (no freeze)
+          RepaintBoundary(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: ConfettiWidget(
+                confettiController: _confettiController,
+                blastDirectionality: BlastDirectionality.explosive,
+                shouldLoop: false,
+                emissionFrequency: 0.04,    // lower load
+                numberOfParticles: 100,      // less particles
+                gravity: 0.1,             // smoother
+                maxBlastForce: 100,
+                minBlastForce: 50,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
