@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zinzy/screens/numbers/subscreens/countObjects.dart';
+import 'package:zinzy/screens/numbers/subscreens/numberMatching.dart';
 import 'package:zinzy/screens/numbers/subscreens/numberTracing.dart';
 
 class NumbersScreen extends StatelessWidget {
@@ -124,7 +125,14 @@ class NumbersScreen extends StatelessWidget {
                                 ),
                               );
                               break;
-                            // TODO: Handle other cases
+                              case 'Number Matching':
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => NumberMatchingScreen(),
+                                ),
+                              );
+                              break;
                           }
                         },
                         child: Padding(
