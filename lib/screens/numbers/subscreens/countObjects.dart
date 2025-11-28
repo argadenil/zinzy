@@ -18,6 +18,8 @@ class _CountObjectsScreenState extends State<CountObjectsScreen>
   int _objectCount = 0;
   bool _showSuccess = false;
   bool _showWrong = false;
+  bool _confettiPlayed = false;
+
 
   final List<String> _objectImages = [
     'assets/images/alphabets/a.png',
@@ -54,17 +56,49 @@ class _CountObjectsScreenState extends State<CountObjectsScreen>
     _generateObjects();
   }
 
-  void _generateObjects() {
-    setState(() {
-      _showSuccess = false;
-      _showWrong = false;
+void _generateObjects() {
+  setState(() {
+    _showSuccess = false;
+    _showWrong = false;
 
-      _objectCount = _random.nextInt(9) + 1;
-      _currentObject = _objectImages[_random.nextInt(_objectImages.length)];
+    _objectCount = _random.nextInt(9) + 1;
+    _currentObject = _objectImages[_random.nextInt(_objectImages.length)];
 
-      _positions.clear();
-      for (int i = 0; i < _objectCount; i++) {
-        // LIMIT the spread range to keep items closer
+    _positions.clear();
+
+    const double minDistance = 0.18; // space between objects
+    const int maxTries = 100;
+
+    for (int i = 0; i < _objectCount; i++) {
+      bool placed = false;
+
+      for (int t = 0; t < maxTries && !placed; t++) {
+        final Offset pos = Offset(
+          0.1 + _random.nextDouble() * 0.8,
+          0.1 + _random.nextDouble() * 0.8,
+        );
+
+        bool overlaps = false;
+
+        for (final existing in _positions) {
+          final double dx = (pos.dx - existing.dx);
+          final double dy = (pos.dy - existing.dy);
+          final double dist = sqrt(dx * dx + dy * dy);
+
+          if (dist < minDistance) {
+            overlaps = true;
+            break;
+          }
+        }
+
+        if (!overlaps) {
+          _positions.add(pos);
+          placed = true;
+        }
+      }
+
+      // Fallback if no good position found
+      if (!placed) {
         _positions.add(
           Offset(
             0.1 + _random.nextDouble() * 0.8,
@@ -72,27 +106,36 @@ class _CountObjectsScreenState extends State<CountObjectsScreen>
           ),
         );
       }
+    }
+  });
+}
+
+
+void _checkAnswer(int selected) {
+  if (selected == _objectCount) {
+    if (_confettiPlayed) return; // prevent double fire
+
+    setState(() {
+      _showSuccess = true;
+      _showWrong = false;
+      _confettiPlayed = true;
+    });
+
+    // stop any running animation before playing
+    _confettiController.stop();
+    _confettiController.play();
+
+    Future.delayed(const Duration(seconds: 1), () {
+      _confettiPlayed = false; // reset for next round
+      _generateObjects();
+    });
+  } else {
+    setState(() {
+      _showWrong = true;
+      _showSuccess = false;
     });
   }
-
-  void _checkAnswer(int selected) {
-    if (selected == _objectCount) {
-      setState(() {
-        _showSuccess = true;
-        _showWrong = false;
-      });
-
-      // play lighter confetti
-      _confettiController.play();
-
-      Future.delayed(const Duration(seconds: 1), _generateObjects);
-    } else {
-      setState(() {
-        _showWrong = true;
-        _showSuccess = false;
-      });
-    }
-  }
+}
 
   @override
   void dispose() {
