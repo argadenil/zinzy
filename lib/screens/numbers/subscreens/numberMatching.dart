@@ -11,8 +11,9 @@ class NumberMatchingScreen extends StatefulWidget {
 
 class _NumberMatchingScreenState extends State<NumberMatchingScreen>
     with SingleTickerProviderStateMixin {
-  final ConfettiController _confettiController =
-      ConfettiController(duration: const Duration(seconds: 2));
+  final ConfettiController _confettiController = ConfettiController(
+    duration: const Duration(seconds: 2),
+  );
 
   final List<int> numbers = List.generate(9, (i) => i + 1);
   late List<int> shuffledNumbers;
@@ -38,8 +39,10 @@ class _NumberMatchingScreenState extends State<NumberMatchingScreen>
       duration: const Duration(milliseconds: 600),
     );
 
-    _bounceAnimation =
-        CurvedAnimation(parent: _bounceController, curve: Curves.elasticOut);
+    _bounceAnimation = CurvedAnimation(
+      parent: _bounceController,
+      curve: Curves.elasticOut,
+    );
   }
 
   void _setupGame() {
@@ -120,10 +123,10 @@ class _NumberMatchingScreenState extends State<NumberMatchingScreen>
                       padding: const EdgeInsets.only(bottom: 8),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        crossAxisSpacing: 12,
-                        mainAxisSpacing: 12,
-                      ),
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 12,
+                          ),
                       itemCount: numbers.length,
                       itemBuilder: (context, index) {
                         final number = numbers[index];
@@ -137,8 +140,10 @@ class _NumberMatchingScreenState extends State<NumberMatchingScreen>
                   const Center(
                     child: Text(
                       "Drag & Drop",
-                      style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
 
@@ -156,17 +161,17 @@ class _NumberMatchingScreenState extends State<NumberMatchingScreen>
                           color: Colors.black12,
                           blurRadius: 6,
                           offset: Offset(0, 3),
-                        )
+                        ),
                       ],
                     ),
                     child: GridView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 5,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                      ),
+                            crossAxisCount: 5,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                          ),
                       itemCount: shuffledNumbers.length,
                       itemBuilder: (context, index) {
                         final number = shuffledNumbers[index];
@@ -176,13 +181,25 @@ class _NumberMatchingScreenState extends State<NumberMatchingScreen>
 
                         return Draggable<int>(
                           data: number,
-                          feedback: Transform.scale(
-                            scale: 1.4,
-                            child: _buildNumberCard(number, true),
+
+                          /// FIXED draggable feedback (when user drags)
+                          feedback: Material(
+                            color: Colors.transparent,
+                            child: Transform.scale(
+                              scale: 1.6,
+                              child: _buildDragCard(number, true),
+                            ),
                           ),
-                          childWhenDragging:
-                              _buildNumberCard(number, false, faded: true),
-                          child: _buildNumberCard(number, false),
+
+                          /// While dragging – faded placeholder
+                          childWhenDragging: _buildDragCard(
+                            number,
+                            false,
+                            faded: true,
+                          ),
+
+                          /// Normal state
+                          child: _buildDragCard(number, false),
                         );
                       },
                     ),
@@ -258,9 +275,7 @@ class _NumberMatchingScreenState extends State<NumberMatchingScreen>
           decoration: BoxDecoration(
             color: isMatched
                 ? Colors.green.shade400
-                : (isHighlighted
-                    ? Colors.orange.shade100
-                    : Colors.white),
+                : (isHighlighted ? Colors.orange.shade100 : Colors.white),
             borderRadius: BorderRadius.circular(cardRadius),
             border: Border.all(color: Colors.deepOrange, width: 3),
             boxShadow: const [
@@ -324,26 +339,27 @@ class _NumberMatchingScreenState extends State<NumberMatchingScreen>
               const Text(
                 "🎉 Level Complete!",
                 style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.deepOrange),
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepOrange,
+                ),
               ),
               const SizedBox(height: 10),
-              Text("You earned $stars ⭐",
-                  style: const TextStyle(fontSize: 20)),
+              Text("You earned $stars ⭐", style: const TextStyle(fontSize: 20)),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _resetGame,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepOrange,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 12,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
-                child:
-                    const Text("Play Again", style: TextStyle(fontSize: 18)),
+                child: const Text("Play Again", style: TextStyle(fontSize: 18)),
               ),
             ],
           ),
@@ -351,4 +367,37 @@ class _NumberMatchingScreenState extends State<NumberMatchingScreen>
       ),
     );
   }
+}
+
+Widget _buildDragCard(int number, bool dragging, {bool faded = false}) {
+  return Opacity(
+    opacity: faded ? 0.3 : 1,
+    child: Container(
+      width: 70,
+      height: 70,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: dragging ? Colors.orangeAccent : Colors.white,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: Colors.deepOrange, width: 3),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 12,
+            spreadRadius: 2,
+            offset: Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Text(
+        "$number",
+        style: const TextStyle(
+          fontSize: 28,
+          fontWeight: FontWeight.bold,
+          decoration: TextDecoration.none, // ✅ Removes yellow underline
+          color: Colors.black,
+        ),
+      ),
+    ),
+  );
 }
