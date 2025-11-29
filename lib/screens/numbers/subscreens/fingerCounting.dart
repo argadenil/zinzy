@@ -129,8 +129,7 @@ class _FingerCountingPageState extends State<FingerCountingPage> {
     );
   }
 }
-
-/// Painter to draw hand landmarks
+/// Painter to draw hand landmarks (SAFE VERSION)
 class LandmarkPainter extends CustomPainter {
   LandmarkPainter({
     required this.hands,
@@ -146,54 +145,84 @@ class LandmarkPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final scale = size.width / previewSize.height;
+    try {
+      final scale = size.width / previewSize.height;
 
-    final pointPaint = Paint()
-      ..color = Colors.red
-      ..strokeWidth = 8 / scale
-      ..strokeCap = StrokeCap.round;
+      final pointPaint = Paint()
+        ..color = Colors.red
+        ..strokeWidth = 8 / scale
+        ..strokeCap = StrokeCap.round;
 
-    final linePaint = Paint()
-      ..color = Colors.cyanAccent
-      ..strokeWidth = 4 / scale;
+      final linePaint = Paint()
+        ..color = Colors.cyanAccent
+        ..strokeWidth = 4 / scale;
 
-    canvas.save();
+      canvas.save();
 
-    final center = Offset(size.width / 2, size.height / 2);
-    canvas.translate(center.dx, center.dy);
-    canvas.rotate(sensorOrientation * math.pi / 180);
+      final center = Offset(size.width / 2, size.height / 2);
+      canvas.translate(center.dx, center.dy);
+      canvas.rotate(sensorOrientation * math.pi / 180);
 
-    if (lensDirection == CameraLensDirection.front) {
-      canvas.scale(-1, 1);
-      canvas.rotate(math.pi);
-    }
-
-    canvas.scale(scale);
-
-    final logicalWidth = previewSize.width;
-    final logicalHeight = previewSize.height;
-
-    for (final hand in hands) {
-      for (final lm in hand.landmarks) {
-        final dx = (lm.x - 0.5) * logicalWidth;
-        final dy = (lm.y - 0.5) * logicalHeight;
-        canvas.drawCircle(Offset(dx, dy), 8 / scale, pointPaint);
+      if (lensDirection == CameraLensDirection.front) {
+        canvas.scale(-1, 1);
+        canvas.rotate(math.pi);
       }
 
-      for (final link in HandLandmarkConnections.connections) {
-        final start = hand.landmarks[link[0]];
-        final end = hand.landmarks[link[1]];
+      canvas.scale(scale);
 
-        final sx = (start.x - 0.5) * logicalWidth;
-        final sy = (start.y - 0.5) * logicalHeight;
-        final ex = (end.x - 0.5) * logicalWidth;
-        final ey = (end.y - 0.5) * logicalHeight;
+      final logicalWidth = previewSize.width;
+      final logicalHeight = previewSize.height;
 
-        canvas.drawLine(Offset(sx, sy), Offset(ex, ey), linePaint);
+      // ==================================================
+      // SAFE DRAWING LOOP — no crashes
+      // ==================================================
+      for (final hand in hands) {
+        // Skip invalid hand
+        if (hand.landmarks.isEmpty || hand.landmarks.length < 21) continue;
+
+        // Draw points safely
+        for (final lm in hand.landmarks) {
+          if (!_valid(lm.x) || !_valid(lm.y)) continue;
+
+          final dx = (lm.x - 0.5) * logicalWidth;
+          final dy = (lm.y - 0.5) * logicalHeight;
+
+          canvas.drawCircle(Offset(dx, dy), 8 / scale, pointPaint);
+        }
+
+        // Draw connections safely
+        for (final link in HandLandmarkConnections.connections) {
+          final a = link[0];
+          final b = link[1];
+
+          if (a >= hand.landmarks.length || b >= hand.landmarks.length) continue;
+
+          final start = hand.landmarks[a];
+          final end = hand.landmarks[b];
+
+          // Skip invalid data
+          if (!_valid(start.x) || !_valid(start.y)) continue;
+          if (!_valid(end.x) || !_valid(end.y)) continue;
+
+          final sx = (start.x - 0.5) * logicalWidth;
+          final sy = (start.y - 0.5) * logicalHeight;
+          final ex = (end.x - 0.5) * logicalWidth;
+          final ey = (end.y - 0.5) * logicalHeight;
+
+          canvas.drawLine(Offset(sx, sy), Offset(ex, ey), linePaint);
+        }
       }
-    }
 
-    canvas.restore();
+      canvas.restore();
+    } catch (e) {
+      // Prevent app crash
+      debugPrint("LandmarkPainter error: $e");
+    }
+  }
+
+  /// Validate coordinate values
+  bool _valid(double v) {
+    return !(v.isNaN || !v.isFinite);
   }
 
   @override
