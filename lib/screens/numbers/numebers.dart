@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zinzy/screens/numbers/subscreens/countObjects.dart';
+import 'package:zinzy/screens/numbers/subscreens/fingerCounting.dart';
 import 'package:zinzy/screens/numbers/subscreens/numberColoring.dart';
 import 'package:zinzy/screens/numbers/subscreens/numberMatching.dart';
 import 'package:zinzy/screens/numbers/subscreens/numberPuzzle.dart';
@@ -140,6 +141,14 @@ class NumbersScreen extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                   builder: (_) =>  ModernNumberPuzzleScreen(),
+                                ),
+                              );
+                              break;
+                              case 'Finger Counting':
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => FingerCountingPage(),
                                 ),
                               );
                               break;
