@@ -36,21 +36,21 @@ class NumbersScreen extends StatelessWidget {
       'icon': Icons.back_hand,
       'color': Color(0xFF66bb6a),
     },
-    {
-      'title': 'Number Ordering',
-      'icon': Icons.sort,
-      'color': Color(0xFFffa726),
-    },
-    {
-      'title': 'Addition & Subtraction',
-      'icon': Icons.add_chart,
-      'color': Color(0xFF26c6da),
-    },
-    {
-      'title': 'Songs & Rhymes',
-      'icon': Icons.music_note,
-      'color': Color(0xFFec407a),
-    },
+    // {
+    //   'title': 'Number Ordering',
+    //   'icon': Icons.sort,
+    //   'color': Color(0xFFffa726),
+    // },
+    // {
+    //   'title': 'Addition & Subtraction',
+    //   'icon': Icons.add_chart,
+    //   'color': Color(0xFF26c6da),
+    // },
+    // {
+    //   'title': 'Songs & Rhymes',
+    //   'icon': Icons.music_note,
+    //   'color': Color(0xFFec407a),
+    // },
   ];
 
   @override

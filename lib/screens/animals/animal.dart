@@ -269,9 +269,9 @@ class _AnimalScreenState extends State<AnimalScreen>
                                       child: Text(
                                         animal['name']!,
                                         style: const TextStyle(
-                                          fontSize: 30,
+                                          fontSize: 20,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.white,
+                                          color: Color(0xff3c2815),
                                         ),
                                       ),
                                     ),

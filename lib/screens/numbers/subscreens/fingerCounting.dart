@@ -51,7 +51,7 @@ class _FingerCountingPageState extends State<FingerCountingPage> {
     _plugin = HandLandmarkerPlugin.create(
       numHands: 2,
       minHandDetectionConfidence: 0.6,
-      delegate: HandLandmarkerDelegate.CPU,
+      delegate: HandLandmarkerDelegate.cpu,
     );
 
     await _controller!.initialize();

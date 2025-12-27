@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:rive/rive.dart' as rive_pkg;
 import 'package:zinzy/screens/alphabet/alphabet.dart';
 import 'package:zinzy/screens/animals/animal.dart';
+import 'package:zinzy/screens/colors/colors.dart';
 import 'package:zinzy/screens/numbers/numebers.dart';
+import 'package:zinzy/screens/shapes/shapesscreen.dart';
 import 'package:zinzy/widgets/card.dart';
 import 'package:zinzy/widgets/horizontalCard.dart';
 
@@ -101,7 +103,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             "label": "Colors",
                             "img": "assets/images/colors.webp",
                             "bg": const Color(0xffc32501),
-                            "route": const Alphabet(),
+                            "route": const ColorsScreen(),
+                          },
+                          {
+                            "label": "Shapes",
+                            "img": "assets/images/shapes.webp",
+                            "bg": const Color(0xff9fb020),
+                            "route": const ShapesScreen(),
                           },
                           {
                             "label": "Science",
@@ -119,12 +127,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             "label": "Music",
                             "img": "assets/images/music.webp",
                             "bg": const Color(0xffBA68C8),
-                            "route": const Alphabet(),
-                          },
-                          {
-                            "label": "Shapes",
-                            "img": "assets/images/shapes.webp",
-                            "bg": const Color(0xff9fb020),
                             "route": const Alphabet(),
                           },
                           {
