@@ -117,7 +117,7 @@ class _AlphabetState extends State<Alphabet> with TickerProviderStateMixin {
             child: ColorFiltered(
               colorFilter: ColorFilter.matrix(_saturationMatrix(1.5)),
               child: Image.asset(
-                'assets/images/alphabet_bg.png',
+                'assets/images/alphabet_bg.webp',
                 fit: BoxFit.cover,
               ),
             ),
@@ -137,7 +137,7 @@ class _AlphabetState extends State<Alphabet> with TickerProviderStateMixin {
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: Image.asset(
-                          'assets/images/back_button.png',
+                          'assets/images/back_button.webp',
                           width: isSmallScreen ? 60 : 80,
                           height: isSmallScreen ? 60 : 80,
                           fit: BoxFit.contain,

@@ -122,7 +122,7 @@ class _ModernNumberPuzzleScreenState extends State<ModernNumberPuzzleScreen>
               child: IconButton(
                 onPressed: () => Navigator.pop(context),
                 icon: Image.asset(
-                  'assets/images/back_button.png',
+                  'assets/images/back_button.webp',
                   width: 60,
                   height: 60,
                 ),

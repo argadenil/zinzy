@@ -103,7 +103,7 @@ class _NumberMatchingScreenState extends State<NumberMatchingScreen>
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: Image.asset(
-                          'assets/images/back_button.png',
+                          'assets/images/back_button.webp',
                           width: 60,
                           height: 60,
                         ),

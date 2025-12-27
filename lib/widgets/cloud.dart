@@ -62,7 +62,7 @@ class _AnimatedCloudsState extends State<AnimatedClouds>
               width: 400,
               height: 400,
               child: Image.asset(
-                'assets/images/cloud.png',
+                'assets/images/cloud.webp',
                 fit: BoxFit.contain,
               ), // use your cloud image
             ),

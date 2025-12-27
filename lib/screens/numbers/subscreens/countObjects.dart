@@ -195,7 +195,7 @@ class _CountObjectsScreenState extends State<CountObjectsScreen>
                     child: GestureDetector(
                       onTap: () => Navigator.pop(context),
                       child: Image.asset(
-                        'assets/images/back_button.png',
+                        'assets/images/back_button.webp',
                         width: 70,
                         height: 70,
                       ),

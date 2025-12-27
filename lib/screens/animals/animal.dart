@@ -156,7 +156,7 @@ class _AnimalScreenState extends State<AnimalScreen>
             child: ColorFiltered(
               colorFilter: ColorFilter.matrix(_saturationMatrix(1.4)),
               child: Image.asset(
-                'assets/images/alphabet_bg.png',
+                'assets/images/alphabet_bg.webp',
                 fit: BoxFit.cover,
               ),
             ),
@@ -184,7 +184,7 @@ class _AnimalScreenState extends State<AnimalScreen>
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: Image.asset(
-                          'assets/images/back_button.png',
+                          'assets/images/back_button.webp',
                           width: 60,
                           height: 60,
                         ),

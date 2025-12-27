@@ -75,7 +75,7 @@ class NumbersScreen extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.topLeft,
                   child: Image.asset(
-                    'assets/images/back_button.png',
+                    'assets/images/back_button.webp',
                     width: isTablet ? 80 : 60,
                     height: isTablet ? 80 : 60,
                   ),
