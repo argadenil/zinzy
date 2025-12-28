@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart' as rive_pkg;
-import 'package:zinzy/screens/alphabet/alphabet.dart';
-import 'package:zinzy/screens/animals/animal.dart';
-import 'package:zinzy/screens/colors/colors.dart';
-import 'package:zinzy/screens/numbers/numebers.dart';
+import 'package:zinzy/screens/alphabet/alphabetScreen.dart';
+import 'package:zinzy/screens/animals/animalScreen.dart';
+import 'package:zinzy/screens/colors/colorsScreen.dart';
+import 'package:zinzy/screens/numbers/numebersScreen.dart';
 import 'package:zinzy/screens/shapes/shapesScreen.dart';
 import 'package:zinzy/widgets/card.dart';
 import 'package:zinzy/widgets/horizontalCard.dart';
