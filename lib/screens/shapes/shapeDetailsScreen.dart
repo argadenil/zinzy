@@ -15,58 +15,109 @@ class ShapeDetailScreen extends StatefulWidget {
 class _ShapeDetailScreenState extends State<ShapeDetailScreen> {
   @override
   void initState() {
+    super.initState();
     print('@@@ start');
     for (var f in widget.shape.formulas ?? []) {
       print('Formula: ${f.title} = ${f.formula}');
     }
     print('@@@ end');
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final Color mainColor = widget.shape.color;
+    final Color lighterColor = Color.lerp(mainColor, Colors.white, 0.35)!;
+    final Color darkerColor = Color.lerp(mainColor, Colors.black, 0.15)!;
+
     return Scaffold(
+      backgroundColor: mainColor,
       body: Stack(
         children: [
-          /// 🌈 BACKGROUND COLOR
-          Positioned.fill(child: Container(color: widget.shape.color)),
+          /// 🌈 GRADIENT BACKGROUND
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [lighterColor, mainColor, darkerColor],
+                ),
+              ),
+            ),
+          ),
+
+          /// 🎨 SUBTLE DECOR ELEMENTS
+          Positioned(
+            top: -60,
+            right: -60,
+            child: CircleAvatar(
+              radius: 110,
+              backgroundColor: Colors.white.withOpacity(0.08),
+            ),
+          ),
+          Positioned(
+            top: 120,
+            left: -40,
+            child: CircleAvatar(
+              radius: 70,
+              backgroundColor: Colors.white.withOpacity(0.05),
+            ),
+          ),
 
           SafeArea(
             child: Column(
               children: [
-                /// 🔙 CUSTOM BACK BUTTON
+                /// 🔙 BACK BUTTON
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.only(left: 16, top: 8),
                     child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
                       onTap: () => Navigator.pop(context),
                       child: Container(
-                        decoration: BoxDecoration(shape: BoxShape.circle),
-                        child: Image.asset(
-                          'assets/images/back_button.webp',
-                          width: 50,
-                          height: 50,
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.25),
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.35),
+                          ),
+                        ),
+                        child: const Icon(
+                          Icons.arrow_back_ios_new_rounded,
+                          color: Colors.white,
+                          size: 22,
                         ),
                       ),
                     ),
                   ),
                 ),
 
-                /// --- TOP SECTION : SHAPE VIEW ---
+                /// --- SHAPE VIEW ---
                 Expanded(
-                  flex: 4,
+                  flex: 9,
                   child: Center(
                     child: Hero(
                       tag: widget.shape.name,
-                      child: SizedBox(
-                        width: 240,
-                        height: 240,
+                      child: Container(
+                        width: 260,
+                        height: 260,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: darkerColor.withOpacity(0.35),
+                              blurRadius: 28,
+                              offset: const Offset(0, 12),
+                            ),
+                          ],
+                        ),
                         child: widget.shape.is3D
                             ? Flutter3DViewer(
                                 src: widget.shape.asset!,
                                 enableTouch: true,
-                                progressBarColor: Colors.white,
+                                progressBarColor: Colors.transparent,
                               )
                             : CustomPaint(
                                 painter: ShapePainter(
@@ -80,86 +131,107 @@ class _ShapeDetailScreenState extends State<ShapeDetailScreen> {
                   ),
                 ),
 
-                /// --- BOTTOM INFO CARD ---
+                /// --- INFO CARD ---
                 Expanded(
-                  flex: 6,
+                  flex: 11,
                   child: Container(
                     width: double.infinity,
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(40),
-                        topRight: Radius.circular(40),
+                        topLeft: Radius.circular(48),
+                        topRight: Radius.circular(48),
                       ),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black12,
                           blurRadius: 20,
-                          offset: Offset(0, -5),
+                          offset: Offset(0, -6),
                         ),
                       ],
                     ),
                     child: SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.fromLTRB(25, 30, 25, 30),
+                      padding: const EdgeInsets.fromLTRB(28, 12, 28, 30),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          /// 🏷️ TITLE
+                          /// DRAG HANDLE
+                          Container(
+                            margin: const EdgeInsets.symmetric(vertical: 16),
+                            width: 48,
+                            height: 5,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+
+                          /// TITLE
                           Text(
-                            widget.shape.name,
+                            widget.shape.name.toUpperCase(),
                             style: TextStyle(
-                              fontSize: 38,
+                              fontSize: 30,
                               fontWeight: FontWeight.w900,
-                              color: widget.shape.color,
-                              letterSpacing: -1,
+                              color: mainColor,
+                              letterSpacing: 1.4,
                             ),
                           ),
 
-                          /// 📝 DESCRIPTION
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 15),
-                            child: Text(
-                              widget.shape.description,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.grey[700],
-                                height: 1.4,
+                          const SizedBox(height: 14),
+
+                          /// DESCRIPTION
+                          Text(
+                            widget.shape.description,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16.5,
+                              height: 1.6,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.blueGrey[600],
+                            ),
+                          ),
+
+                          const SizedBox(height: 32),
+
+                          /// FORMULA HEADER
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: mainColor.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Icon(
+                                  Icons.functions_rounded,
+                                  color: mainColor,
+                                  size: 20,
+                                ),
                               ),
-                            ),
+                              const SizedBox(width: 12),
+                              Text(
+                                "Math Formulas",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.blueGrey[800],
+                                ),
+                              ),
+                            ],
                           ),
 
-                          const SizedBox(height: 10),
-                          Divider(color: Colors.grey[200], thickness: 2),
                           const SizedBox(height: 20),
 
-                          /// 📐 FORMULAS HEADER
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Key Formulas",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.grey[800],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 15),
-
-                          /// ➗ FORMULA LIST
+                          /// FORMULA LIST
                           if (widget.shape.formulas != null &&
                               widget.shape.formulas!.isNotEmpty)
                             ...widget.shape.formulas!.map(
-                              (f) => _buildFormulaCard(f, widget.shape.color),
+                              (f) => _buildFormulaCard(f, mainColor),
                             )
                           else
                             _buildNoFormulaState(),
 
-                          // Add padding at bottom for scrolling
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 30),
                         ],
                       ),
                     ),
@@ -173,37 +245,39 @@ class _ShapeDetailScreenState extends State<ShapeDetailScreen> {
     );
   }
 
-  /// 📐 FORMULA CARD WIDGET
+  /// 📐 FORMULA CARD
   Widget _buildFormulaCard(ShapeFormula item, Color color) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 15),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.08),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.2), width: 1.5),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(22),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
+        border: Border.all(
+          color: color.withOpacity(0.12),
+          width: 1.2,
+        ),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /// Icon Container
           Container(
-            padding: const EdgeInsets.all(10),
+            width: 6,
+            height: 52,
             decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: color.withOpacity(0.2),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
+              color: color,
+              borderRadius: BorderRadius.circular(6),
             ),
-            child: Icon(Icons.calculate_outlined, color: color, size: 24),
           ),
-          const SizedBox(width: 15),
+          const SizedBox(width: 16),
 
-          /// Text Content
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,23 +285,33 @@ class _ShapeDetailScreenState extends State<ShapeDetailScreen> {
                 Text(
                   (item.title ?? '').toUpperCase(),
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 11,
                     fontWeight: FontWeight.bold,
-                    color: color.withOpacity(0.8),
-                    letterSpacing: 1.2,
+                    color: Colors.grey[500],
+                    letterSpacing: 1.4,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 6),
                 Text(
                   item.formula,
+                  softWrap: true,
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 21,
                     fontWeight: FontWeight.w600,
-                    fontFamily: 'Courier', // Monospace for math looks better
-                    color: Colors.grey[900],
+                    fontFamily: 'Courier',
+                    color: Colors.blueGrey[900],
                   ),
                 ),
               ],
+            ),
+          ),
+
+          Opacity(
+            opacity: 0.08,
+            child: Icon(
+              Icons.calculate,
+              color: color,
+              size: 36,
             ),
           ),
         ],
@@ -237,10 +321,21 @@ class _ShapeDetailScreenState extends State<ShapeDetailScreen> {
 
   Widget _buildNoFormulaState() {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: Text(
-        "No formulas needed for this one!",
-        style: TextStyle(color: Colors.grey[400], fontStyle: FontStyle.italic),
+      padding: const EdgeInsets.symmetric(vertical: 30),
+      child: Column(
+        children: [
+          Icon(Icons.check_circle_outline,
+              size: 40, color: Colors.grey[300]),
+          const SizedBox(height: 12),
+          Text(
+            "Just remember the shape!",
+            style: TextStyle(
+              color: Colors.grey[400],
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
       ),
     );
   }
