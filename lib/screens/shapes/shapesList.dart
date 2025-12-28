@@ -1,0 +1,209 @@
+
+// --------------------------------------------------
+import 'dart:ui';
+
+/// DATA MODEL
+/// --------------------------------------------------
+class ShapeItem {
+  final String name;
+  final String description;
+  final String simpleFact; // Short text like "Round!" or "4 Sides"
+  final int sides;
+  final int corners;
+  final Color color;
+  final bool is3D;
+  final String? asset;
+
+  ShapeItem({
+    required this.name,
+    required this.description,
+    required this.simpleFact,
+    required this.sides,
+    required this.corners,
+    required this.color,
+    this.asset,
+    this.is3D = false,
+  });
+}
+
+final List<ShapeItem> shapesList = [
+  // ---------------- 2D SHAPES ----------------
+  ShapeItem(
+    name: 'Circle',
+    description: 'A circle is round. It has no corners.',
+    simpleFact: 'Round!',
+    sides: 0,
+    corners: 0,
+    color: const Color(0xFFFF6F61),
+  ),
+  ShapeItem(
+    name: 'Square',
+    description: 'A square has 4 equal sides.',
+    simpleFact: '4 Equal Sides',
+    sides: 4,
+    corners: 4,
+    color: const Color(0xFF42A5F5),
+  ),
+  ShapeItem(
+    name: 'Rectangle',
+    description: 'A rectangle has 4 sides. Opposite sides are equal.',
+    simpleFact: 'Long & Short',
+    sides: 4,
+    corners: 4,
+    color: const Color(0xFF66BB6A),
+  ),
+  ShapeItem(
+    name: 'Triangle',
+    description: 'A triangle has 3 sides and 3 corners.',
+    simpleFact: '3 Sides',
+    sides: 3,
+    corners: 3,
+    color: const Color(0xFFAB47BC),
+  ),
+  ShapeItem(
+    name: 'Oval',
+    description: 'An oval looks like an egg shape.',
+    simpleFact: 'Egg Shape',
+    sides: 0,
+    corners: 0,
+    color: const Color(0xFF26C6DA),
+  ),
+  ShapeItem(
+    name: 'Pentagon',
+    description: 'A pentagon has 5 sides.',
+    simpleFact: '5 Sides',
+    sides: 5,
+    corners: 5,
+    color: const Color(0xFF7E57C2),
+  ),
+  ShapeItem(
+    name: 'Hexagon',
+    description: 'A hexagon has 6 sides.',
+    simpleFact: '6 Sides',
+    sides: 6,
+    corners: 6,
+    color: const Color(0xFF26A69A),
+  ),
+  ShapeItem(
+    name: 'Heptagon',
+    description: 'A heptagon has 7 sides.',
+    simpleFact: '7 Sides',
+    sides: 7,
+    corners: 7,
+    color: const Color(0xFFFFA726),
+  ),
+  ShapeItem(
+    name: 'Octagon',
+    description: 'An octagon has 8 sides.',
+    simpleFact: '8 Sides',
+    sides: 8,
+    corners: 8,
+    color: const Color(0xFFEF5350),
+  ),
+  ShapeItem(
+    name: 'Rhombus',
+    description: 'A rhombus has 4 equal slanted sides.',
+    simpleFact: 'Diamond Shape',
+    sides: 4,
+    corners: 4,
+    color: const Color(0xFF5C6BC0),
+  ),
+  ShapeItem(
+    name: 'Parallelogram',
+    description: 'Opposite sides are parallel.',
+    simpleFact: 'Parallel',
+    sides: 4,
+    corners: 4,
+    color: const Color(0xFF8D6E63),
+  ),
+  ShapeItem(
+    name: 'Trapezium',
+    description: 'A trapezium has one pair of parallel sides.',
+    simpleFact: '1 Parallel Pair',
+    sides: 4,
+    corners: 4,
+    color: const Color(0xFF78909C),
+  ),
+
+  // ---------------- 3D SHAPES ----------------
+  ShapeItem(
+    name: 'Cube',
+    description: 'A cube has 6 square faces.',
+    simpleFact: 'Box Shape',
+    sides: 6,
+    corners: 8,
+    color: const Color(0xFF5C6BC0),
+    asset: 'assets/shapes/cube.glb',
+    is3D: true,
+  ),
+  ShapeItem(
+    name: 'Cuboid',
+    description: 'A cuboid is a box like a book.',
+    simpleFact: 'Box',
+    sides: 6,
+    corners: 8,
+    color: const Color(0xFF42A5F5),
+    asset: 'assets/shapes/cuboid.glb',
+    is3D: true,
+  ),
+  ShapeItem(
+    name: 'Sphere',
+    description: 'A sphere is round like a ball.',
+    simpleFact: 'Rolls',
+    sides: 0,
+    corners: 0,
+    color: const Color(0xFFFF7043),
+    asset: 'assets/shapes/sphere.glb',
+    is3D: true,
+  ),
+  ShapeItem(
+    name: 'Cylinder',
+    description: 'A cylinder looks like a tin can.',
+    simpleFact: 'Can Shape',
+    sides: 3,
+    corners: 0,
+    color: const Color(0xFF26C6DA),
+    asset: 'assets/shapes/cylinder.glb',
+    is3D: true,
+  ),
+  ShapeItem(
+    name: 'Cone',
+    description: 'A cone looks like an ice-cream cone.',
+    simpleFact: 'Pointy Top',
+    sides: 2,
+    corners: 1,
+    color: const Color(0xFFFFA726),
+    asset: 'assets/shapes/cone.glb',
+    is3D: true,
+  ),
+  ShapeItem(
+    name: 'Pyramid',
+    description: 'A pyramid has triangle faces and a square base.',
+    simpleFact: 'Egypt Shape',
+    sides: 5,
+    corners: 5,
+    color: const Color(0xFF8D6E63),
+    asset: 'assets/shapes/pyramid.glb',
+    is3D: true,
+  ),
+  ShapeItem(
+    name: 'Prism',
+    description: 'A prism has the same shape on both ends.',
+    simpleFact: 'Twin Ends',
+    sides: 5,
+    corners: 6,
+    color: const Color(0xFF7E57C2),
+    asset: 'assets/shapes/prism.glb',
+    is3D: true,
+  ),
+  ShapeItem(
+    name: 'Hemisphere',
+    description: 'A hemisphere is half of a sphere.',
+    simpleFact: 'Half Ball',
+    sides: 1,
+    corners: 0,
+    color: const Color(0xFFEC407A),
+    asset: 'assets/shapes/hemisphere.glb',
+    is3D: true,
+  ),
+];

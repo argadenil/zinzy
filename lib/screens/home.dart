@@ -4,7 +4,7 @@ import 'package:zinzy/screens/alphabet/alphabet.dart';
 import 'package:zinzy/screens/animals/animal.dart';
 import 'package:zinzy/screens/colors/colors.dart';
 import 'package:zinzy/screens/numbers/numebers.dart';
-import 'package:zinzy/screens/shapes/shapesscreen.dart';
+import 'package:zinzy/screens/shapes/shapesScreen.dart';
 import 'package:zinzy/widgets/card.dart';
 import 'package:zinzy/widgets/horizontalCard.dart';
 
