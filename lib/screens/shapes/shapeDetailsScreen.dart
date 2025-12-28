@@ -3,10 +3,25 @@ import 'package:flutter_3d_controller/flutter_3d_controller.dart';
 import 'package:zinzy/screens/shapes/shapeItem.dart';
 import 'package:zinzy/screens/shapes/shapesscreen.dart';
 
-class ShapeDetailScreen extends StatelessWidget {
+class ShapeDetailScreen extends StatefulWidget {
   final ShapeItem shape;
 
   const ShapeDetailScreen({super.key, required this.shape});
+
+  @override
+  State<ShapeDetailScreen> createState() => _ShapeDetailScreenState();
+}
+
+class _ShapeDetailScreenState extends State<ShapeDetailScreen> {
+  @override
+  void initState() {
+    print('@@@ start');
+    for (var f in widget.shape.formulas ?? []) {
+      print('Formula: ${f.title} = ${f.formula}');
+    }
+    print('@@@ end');
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +29,7 @@ class ShapeDetailScreen extends StatelessWidget {
       body: Stack(
         children: [
           /// 🌈 BACKGROUND COLOR
-          Positioned.fill(child: Container(color: shape.color)),
+          Positioned.fill(child: Container(color: widget.shape.color)),
 
           SafeArea(
             child: Column(
@@ -43,19 +58,19 @@ class ShapeDetailScreen extends StatelessWidget {
                   flex: 4,
                   child: Center(
                     child: Hero(
-                      tag: shape.name,
+                      tag: widget.shape.name,
                       child: SizedBox(
                         width: 240,
                         height: 240,
-                        child: shape.is3D
+                        child: widget.shape.is3D
                             ? Flutter3DViewer(
-                                src: shape.asset!,
+                                src: widget.shape.asset!,
                                 enableTouch: true,
                                 progressBarColor: Colors.white,
                               )
                             : CustomPaint(
                                 painter: ShapePainter(
-                                  shape.name,
+                                  widget.shape.name,
                                   Colors.white,
                                   isDetail: true,
                                 ),
@@ -92,11 +107,11 @@ class ShapeDetailScreen extends StatelessWidget {
                         children: [
                           /// 🏷️ TITLE
                           Text(
-                            shape.name,
+                            widget.shape.name,
                             style: TextStyle(
                               fontSize: 38,
                               fontWeight: FontWeight.w900,
-                              color: shape.color,
+                              color: widget.shape.color,
                               letterSpacing: -1,
                             ),
                           ),
@@ -105,7 +120,7 @@ class ShapeDetailScreen extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 15),
                             child: Text(
-                              shape.description,
+                              widget.shape.description,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 18,
@@ -135,10 +150,10 @@ class ShapeDetailScreen extends StatelessWidget {
                           const SizedBox(height: 15),
 
                           /// ➗ FORMULA LIST
-                          if (shape.formulas != null &&
-                              shape.formulas!.isNotEmpty)
-                            ...shape.formulas!.map(
-                              (f) => _buildFormulaCard(f, shape.color),
+                          if (widget.shape.formulas != null &&
+                              widget.shape.formulas!.isNotEmpty)
+                            ...widget.shape.formulas!.map(
+                              (f) => _buildFormulaCard(f, widget.shape.color),
                             )
                           else
                             _buildNoFormulaState(),
@@ -194,7 +209,7 @@ class ShapeDetailScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  item.title.toUpperCase(),
+                  (item.title ?? '').toUpperCase(),
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
