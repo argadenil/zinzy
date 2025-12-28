@@ -316,16 +316,10 @@ class ShapeCard extends StatelessWidget {
               width: 130,
               height: 130,
               alignment: Alignment.center,
-              child: shape.is3D
-                  ? Icon(
-                      Icons.view_in_ar_outlined,
-                      size: 120, // ⬅️ BIGGER ICON
-                      color: shape.color,
-                    )
-                  : CustomPaint(
-                      size: const Size(120, 120),
-                      painter: ShapePainter(shape.name, shape.color),
-                    ),
+              child: CustomPaint(
+                size: const Size(120, 120),
+                painter: ShapePainter(shape.name, shape.color),
+              ),
             ),
 
             /// 🏷 SHAPE NAME
@@ -679,6 +673,261 @@ class ShapePainter extends CustomPainter {
           center.dx - radius * 0.6,
           center.dy + radius,
         ); // Bottom Left
+        path.close();
+        break;
+      case 'Cube':
+        final double d = radius * 0.35; // depth
+
+        // ---------- FRONT FACE ----------
+        path.moveTo(
+          center.dx - radius * 0.8,
+          center.dy - radius * 0.8,
+        ); // Front Top Left
+
+        path.lineTo(
+          center.dx + radius * 0.8,
+          center.dy - radius * 0.8,
+        ); // Front Top Right
+
+        path.lineTo(
+          center.dx + radius * 0.8,
+          center.dy + radius * 0.8,
+        ); // Front Bottom Right
+
+        path.lineTo(
+          center.dx - radius * 0.8,
+          center.dy + radius * 0.8,
+        ); // Front Bottom Left
+
+        path.close();
+
+        // ---------- BACK FACE ----------
+        path.moveTo(
+          center.dx - radius * 0.8 + d,
+          center.dy - radius * 0.8 - d,
+        ); // Back Top Left
+
+        path.lineTo(
+          center.dx + radius * 0.8 + d,
+          center.dy - radius * 0.8 - d,
+        ); // Back Top Right
+
+        path.lineTo(
+          center.dx + radius * 0.8 + d,
+          center.dy + radius * 0.8 - d,
+        ); // Back Bottom Right
+
+        path.lineTo(
+          center.dx - radius * 0.8 + d,
+          center.dy + radius * 0.8 - d,
+        ); // Back Bottom Left
+
+        path.close();
+
+        // ---------- CONNECTING EDGES ----------
+        path.moveTo(center.dx - radius * 0.8, center.dy - radius * 0.8);
+        path.lineTo(center.dx - radius * 0.8 + d, center.dy - radius * 0.8 - d);
+
+        path.moveTo(center.dx + radius * 0.8, center.dy - radius * 0.8);
+        path.lineTo(center.dx + radius * 0.8 + d, center.dy - radius * 0.8 - d);
+
+        path.moveTo(center.dx + radius * 0.8, center.dy + radius * 0.8);
+        path.lineTo(center.dx + radius * 0.8 + d, center.dy + radius * 0.8 - d);
+
+        path.moveTo(center.dx - radius * 0.8, center.dy + radius * 0.8);
+        path.lineTo(center.dx - radius * 0.8 + d, center.dy + radius * 0.8 - d);
+
+        break;
+      case 'Cuboid':
+        final double d = radius * 0.5; // depth
+
+        // ---------- FRONT FACE ----------
+        path.moveTo(
+          center.dx - radius,
+          center.dy - radius * 0.7,
+        ); // Front Top Left
+
+        path.lineTo(
+          center.dx + radius,
+          center.dy - radius * 0.7,
+        ); // Front Top Right
+
+        path.lineTo(
+          center.dx + radius,
+          center.dy + radius * 0.7,
+        ); // Front Bottom Right
+
+        path.lineTo(
+          center.dx - radius,
+          center.dy + radius * 0.7,
+        ); // Front Bottom Left
+
+        path.close();
+
+        // ---------- BACK FACE ----------
+        path.moveTo(
+          center.dx - radius + d,
+          center.dy - radius * 0.7 - d,
+        ); // Back Top Left
+
+        path.lineTo(
+          center.dx + radius + d,
+          center.dy - radius * 0.7 - d,
+        ); // Back Top Right
+
+        path.lineTo(
+          center.dx + radius + d,
+          center.dy + radius * 0.7 - d,
+        ); // Back Bottom Right
+
+        path.lineTo(
+          center.dx - radius + d,
+          center.dy + radius * 0.7 - d,
+        ); // Back Bottom Left
+
+        path.close();
+
+        // ---------- CONNECTING EDGES ----------
+        path.moveTo(center.dx - radius, center.dy - radius * 0.7);
+        path.lineTo(center.dx - radius + d, center.dy - radius * 0.7 - d);
+
+        path.moveTo(center.dx + radius, center.dy - radius * 0.7);
+        path.lineTo(center.dx + radius + d, center.dy - radius * 0.7 - d);
+
+        path.moveTo(center.dx + radius, center.dy + radius * 0.7);
+        path.lineTo(center.dx + radius + d, center.dy + radius * 0.7 - d);
+
+        path.moveTo(center.dx - radius, center.dy + radius * 0.7);
+        path.lineTo(center.dx - radius + d, center.dy + radius * 0.7 - d);
+
+        break;
+
+      case 'Sphere':
+        canvas.drawCircle(center, radius, fillPaint);
+        if (!isDetail) canvas.drawCircle(center, radius, strokePaint);
+        return; // Return early as sphere doesn't use path
+
+      case 'Cylinder':
+        final double h = radius * 0.8;
+        // Top ellipse
+        Rect topRect = Rect.fromCenter(
+          center: Offset(center.dx, center.dy - h / 2),
+          width: radius * 1.6,
+          height: radius * 0.6,
+        );
+        path.addOval(topRect);
+        // Bottom ellipse
+        Rect bottomRect = Rect.fromCenter(
+          center: Offset(center.dx, center.dy + h / 2),
+          width: radius * 1.6,
+          height: radius * 0.6,
+        );
+        path.addOval(bottomRect);
+        // Side lines
+        path.moveTo(center.dx - radius * 0.8, center.dy - h / 2);
+        path.lineTo(center.dx - radius * 0.8, center.dy + h / 2);
+        path.moveTo(center.dx + radius * 0.8, center.dy - h / 2);
+        path.lineTo(center.dx + radius * 0.8, center.dy + h / 2);
+        break;
+
+      case 'Cone':
+        final double h = radius * 1.2;
+        // Base ellipse
+        Rect baseRect = Rect.fromCenter(
+          center: Offset(center.dx, center.dy + h / 2),
+          width: radius * 1.6,
+          height: radius * 0.6,
+        );
+        path.addOval(baseRect);
+        // Side lines to apex
+        path.moveTo(center.dx - radius * 0.8, center.dy + h / 2);
+        path.lineTo(center.dx, center.dy - h / 2);
+        path.lineTo(center.dx + radius * 0.8, center.dy + h / 2);
+        break;
+      case 'Pyramid':
+        final double baseSize = radius * 1.2;
+        final double height = radius * 1.2;
+        // Base square
+        path.moveTo(
+          center.dx - baseSize / 2,
+          center.dy + baseSize / 2,
+        ); // Bottom Left
+        path.lineTo(
+          center.dx + baseSize / 2,
+          center.dy + baseSize / 2,
+        ); // Bottom Right
+        path.lineTo(
+          center.dx + baseSize / 2,
+          center.dy - baseSize / 2,
+        ); // Top Right
+        path.lineTo(
+          center.dx - baseSize / 2,
+          center.dy - baseSize / 2,
+        ); // Top Left
+        path.close();
+        // Apex connections
+        path.moveTo(center.dx - baseSize / 2, center.dy - baseSize / 2);
+        path.lineTo(center.dx, center.dy - height / 2);
+        path.lineTo(center.dx + baseSize / 2, center.dy - baseSize / 2);
+        path.lineTo(center.dx, center.dy - height / 2);
+        path.lineTo(center.dx + baseSize / 2, center.dy + baseSize / 2);
+        path.lineTo(center.dx, center.dy - height / 2);
+        path.lineTo(center.dx - baseSize / 2, center.dy + baseSize / 2);
+        path.lineTo(center.dx, center.dy - height / 2);
+        break;
+      case 'Prism':
+        final double baseSize = radius * 1.2;
+        final double height = radius * 1.2;
+        // Front triangle
+        path.moveTo(center.dx, center.dy - height / 2); // Top
+        path.lineTo(
+          center.dx - baseSize / 2,
+          center.dy + height / 2,
+        ); // Bottom Left
+        path.lineTo(
+          center.dx + baseSize / 2,
+          center.dy + height / 2,
+        ); // Bottom Right
+        path.close();
+        // Back triangle
+        path.moveTo(
+          center.dx + baseSize * 0.3,
+          center.dy - height / 2 - baseSize * 0.2,
+        ); // Top
+        path.lineTo(
+          center.dx - baseSize / 2 + baseSize * 0.3,
+          center.dy + height / 2 - baseSize * 0.2,
+        ); // Bottom Left
+        path.lineTo(
+          center.dx + baseSize / 2 + baseSize * 0.3,
+          center.dy + height / 2 - baseSize * 0.2,
+        ); // Bottom Right
+        path.close();
+        // Connecting edges
+        path.moveTo(center.dx, center.dy - height / 2);
+        path.lineTo(
+          center.dx + baseSize * 0.3,
+          center.dy - height / 2 - baseSize * 0.2,
+        );
+        path.moveTo(center.dx - baseSize / 2, center.dy + height / 2);
+        path.lineTo(
+          center.dx - baseSize / 2 + baseSize * 0.3,
+          center.dy + height / 2 - baseSize * 0.2,
+        );
+        path.moveTo(center.dx + baseSize / 2, center.dy + height / 2);
+        path.lineTo(
+          center.dx + baseSize / 2 + baseSize * 0.3,
+          center.dy + height / 2 - baseSize * 0.2,
+        );
+        break;
+      case 'Hemisphere':
+        // Draw a half circle (top half)
+        path.moveTo(center.dx - radius, center.dy);
+        path.arcToPoint(
+          Offset(center.dx + radius, center.dy),
+          radius: Radius.circular(radius),
+          clockwise: false,
+        );
         path.close();
         break;
     }
