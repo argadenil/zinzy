@@ -760,19 +760,41 @@ class ShapePainter extends CustomPainter {
         break;
 
       case 'Sphere':
-        canvas.drawCircle(center, radius, fillPaint);
-        // Add a highlight arc to make it look 3D
-        if (!isDetail) {
-          canvas.drawCircle(center, radius, strokePaint);
-          final highlightPath = Path();
-          highlightPath.addArc(
-            Rect.fromCircle(center: center, radius: radius * 0.7),
-            math.pi + 0.5,
-            1.5,
-          );
-          canvas.drawPath(highlightPath, strokePaint);
-        }
-        return;
+        final Paint spherePaint = Paint()
+          ..shader = RadialGradient(
+            colors: [
+              Colors.white.withOpacity(0.5), // Brightest spot (Highlight)
+              color, // The actual shape color
+              Color.lerp(color, Colors.black, 0.35)!, // Darker shadow side
+            ],
+            stops: const [0.0, 0.4, 1.0],
+            center: const Alignment(-0.5, -0.5),
+            radius: 1.2,
+          ).createShader(Rect.fromCircle(center: center, radius: radius));
+
+        // Draw the main sphere body
+        canvas.drawCircle(center, radius, spherePaint);
+
+        // 2. Add a glossy reflection (White Oval)
+        // This makes it look shiny and distinct from a flat circle
+        final Paint shinePaint = Paint()
+          ..color = Colors.white.withOpacity(0.3)
+          ..style = PaintingStyle.fill;
+
+        canvas.save();
+        // Position the shine near the top-left
+        canvas.translate(center.dx - radius * 0.35, center.dy - radius * 0.35);
+        // Rotate it slightly for a natural look
+        canvas.rotate(-math.pi / 4);
+        canvas.drawOval(
+          Rect.fromCenter(
+            center: Offset.zero,
+            width: radius * 0.5,
+            height: radius * 0.25,
+          ),
+          shinePaint,
+        );
+        canvas.restore();
 
       case 'Cylinder':
         final double cylW = radius * 1.2;
