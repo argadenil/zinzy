@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_3d_controller/flutter_3d_controller.dart';
 import 'package:zinzy/screens/shapes/shapeItem.dart';
+import 'package:zinzy/screens/shapes/shapePainter.dart';
+import 'package:zinzy/screens/shapes/shapesScreen.dart';
 import 'package:zinzy/screens/shapes/shapesscreen.dart';
 
 class ShapeDetailScreen extends StatefulWidget {
@@ -122,7 +124,7 @@ class _ShapeDetailScreenState extends State<ShapeDetailScreen> {
                             : CustomPaint(
                                 painter: ShapePainter(
                                   widget.shape.name,
-                                  Colors.white,
+                                  Colors.amberAccent,
                                   isDetail: true,
                                 ),
                               ),
@@ -151,7 +153,6 @@ class _ShapeDetailScreenState extends State<ShapeDetailScreen> {
                       ],
                     ),
                     child: SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
                       padding: const EdgeInsets.fromLTRB(28, 12, 28, 30),
                       child: Column(
                         children: [
@@ -223,9 +224,8 @@ class _ShapeDetailScreenState extends State<ShapeDetailScreen> {
                           const SizedBox(height: 20),
 
                           /// FORMULA LIST
-                          if (widget.shape.formulas != null &&
-                              widget.shape.formulas!.isNotEmpty)
-                            ...widget.shape.formulas!.map(
+                          if (widget.shape.formulas.isNotEmpty)
+                            ...widget.shape.formulas.map(
                               (f) => _buildFormulaCard(f, mainColor),
                             )
                           else

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zinzy/screens/shapes/shapeDetailsScreen.dart';
 import 'package:zinzy/screens/shapes/shapeItem.dart';
-import 'package:zinzy/screens/shapes/shapesScreen.dart';
+import 'package:zinzy/screens/shapes/shapePainter.dart';
 
 
 class ShapeCard extends StatelessWidget {
