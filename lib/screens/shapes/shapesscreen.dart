@@ -511,13 +511,12 @@ class ShapeDetailScreen extends StatelessWidget {
 }
 
 /// --------------------------------------------------
-/// UNIFIED SHAPE PAINTER (Handles all 2D shapes)
+/// UNIFIED SHAPE PAINTER (Handles all 2D shapes & 3D Projections)
 /// --------------------------------------------------
 class ShapePainter extends CustomPainter {
   final String shape;
   final Color color;
   final bool isDetail;
-
   ShapePainter(this.shape, this.color, {this.isDetail = false});
 
   @override
@@ -528,10 +527,11 @@ class ShapePainter extends CustomPainter {
 
     // Optional: Add a stroke (outline) for the detail view to make it pop
     final strokePaint = Paint()
-      ..color = Color(0xff3c2815)
+      ..color = const Color(0xff3c2815)
       ..style = PaintingStyle.stroke
       ..strokeWidth = isDetail ? 0 : 3
-      ..strokeCap = StrokeCap.round;
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
 
     final center = Offset(size.width / 2, size.height / 2);
     // Detail view uses more space
@@ -540,21 +540,19 @@ class ShapePainter extends CustomPainter {
     Path path = Path();
 
     switch (shape) {
+      // ---------------- 2D SHAPES (Unchanged) ----------------
       case 'Circle':
         canvas.drawCircle(center, radius, fillPaint);
         if (!isDetail) canvas.drawCircle(center, radius, strokePaint);
-        return; // Return early as circle doesn't use path
-
+        return;
       case 'Square':
         final rect = Rect.fromCenter(
           center: center,
           width: radius * 1.8,
           height: radius * 1.8,
         );
-        // Rounded rect for kid friendliness
         path.addRRect(RRect.fromRectAndRadius(rect, const Radius.circular(12)));
         break;
-
       case 'Rectangle':
         final rect = Rect.fromCenter(
           center: center,
@@ -563,16 +561,13 @@ class ShapePainter extends CustomPainter {
         );
         path.addRRect(RRect.fromRectAndRadius(rect, const Radius.circular(12)));
         break;
-
       case 'Triangle':
-        // Equilateral triangle calculation
         final h = radius * math.sqrt(3);
         path.moveTo(center.dx, center.dy - h / 1.5); // Top
         path.lineTo(center.dx + radius, center.dy + h / 3); // Bottom Right
         path.lineTo(center.dx - radius, center.dy + h / 3); // Bottom Left
         path.close();
         break;
-
       case 'Oval':
         final rect = Rect.fromCenter(
           center: center,
@@ -581,354 +576,326 @@ class ShapePainter extends CustomPainter {
         );
         path.addOval(rect);
         break;
-
       case 'Pentagon':
-        // Calculate 5 points
         for (int i = 0; i < 5; i++) {
-          double angle =
-              (math.pi / 2.5 * i) - math.pi / 2; // Start from top (-90 deg)
+          double angle = (math.pi / 2.5 * i) - math.pi / 2;
           double x = center.dx + radius * math.cos(angle);
           double y = center.dy + radius * math.sin(angle);
-          if (i == 0) {
+          if (i == 0)
             path.moveTo(x, y);
-          } else {
+          else
             path.lineTo(x, y);
-          }
         }
         path.close();
         break;
       case 'Hexagon':
-        // Calculate 6 points
         for (int i = 0; i < 6; i++) {
-          double angle =
-              (math.pi / 3 * i) - math.pi / 2; // Start from top (-90 deg)
+          double angle = (math.pi / 3 * i) - math.pi / 2;
           double x = center.dx + radius * math.cos(angle);
           double y = center.dy + radius * math.sin(angle);
-          if (i == 0) {
+          if (i == 0)
             path.moveTo(x, y);
-          } else {
+          else
             path.lineTo(x, y);
-          }
         }
         path.close();
         break;
       case 'Heptagon':
-        // Calculate 7 points
         for (int i = 0; i < 7; i++) {
-          double angle =
-              (2 * math.pi / 7 * i) - math.pi / 2; // Start from top (-90 deg)
+          double angle = (2 * math.pi / 7 * i) - math.pi / 2;
           double x = center.dx + radius * math.cos(angle);
           double y = center.dy + radius * math.sin(angle);
-          if (i == 0) {
+          if (i == 0)
             path.moveTo(x, y);
-          } else {
+          else
             path.lineTo(x, y);
-          }
         }
         path.close();
         break;
       case 'Octagon':
-        // Calculate 8 points
         for (int i = 0; i < 8; i++) {
-          double angle =
-              (math.pi / 4 * i) - math.pi / 2; // Start from top (-90 deg)
+          double angle = (math.pi / 4 * i) - math.pi / 2;
           double x = center.dx + radius * math.cos(angle);
           double y = center.dy + radius * math.sin(angle);
-          if (i == 0) {
+          if (i == 0)
             path.moveTo(x, y);
-          } else {
+          else
             path.lineTo(x, y);
-          }
         }
         path.close();
         break;
       case 'Rhombus':
-        path.moveTo(center.dx, center.dy - radius); // Top
-        path.lineTo(center.dx + radius, center.dy); // Right
-        path.lineTo(center.dx, center.dy + radius); // Bottom
-        path.lineTo(center.dx - radius, center.dy); // Left
+        path.moveTo(center.dx, center.dy - radius);
+        path.lineTo(center.dx + radius, center.dy);
+        path.lineTo(center.dx, center.dy + radius);
+        path.lineTo(center.dx - radius, center.dy);
         path.close();
         break;
       case 'Parallelogram':
-        path.moveTo(center.dx - radius * 0.6, center.dy - radius); // Top Left
-        path.lineTo(center.dx + radius * 1.2, center.dy - radius); // Top Right
-        path.lineTo(
-          center.dx + radius * 0.6,
-          center.dy + radius,
-        ); // Bottom Right
-        path.lineTo(
-          center.dx - radius * 1.2,
-          center.dy + radius,
-        ); // Bottom Left
+        path.moveTo(center.dx - radius * 0.6, center.dy - radius);
+        path.lineTo(center.dx + radius * 1.2, center.dy - radius);
+        path.lineTo(center.dx + radius * 0.6, center.dy + radius);
+        path.lineTo(center.dx - radius * 1.2, center.dy + radius);
         path.close();
         break;
       case 'Trapezium':
-        path.moveTo(center.dx - radius * 1.0, center.dy - radius); // Top Left
-        path.lineTo(center.dx + radius * 1.0, center.dy - radius); // Top Right
-        path.lineTo(
-          center.dx + radius * 0.6,
-          center.dy + radius,
-        ); // Bottom Right
-        path.lineTo(
-          center.dx - radius * 0.6,
-          center.dy + radius,
-        ); // Bottom Left
+        path.moveTo(center.dx - radius * 1.0, center.dy - radius);
+        path.lineTo(center.dx + radius * 1.0, center.dy - radius);
+        path.lineTo(center.dx + radius * 0.6, center.dy + radius);
+        path.lineTo(center.dx - radius * 0.6, center.dy + radius);
         path.close();
         break;
+
+      // ---------------- 3D SHAPES (Corrected Projections) ----------------
       case 'Cube':
-        final double d = radius * 0.35; // depth
-
-        // ---------- FRONT FACE ----------
-        path.moveTo(
-          center.dx - radius * 0.8,
-          center.dy - radius * 0.8,
-        ); // Front Top Left
-
+        // Isometric view (Hexagon outline with internal Y)
+        final double size3d = radius * 0.9;
+        // Outline (Silhouette)
+        path.moveTo(center.dx, center.dy - size3d); // Top
         path.lineTo(
-          center.dx + radius * 0.8,
-          center.dy - radius * 0.8,
-        ); // Front Top Right
-
+          center.dx + size3d * 0.866,
+          center.dy - size3d * 0.5,
+        ); // Top Right
         path.lineTo(
-          center.dx + radius * 0.8,
-          center.dy + radius * 0.8,
-        ); // Front Bottom Right
-
+          center.dx + size3d * 0.866,
+          center.dy + size3d * 0.5,
+        ); // Bottom Right
+        path.lineTo(center.dx, center.dy + size3d); // Bottom
         path.lineTo(
-          center.dx - radius * 0.8,
-          center.dy + radius * 0.8,
-        ); // Front Bottom Left
-
+          center.dx - size3d * 0.866,
+          center.dy + size3d * 0.5,
+        ); // Bottom Left
+        path.lineTo(
+          center.dx - size3d * 0.866,
+          center.dy - size3d * 0.5,
+        ); // Top Left
         path.close();
 
-        // ---------- BACK FACE ----------
-        path.moveTo(
-          center.dx - radius * 0.8 + d,
-          center.dy - radius * 0.8 - d,
-        ); // Back Top Left
-
-        path.lineTo(
-          center.dx + radius * 0.8 + d,
-          center.dy - radius * 0.8 - d,
-        ); // Back Top Right
-
-        path.lineTo(
-          center.dx + radius * 0.8 + d,
-          center.dy + radius * 0.8 - d,
-        ); // Back Bottom Right
-
-        path.lineTo(
-          center.dx - radius * 0.8 + d,
-          center.dy + radius * 0.8 - d,
-        ); // Back Bottom Left
-
-        path.close();
-
-        // ---------- CONNECTING EDGES ----------
-        path.moveTo(center.dx - radius * 0.8, center.dy - radius * 0.8);
-        path.lineTo(center.dx - radius * 0.8 + d, center.dy - radius * 0.8 - d);
-
-        path.moveTo(center.dx + radius * 0.8, center.dy - radius * 0.8);
-        path.lineTo(center.dx + radius * 0.8 + d, center.dy - radius * 0.8 - d);
-
-        path.moveTo(center.dx + radius * 0.8, center.dy + radius * 0.8);
-        path.lineTo(center.dx + radius * 0.8 + d, center.dy + radius * 0.8 - d);
-
-        path.moveTo(center.dx - radius * 0.8, center.dy + radius * 0.8);
-        path.lineTo(center.dx - radius * 0.8 + d, center.dy + radius * 0.8 - d);
-
+        // Internal lines for 3D effect (The 'Y' shape)
+        path.moveTo(center.dx, center.dy);
+        path.lineTo(center.dx, center.dy - size3d);
+        path.moveTo(center.dx, center.dy);
+        path.lineTo(center.dx + size3d * 0.866, center.dy + size3d * 0.5);
+        path.moveTo(center.dx, center.dy);
+        path.lineTo(center.dx - size3d * 0.866, center.dy + size3d * 0.5);
         break;
+
       case 'Cuboid':
-        final double d = radius * 0.5; // depth
+        // Isometric-ish view (wider cube)
+        final double w = radius * 1.2;
+        final double h = radius * 0.8;
+        final double d = radius * 0.5; // depth offset
 
-        // ---------- FRONT FACE ----------
-        path.moveTo(
-          center.dx - radius,
-          center.dy - radius * 0.7,
-        ); // Front Top Left
+        // Front Face
+        path.moveTo(center.dx - w + d, center.dy - h + d); // Top Left Back
+        path.lineTo(center.dx + w, center.dy - h + d); // Top Right Back
+        path.lineTo(center.dx + w, center.dy + h); // Bottom Right Front
+        path.lineTo(center.dx - w, center.dy + h); // Bottom Left Front
+        path.lineTo(center.dx - w, center.dy - h + 20); // Top Left Front
+        path.close(); // Only closes the loop, doesn't look quite right for fill
 
+        // Let's redraw properly as silhouette + internal
+        path.reset();
+
+        // Silhouette (Perimeter)
+        path.moveTo(center.dx - w, center.dy - h); // Top Left Front
+        path.lineTo(center.dx + w * 0.6, center.dy - h); // Top Right Front
         path.lineTo(
-          center.dx + radius,
-          center.dy - radius * 0.7,
-        ); // Front Top Right
-
-        path.lineTo(
-          center.dx + radius,
-          center.dy + radius * 0.7,
-        ); // Front Bottom Right
-
-        path.lineTo(
-          center.dx - radius,
-          center.dy + radius * 0.7,
-        ); // Front Bottom Left
-
+          center.dx + w,
+          center.dy - h - d,
+        ); // Top Right Back (Perspective)
+        path.lineTo(center.dx + w, center.dy + h - d); // Bottom Right Back
+        path.lineTo(center.dx + w * 0.6, center.dy + h); // Bottom Right Front
+        path.lineTo(center.dx - w, center.dy + h); // Bottom Left Front
         path.close();
 
-        // ---------- BACK FACE ----------
-        path.moveTo(
-          center.dx - radius + d,
-          center.dy - radius * 0.7 - d,
-        ); // Back Top Left
-
+        // Internal Lines
+        path.moveTo(center.dx + w * 0.6, center.dy - h);
+        path.lineTo(center.dx + w * 0.6, center.dy + h); // Vertical divider
+        path.moveTo(center.dx + w * 0.6, center.dy - h);
         path.lineTo(
-          center.dx + radius + d,
-          center.dy - radius * 0.7 - d,
-        ); // Back Top Right
+          center.dx - w,
+          center.dy + h,
+        ); // Cross (optional, remove for cleaner look)
+        // Actually, let's just do standard box lines
+        path.reset();
 
-        path.lineTo(
-          center.dx + radius + d,
-          center.dy + radius * 0.7 - d,
-        ); // Back Bottom Right
+        // Front Face Rect
+        path.addRect(
+          Rect.fromCenter(
+            center: Offset(center.dx - 10, center.dy + 10),
+            width: w * 1.4,
+            height: h * 1.4,
+          ),
+        );
 
-        path.lineTo(
-          center.dx - radius + d,
-          center.dy + radius * 0.7 - d,
-        ); // Back Bottom Left
-
+        // Top and Side (Oblique) - Clear path
+        path.reset();
+        // 1. Front Face
+        path.moveTo(center.dx - w * 0.8, center.dy - h * 0.6);
+        path.lineTo(center.dx + w * 0.6, center.dy - h * 0.6);
+        path.lineTo(center.dx + w * 0.6, center.dy + h * 0.8);
+        path.lineTo(center.dx - w * 0.8, center.dy + h * 0.8);
         path.close();
 
-        // ---------- CONNECTING EDGES ----------
-        path.moveTo(center.dx - radius, center.dy - radius * 0.7);
-        path.lineTo(center.dx - radius + d, center.dy - radius * 0.7 - d);
+        // 2. Top Face connections
+        path.moveTo(center.dx - w * 0.8, center.dy - h * 0.6);
+        path.lineTo(center.dx - w * 0.5, center.dy - h * 1.1); // Top Left angle
+        path.lineTo(
+          center.dx + w * 0.9,
+          center.dy - h * 1.1,
+        ); // Top Right angle
+        path.lineTo(
+          center.dx + w * 0.6,
+          center.dy - h * 0.6,
+        ); // Connect to front
 
-        path.moveTo(center.dx + radius, center.dy - radius * 0.7);
-        path.lineTo(center.dx + radius + d, center.dy - radius * 0.7 - d);
-
-        path.moveTo(center.dx + radius, center.dy + radius * 0.7);
-        path.lineTo(center.dx + radius + d, center.dy + radius * 0.7 - d);
-
-        path.moveTo(center.dx - radius, center.dy + radius * 0.7);
-        path.lineTo(center.dx - radius + d, center.dy + radius * 0.7 - d);
-
+        // 3. Side Face connections
+        path.moveTo(center.dx + w * 0.9, center.dy - h * 1.1);
+        path.lineTo(center.dx + w * 0.9, center.dy + h * 0.3); // Side Bottom
+        path.lineTo(
+          center.dx + w * 0.6,
+          center.dy + h * 0.8,
+        ); // Connect to front bottom
         break;
 
       case 'Sphere':
         canvas.drawCircle(center, radius, fillPaint);
-        if (!isDetail) canvas.drawCircle(center, radius, strokePaint);
-        return; // Return early as sphere doesn't use path
+        // Add a highlight arc to make it look 3D
+        if (!isDetail) {
+          canvas.drawCircle(center, radius, strokePaint);
+          final highlightPath = Path();
+          highlightPath.addArc(
+            Rect.fromCircle(center: center, radius: radius * 0.7),
+            math.pi + 0.5,
+            1.5,
+          );
+          canvas.drawPath(highlightPath, strokePaint);
+        }
+        return;
 
       case 'Cylinder':
-        final double h = radius * 0.8;
-        // Top ellipse
-        Rect topRect = Rect.fromCenter(
-          center: Offset(center.dx, center.dy - h / 2),
-          width: radius * 1.6,
-          height: radius * 0.6,
+        final double cylW = radius * 1.2;
+        final double cylH = radius * 1.6;
+        final double ovalH = radius * 0.4;
+
+        // Top Oval
+        path.addOval(
+          Rect.fromCenter(
+            center: Offset(center.dx, center.dy - cylH / 2),
+            width: cylW * 2,
+            height: ovalH * 2,
+          ),
         );
-        path.addOval(topRect);
-        // Bottom ellipse
-        Rect bottomRect = Rect.fromCenter(
-          center: Offset(center.dx, center.dy + h / 2),
-          width: radius * 1.6,
-          height: radius * 0.6,
+
+        // Sides & Bottom
+        path.moveTo(center.dx - cylW, center.dy - cylH / 2);
+        path.lineTo(center.dx - cylW, center.dy + cylH / 2);
+        // Bottom Arc (Half oval)
+        path.arcToPoint(
+          Offset(center.dx + cylW, center.dy + cylH / 2),
+          radius: Radius.elliptical(cylW, ovalH),
+          clockwise: false,
         );
-        path.addOval(bottomRect);
-        // Side lines
-        path.moveTo(center.dx - radius * 0.8, center.dy - h / 2);
-        path.lineTo(center.dx - radius * 0.8, center.dy + h / 2);
-        path.moveTo(center.dx + radius * 0.8, center.dy - h / 2);
-        path.lineTo(center.dx + radius * 0.8, center.dy + h / 2);
+        path.lineTo(center.dx + cylW, center.dy - cylH / 2);
+        // We don't close here normally to keep lines clean, but for fill we should.
+        // The fill will handle the internal overlap fine.
         break;
 
       case 'Cone':
-        final double h = radius * 1.2;
-        // Base ellipse
-        Rect baseRect = Rect.fromCenter(
-          center: Offset(center.dx, center.dy + h / 2),
-          width: radius * 1.6,
-          height: radius * 0.6,
-        );
-        path.addOval(baseRect);
-        // Side lines to apex
-        path.moveTo(center.dx - radius * 0.8, center.dy + h / 2);
-        path.lineTo(center.dx, center.dy - h / 2);
-        path.lineTo(center.dx + radius * 0.8, center.dy + h / 2);
-        break;
-      case 'Pyramid':
-        final double baseSize = radius * 1.2;
-        final double height = radius * 1.2;
-        // Base square
-        path.moveTo(
-          center.dx - baseSize / 2,
-          center.dy + baseSize / 2,
-        ); // Bottom Left
-        path.lineTo(
-          center.dx + baseSize / 2,
-          center.dy + baseSize / 2,
-        ); // Bottom Right
-        path.lineTo(
-          center.dx + baseSize / 2,
-          center.dy - baseSize / 2,
-        ); // Top Right
-        path.lineTo(
-          center.dx - baseSize / 2,
-          center.dy - baseSize / 2,
-        ); // Top Left
-        path.close();
-        // Apex connections
-        path.moveTo(center.dx - baseSize / 2, center.dy - baseSize / 2);
-        path.lineTo(center.dx, center.dy - height / 2);
-        path.lineTo(center.dx + baseSize / 2, center.dy - baseSize / 2);
-        path.lineTo(center.dx, center.dy - height / 2);
-        path.lineTo(center.dx + baseSize / 2, center.dy + baseSize / 2);
-        path.lineTo(center.dx, center.dy - height / 2);
-        path.lineTo(center.dx - baseSize / 2, center.dy + baseSize / 2);
-        path.lineTo(center.dx, center.dy - height / 2);
-        break;
-      case 'Prism':
-        final double baseSize = radius * 1.2;
-        final double height = radius * 1.2;
-        // Front triangle
-        path.moveTo(center.dx, center.dy - height / 2); // Top
-        path.lineTo(
-          center.dx - baseSize / 2,
-          center.dy + height / 2,
-        ); // Bottom Left
-        path.lineTo(
-          center.dx + baseSize / 2,
-          center.dy + height / 2,
-        ); // Bottom Right
-        path.close();
-        // Back triangle
-        path.moveTo(
-          center.dx + baseSize * 0.3,
-          center.dy - height / 2 - baseSize * 0.2,
-        ); // Top
-        path.lineTo(
-          center.dx - baseSize / 2 + baseSize * 0.3,
-          center.dy + height / 2 - baseSize * 0.2,
-        ); // Bottom Left
-        path.lineTo(
-          center.dx + baseSize / 2 + baseSize * 0.3,
-          center.dy + height / 2 - baseSize * 0.2,
-        ); // Bottom Right
-        path.close();
-        // Connecting edges
-        path.moveTo(center.dx, center.dy - height / 2);
-        path.lineTo(
-          center.dx + baseSize * 0.3,
-          center.dy - height / 2 - baseSize * 0.2,
-        );
-        path.moveTo(center.dx - baseSize / 2, center.dy + height / 2);
-        path.lineTo(
-          center.dx - baseSize / 2 + baseSize * 0.3,
-          center.dy + height / 2 - baseSize * 0.2,
-        );
-        path.moveTo(center.dx + baseSize / 2, center.dy + height / 2);
-        path.lineTo(
-          center.dx + baseSize / 2 + baseSize * 0.3,
-          center.dy + height / 2 - baseSize * 0.2,
-        );
-        break;
-      case 'Hemisphere':
-        // Draw a half circle (top half)
-        path.moveTo(center.dx - radius, center.dy);
+        final double coneW = radius * 1.4;
+        final double coneH = radius * 1.8;
+        final double coneOvalH = radius * 0.4;
+
+        // Sides
+        path.moveTo(center.dx, center.dy - coneH / 2); // Top Apex
+        path.lineTo(center.dx - coneW, center.dy + coneH / 2); // Bottom Left
+
+        // Bottom Arc
         path.arcToPoint(
-          Offset(center.dx + radius, center.dy),
-          radius: Radius.circular(radius),
+          Offset(center.dx + coneW, center.dy + coneH / 2),
+          radius: Radius.elliptical(coneW, coneOvalH),
           clockwise: false,
         );
+
+        path.lineTo(center.dx, center.dy - coneH / 2); // Back to Apex
+        break;
+
+      case 'Pyramid':
+        // A square pyramid viewed from slightly above/side
+        final double pW = radius * 1.3;
+        final double pH = radius * 1.5;
+
+        // Silhouette (Big Triangle)
+        path.moveTo(center.dx, center.dy - pH); // Apex
+        path.lineTo(center.dx + pW, center.dy + pH / 2); // Bottom Right
+        path.lineTo(
+          center.dx,
+          center.dy + pH * 0.8,
+        ); // Bottom Center (Base corner)
+        path.lineTo(center.dx - pW, center.dy + pH / 2); // Bottom Left
         path.close();
+
+        // Internal Line (The Edge facing us)
+        path.moveTo(center.dx, center.dy - pH);
+        path.lineTo(center.dx, center.dy + pH * 0.8);
+        break;
+
+      case 'Prism':
+        // Triangular Prism (Tent shape)
+        final double prW = radius * 1.0;
+        final double prH = radius * 1.2;
+        final double depth = radius * 0.6;
+
+        // Front Triangle
+        path.moveTo(center.dx - depth, center.dy - prH); // Front Top
+        path.lineTo(
+          center.dx - depth - prW,
+          center.dy + prH,
+        ); // Front Bottom Left
+        path.lineTo(
+          center.dx - depth + prW,
+          center.dy + prH,
+        ); // Front Bottom Right
+        path.close();
+
+        // Connect to back
+        path.moveTo(center.dx - depth, center.dy - prH); // Front Top
+        path.lineTo(center.dx + depth * 2, center.dy - prH * 0.8); // Back Top
+        path.lineTo(
+          center.dx + depth * 2 + prW,
+          center.dy + prH * 0.8,
+        ); // Back Bottom Right
+        path.lineTo(
+          center.dx - depth + prW,
+          center.dy + prH,
+        ); // Front Bottom Right
+        break;
+
+      case 'Hemisphere':
+        // Dome shape
+        final double hW = radius * 1.4;
+        final double hH = radius * 1.4;
+        final double hOvalH = radius * 0.4;
+
+        // Start at left base
+        path.moveTo(center.dx - hW, center.dy + hH / 3);
+
+        // Top Dome Arc
+        path.arcToPoint(
+          Offset(center.dx + hW, center.dy + hH / 3),
+          radius: Radius.circular(hW),
+          clockwise: true,
+        );
+
+        // Bottom Base Ellipse (Full oval for 3D effect)
+        path.addOval(
+          Rect.fromCenter(
+            center: Offset(center.dx, center.dy + hH / 3),
+            width: hW * 2,
+            height: hOvalH * 2,
+          ),
+        );
         break;
     }
 
