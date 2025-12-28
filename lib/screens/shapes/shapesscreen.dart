@@ -31,86 +31,183 @@ class ShapeItem {
 /// SHAPES DATA (Expanded)
 /// --------------------------------------------------
 final List<ShapeItem> shapesList = [
+  // ---------------- 2D SHAPES ----------------
   ShapeItem(
     name: 'Circle',
-    description:
-        'A circle is perfectly round. It looks like a yummy cookie or a wheel!',
+    description: 'A circle is round. It has no corners.',
     simpleFact: 'Round!',
     sides: 0,
     corners: 0,
-    color: const Color(0xFFFF6F61), // Coral
+    color: const Color(0xFFFF6F61),
   ),
   ShapeItem(
     name: 'Square',
-    description:
-        'A square has 4 equal sides. It looks like a box or a slice of toast!',
-    simpleFact: 'Equal Sides',
+    description: 'A square has 4 equal sides.',
+    simpleFact: '4 Equal Sides',
     sides: 4,
     corners: 4,
-    color: const Color(0xFF42A5F5), // Blue
+    color: const Color(0xFF42A5F5),
   ),
   ShapeItem(
     name: 'Rectangle',
-    description:
-        'A rectangle is like a long square. Doors and phones are rectangles.',
+    description: 'A rectangle has 4 sides. Opposite sides are equal.',
     simpleFact: 'Long & Short',
     sides: 4,
     corners: 4,
-    color: const Color(0xFF66BB6A), // Green
+    color: const Color(0xFF66BB6A),
   ),
   ShapeItem(
     name: 'Triangle',
-    description:
-        'A triangle has 3 sharp corners. It looks like a slice of pizza!',
-    simpleFact: '3 Points',
+    description: 'A triangle has 3 sides and 3 corners.',
+    simpleFact: '3 Sides',
     sides: 3,
     corners: 3,
-    color: const Color(0xFFAB47BC), // Purple
+    color: const Color(0xFFAB47BC),
   ),
   ShapeItem(
-    name: 'Star',
-    description: 'A star twinkles in the sky at night. It has 5 points!',
-    simpleFact: 'Twinkle!',
-    sides: 10,
-    corners: 5,
-    color: const Color(0xFFFFD54F), // Gold
-  ),
-  ShapeItem(
-    name: 'Heart',
-    description:
-        'A heart shape means love. It is curved and pointed at the bottom.',
-    simpleFact: 'Love <3',
-    sides: 2,
-    corners: 1,
-    color: const Color(0xFFEC407A), // Pink
+    name: 'Oval',
+    description: 'An oval looks like an egg shape.',
+    simpleFact: 'Egg Shape',
+    sides: 0,
+    corners: 0,
+    color: const Color(0xFF26C6DA),
   ),
   ShapeItem(
     name: 'Pentagon',
-    description: 'A pentagon is a house shape with 5 sides.',
+    description: 'A pentagon has 5 sides.',
     simpleFact: '5 Sides',
     sides: 5,
     corners: 5,
-    color: const Color(0xFF26C6DA), // Cyan
+    color: const Color(0xFF7E57C2),
   ),
-  // --- 3D Objects ---
+  ShapeItem(
+    name: 'Hexagon',
+    description: 'A hexagon has 6 sides.',
+    simpleFact: '6 Sides',
+    sides: 6,
+    corners: 6,
+    color: const Color(0xFF26A69A),
+  ),
+  ShapeItem(
+    name: 'Heptagon',
+    description: 'A heptagon has 7 sides.',
+    simpleFact: '7 Sides',
+    sides: 7,
+    corners: 7,
+    color: const Color(0xFFFFA726),
+  ),
+  ShapeItem(
+    name: 'Octagon',
+    description: 'An octagon has 8 sides.',
+    simpleFact: '8 Sides',
+    sides: 8,
+    corners: 8,
+    color: const Color(0xFFEF5350),
+  ),
+  ShapeItem(
+    name: 'Rhombus',
+    description: 'A rhombus has 4 equal slanted sides.',
+    simpleFact: 'Diamond Shape',
+    sides: 4,
+    corners: 4,
+    color: const Color(0xFF5C6BC0),
+  ),
+  ShapeItem(
+    name: 'Parallelogram',
+    description: 'Opposite sides are parallel.',
+    simpleFact: 'Parallel',
+    sides: 4,
+    corners: 4,
+    color: const Color(0xFF8D6E63),
+  ),
+  ShapeItem(
+    name: 'Trapezium',
+    description: 'A trapezium has one pair of parallel sides.',
+    simpleFact: '1 Parallel Pair',
+    sides: 4,
+    corners: 4,
+    color: const Color(0xFF78909C),
+  ),
+
+  // ---------------- 3D SHAPES ----------------
   ShapeItem(
     name: 'Cube',
-    description: 'A cube is a 3D box. Dice and ice cubes are this shape.',
-    simpleFact: 'Solid Box',
+    description: 'A cube has 6 square faces.',
+    simpleFact: 'Box Shape',
     sides: 6,
     corners: 8,
-    color: const Color(0xFF5C6BC0), // Indigo
+    color: const Color(0xFF5C6BC0),
     asset: 'assets/shapes/cube.glb',
     is3D: true,
   ),
   ShapeItem(
+    name: 'Cuboid',
+    description: 'A cuboid is a box like a book.',
+    simpleFact: 'Box',
+    sides: 6,
+    corners: 8,
+    color: const Color(0xFF42A5F5),
+    asset: 'assets/shapes/cuboid.glb',
+    is3D: true,
+  ),
+  ShapeItem(
     name: 'Sphere',
-    description: 'A sphere is a ball. You can roll it on the floor!',
-    simpleFact: 'Bouncy!',
+    description: 'A sphere is round like a ball.',
+    simpleFact: 'Rolls',
     sides: 0,
     corners: 0,
-    color: const Color(0xFFFF7043), // Deep Orange
+    color: const Color(0xFFFF7043),
     asset: 'assets/shapes/sphere.glb',
+    is3D: true,
+  ),
+  ShapeItem(
+    name: 'Cylinder',
+    description: 'A cylinder looks like a tin can.',
+    simpleFact: 'Can Shape',
+    sides: 3,
+    corners: 0,
+    color: const Color(0xFF26C6DA),
+    asset: 'assets/shapes/cylinder.glb',
+    is3D: true,
+  ),
+  ShapeItem(
+    name: 'Cone',
+    description: 'A cone looks like an ice-cream cone.',
+    simpleFact: 'Pointy Top',
+    sides: 2,
+    corners: 1,
+    color: const Color(0xFFFFA726),
+    asset: 'assets/shapes/cone.glb',
+    is3D: true,
+  ),
+  ShapeItem(
+    name: 'Pyramid',
+    description: 'A pyramid has triangle faces and a square base.',
+    simpleFact: 'Egypt Shape',
+    sides: 5,
+    corners: 5,
+    color: const Color(0xFF8D6E63),
+    asset: 'assets/shapes/pyramid.glb',
+    is3D: true,
+  ),
+  ShapeItem(
+    name: 'Prism',
+    description: 'A prism has the same shape on both ends.',
+    simpleFact: 'Twin Ends',
+    sides: 5,
+    corners: 6,
+    color: const Color(0xFF7E57C2),
+    asset: 'assets/shapes/prism.glb',
+    is3D: true,
+  ),
+  ShapeItem(
+    name: 'Hemisphere',
+    description: 'A hemisphere is half of a sphere.',
+    simpleFact: 'Half Ball',
+    sides: 1,
+    corners: 0,
+    color: const Color(0xFFEC407A),
+    asset: 'assets/shapes/hemisphere.glb',
     is3D: true,
   ),
 ];
