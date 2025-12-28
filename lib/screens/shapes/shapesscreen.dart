@@ -1,66 +1,99 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_3d_controller/flutter_3d_controller.dart';
 
-class ShapesScreen extends StatefulWidget {
-  const ShapesScreen({super.key});
+/// -------------------------------
+/// DATA MODEL
+/// -------------------------------
+class ShapeItem {
+  final String name;
+  final String description;
+  final String? asset;
+  final bool is3D;
 
-  @override
-  State<ShapesScreen> createState() => _ShapesScreenState();
+  ShapeItem({
+    required this.name,
+    required this.description,
+    this.asset,
+    bool? is3D,
+  }) : is3D = is3D ?? false;
 }
 
-class _ShapesScreenState extends State<ShapesScreen> {
-  final List<Map<String, dynamic>> shapes = [
-    {"name": "Circle", "icon": Icons.circle, "color": Colors.red, "info": "A circle is round. It has no corners."},
-    {"name": "Square", "icon": Icons.crop_square, "color": Colors.blue, "info": "A square has 4 equal sides."},
-    {"name": "Rectangle", "icon": Icons.rectangle_outlined, "color": Colors.orange, "info": "A rectangle has 4 sides. Opposite sides are equal."},
-    {"name": "Triangle", "icon": Icons.change_history, "color": Colors.green, "info": "A triangle has 3 sides."},
-    {"name": "Oval", "icon": Icons.egg, "color": Colors.teal, "info": "An oval looks like a stretched circle."},
-    {"name": "Diamond", "icon": Icons.diamond, "color": Colors.brown, "info": "A diamond has 4 equal slanted sides."},
-    {"name": "Pentagon", "icon": Icons.pentagon, "color": Colors.indigo, "info": "A pentagon has 5 sides."},
-    {"name": "Hexagon", "icon": Icons.hexagon, "color": Colors.deepOrange, "info": "A hexagon has 6 sides."},
-    {"name": "Octagon", "icon": Icons.stop, "color": Colors.cyan, "info": "An octagon has 8 sides."},
-    {"name": "Parallelogram", "icon": Icons.crop_rotate, "color": Colors.lime, "info": "Opposite sides are equal and parallel."},
-    {"name": "Trapezium", "icon": Icons.filter_none, "color": Colors.amber, "info": "One pair of sides are parallel."},
-    {"name": "Star", "icon": Icons.star, "color": Colors.purple, "info": "A star has pointed corners."},
-    {"name": "Heart", "icon": Icons.favorite, "color": Colors.pink, "info": "A heart shows love and care."},
-    {"name": "Cube", "icon": Icons.view_in_ar, "color": Colors.blueGrey, "info": "A cube has 6 square faces."},
-    {"name": "Sphere", "icon": Icons.sports_baseball, "color": Colors.lightBlue, "info": "A sphere is round like a ball."},
-    {"name": "Cylinder", "icon": Icons.wine_bar, "color": Colors.greenAccent, "info": "A cylinder has two circles and a curved surface."},
-    {"name": "Cone", "icon": Icons.icecream, "color": Colors.orangeAccent, "info": "A cone has a circular base and a point."},
-    {"name": "Pyramid", "icon": Icons.account_balance, "color": Colors.redAccent, "info": "A pyramid has triangular sides and a base."},
-  ];
+/// -------------------------------
+/// SHAPES DATA (Class 1–4)
+/// -------------------------------
+final List<ShapeItem> shapesList = [
+  // 🔵 2D SHAPES
+  ShapeItem(
+    name: 'Circle',
+    description: 'A circle is a round 2D shape. It has no corners.',
+    is3D: false,
+  ),
+  ShapeItem(
+    name: 'Square',
+    description: 'A square has 4 equal sides and 4 corners.',
+    is3D: false,
+  ),
+  ShapeItem(
+    name: 'Rectangle',
+    description:
+        'A rectangle has 4 sides and 4 corners. Opposite sides are equal.',
+    is3D: false,
+  ),
+  ShapeItem(
+    name: 'Triangle',
+    description: 'A triangle has 3 sides and 3 corners.',
+    is3D: false,
+  ),
 
-  int tappedIndex = -1;
+  // 🔷 3D SHAPES
+  ShapeItem(
+    name: 'Cube',
+    description: 'A cube is a 3D shape with 6 equal square faces.',
+    asset: 'assets/shapes/cube.glb',
+    is3D: true,
+  ),
+  ShapeItem(
+    name: 'Sphere',
+    description: 'A sphere is round like a ball. It has no edges or corners.',
+    asset: 'assets/shapes/sphere.glb',
+    is3D: true,
+  ),
+  ShapeItem(
+    name: 'Cone',
+    description: 'A cone has one circular base and a pointed top.',
+    asset: 'assets/shapes/cone.glb',
+    is3D: true,
+  ),
+  ShapeItem(
+    name: 'Cylinder',
+    description: 'A cylinder has two circular faces and one curved surface.',
+    asset: 'assets/shapes/cylinder.glb',
+    is3D: true,
+  ),
+];
+
+/// -------------------------------
+/// SHAPES HOME SCREEN
+/// -------------------------------
+class ShapesScreen extends StatelessWidget {
+  const ShapesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F4FA),
-      appBar: AppBar(
-        backgroundColor: Colors.deepPurple,
-        centerTitle: true,
-        title: const Text(
-          "📐 Shapes",
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-      ),
+      appBar: AppBar(title: const Text('Shapes'), centerTitle: true),
       body: GridView.builder(
-        padding: const EdgeInsets.all(14),
-        itemCount: shapes.length,
+        padding: const EdgeInsets.all(16),
+        itemCount: shapesList.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 14,
-          mainAxisSpacing: 14,
-          childAspectRatio: 0.9,
+          crossAxisCount: 2,
+          mainAxisSpacing: 16,
+          crossAxisSpacing: 16,
         ),
         itemBuilder: (context, index) {
-          final shape = shapes[index];
-          final isTapped = tappedIndex == index;
-
+          final shape = shapesList[index];
           return GestureDetector(
-            onTapDown: (_) => setState(() => tappedIndex = index),
-            onTapCancel: () => setState(() => tappedIndex = -1),
-            onTapUp: (_) {
-              setState(() => tappedIndex = -1);
+            onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -68,10 +101,35 @@ class _ShapesScreenState extends State<ShapesScreen> {
                 ),
               );
             },
-            child: AnimatedScale(
-              scale: isTapped ? 0.94 : 1,
-              duration: const Duration(milliseconds: 120),
-              child: _ShapeCard(shape: shape),
+            child: Card(
+              elevation: 6,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  shape.is3D
+                      ? const Icon(
+                          Icons.view_in_ar,
+                          size: 48,
+                          color: Colors.deepPurple,
+                        )
+                      : const Icon(
+                          Icons.category,
+                          size: 48,
+                          color: Colors.orange,
+                        ),
+                  const SizedBox(height: 12),
+                  Text(
+                    shape.name,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },
@@ -80,61 +138,47 @@ class _ShapesScreenState extends State<ShapesScreen> {
   }
 }
 
-/// ================================
-/// CLEAN MODERN SHAPE CARD
-/// ================================
-class _ShapeCard extends StatelessWidget {
-  final Map<String, dynamic> shape;
+/// -------------------------------
+/// SHAPE DETAIL SCREEN
+/// -------------------------------
+class ShapeDetailScreen extends StatelessWidget {
+  final ShapeItem shape;
 
-  const _ShapeCard({required this.shape});
+  const ShapeDetailScreen({super.key, required this.shape});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            shape["color"].withOpacity(0.85),
-            shape["color"].withOpacity(0.65),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(22),
-        boxShadow: [
-          BoxShadow(
-            color: shape["color"].withOpacity(0.35),
-            blurRadius: 10,
-            offset: const Offset(0, 6),
-          )
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+    return Scaffold(
+      appBar: AppBar(title: Text(shape.name), centerTitle: true),
+      body: Column(
         children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white.withOpacity(0.25),
-            ),
-            child: Icon(
-              shape["icon"],
-              size: 42,
-              color: Colors.white,
-            ),
+          const SizedBox(height: 16),
+
+          /// 🔷 SHAPE VIEW
+          AspectRatio(
+            aspectRatio: 1,
+            child: shape.is3D
+                ? Flutter3DViewer(src: shape.asset!, enableTouch: true)
+                : _TwoDShapeView(shapeName: shape.name),
           ),
-          const SizedBox(height: 8),
+
+          const SizedBox(height: 16),
+
+          /// 📘 SHAPE INFO
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 6),
-            child: Text(
-              shape["name"],
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+            padding: const EdgeInsets.all(16),
+            child: Card(
+              elevation: 6,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  shape.description,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 18),
+                ),
               ),
             ),
           ),
@@ -144,74 +188,62 @@ class _ShapeCard extends StatelessWidget {
   }
 }
 
-/// ================================
-/// SHAPE DETAIL SCREEN (UNCHANGED)
-/// ================================
-class ShapeDetailScreen extends StatelessWidget {
-  final Map<String, dynamic> shape;
+/// -------------------------------
+/// 2D SHAPES DRAWING
+/// -------------------------------
+class _TwoDShapeView extends StatelessWidget {
+  final String shapeName;
 
-  const ShapeDetailScreen({super.key, required this.shape});
+  const _TwoDShapeView({required this.shapeName});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: shape["color"].withOpacity(0.12),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: Image.asset(
-                    "assets/images/back_button.webp",
-                    height: 48,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 30),
-            Container(
-              height: 260,
-              width: 260,
-              decoration: BoxDecoration(
-                color: shape["color"],
-                borderRadius: BorderRadius.circular(44),
-                boxShadow: [
-                  BoxShadow(
-                    color: shape["color"].withOpacity(0.6),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: Icon(shape["icon"], size: 160, color: Colors.white),
-            ),
-            const SizedBox(height: 30),
-            Text(
-              shape["name"],
-              style: const TextStyle(
-                fontSize: 38,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 26),
-              child: Text(
-                shape["info"],
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 22,
-                  height: 1.4,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    return CustomPaint(painter: _ShapePainter(shapeName), child: Container());
   }
+}
+
+class _ShapePainter extends CustomPainter {
+  final String shape;
+
+  _ShapePainter(this.shape);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.deepPurple
+      ..style = PaintingStyle.fill;
+
+    final center = Offset(size.width / 2, size.height / 2);
+    final w = size.width * 0.6;
+    final h = size.height * 0.6;
+
+    switch (shape) {
+      case 'Circle':
+        canvas.drawCircle(center, w / 2, paint);
+        break;
+      case 'Square':
+        canvas.drawRect(
+          Rect.fromCenter(center: center, width: w, height: w),
+          paint,
+        );
+        break;
+      case 'Rectangle':
+        canvas.drawRect(
+          Rect.fromCenter(center: center, width: w, height: h),
+          paint,
+        );
+        break;
+      case 'Triangle':
+        final path = Path()
+          ..moveTo(center.dx, center.dy - h / 2)
+          ..lineTo(center.dx - w / 2, center.dy + h / 2)
+          ..lineTo(center.dx + w / 2, center.dy + h / 2)
+          ..close();
+        canvas.drawPath(path, paint);
+        break;
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
