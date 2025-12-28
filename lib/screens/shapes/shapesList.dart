@@ -1,4 +1,3 @@
-
 // --------------------------------------------------
 import 'dart:ui';
 
@@ -6,7 +5,6 @@ import 'package:zinzy/screens/shapes/shapeItem.dart';
 
 /// DATA MODEL
 /// --------------------------------------------------
- 
 
 final List<ShapeItem> shapesList = [
   // ---------------- 2D SHAPES ----------------
@@ -14,6 +12,11 @@ final List<ShapeItem> shapesList = [
     name: 'Circle',
     description: 'A circle is round. It has no corners.',
     simpleFact: 'Round!',
+    formulas: [
+      ShapeFormula(title: 'Circumference', formula: 'C = 2πr'),
+      ShapeFormula(title: 'Area', formula: 'A = πr²'),
+      ShapeFormula(title: 'Diameter', formula: 'd = 2r'),
+    ],
     sides: 0,
     corners: 0,
     color: const Color(0xFFFF6F61),
@@ -22,6 +25,11 @@ final List<ShapeItem> shapesList = [
     name: 'Square',
     description: 'A square has 4 equal sides.',
     simpleFact: '4 Equal Sides',
+    formulas: [
+      ShapeFormula(title: 'Area', formula: 'A = s²'),
+      ShapeFormula(title: 'Perimeter', formula: 'P = 4s'),
+      ShapeFormula(title: 'Diagonal', formula: 'd = s√2'),
+    ],
     sides: 4,
     corners: 4,
     color: const Color(0xFF42A5F5),
@@ -30,6 +38,11 @@ final List<ShapeItem> shapesList = [
     name: 'Rectangle',
     description: 'A rectangle has 4 sides. Opposite sides are equal.',
     simpleFact: 'Long & Short',
+    formulas: [
+      ShapeFormula(title: 'Area', formula: 'A = l × w'),
+      ShapeFormula(title: 'Perimeter', formula: 'P = 2(l + w)'),
+      ShapeFormula(title: 'Diagonal', formula: 'd = √(l² + w²)'),
+    ],
     sides: 4,
     corners: 4,
     color: const Color(0xFF66BB6A),
@@ -38,6 +51,11 @@ final List<ShapeItem> shapesList = [
     name: 'Triangle',
     description: 'A triangle has 3 sides and 3 corners.',
     simpleFact: '3 Sides',
+    formulas: [
+      ShapeFormula(title: 'Area', formula: 'A = ½bh'),
+      ShapeFormula(title: 'Perimeter', formula: 'P = a + b + c'),
+      ShapeFormula(title: 'Heron\'s Formula', formula: 'A = √[s(s-a)(s-b)(s-c)]'),
+    ],
     sides: 3,
     corners: 3,
     color: const Color(0xFFAB47BC),
@@ -46,6 +64,10 @@ final List<ShapeItem> shapesList = [
     name: 'Oval',
     description: 'An oval looks like an egg shape.',
     simpleFact: 'Egg Shape',
+    formulas: [
+      ShapeFormula(title: 'Area', formula: 'A = πab'),
+      ShapeFormula(title: 'Perimeter', formula: 'P ≈ 2π√((a² + b²)/2)'),
+    ],
     sides: 0,
     corners: 0,
     color: const Color(0xFF26C6DA),
@@ -54,6 +76,10 @@ final List<ShapeItem> shapesList = [
     name: 'Pentagon',
     description: 'A pentagon has 5 sides.',
     simpleFact: '5 Sides',
+    formulas: [
+      ShapeFormula(title: 'Perimeter', formula: 'P = 5s'),
+      ShapeFormula(title: 'Area', formula: 'A = ¼√(5(5+2√5))s²'),
+    ],
     sides: 5,
     corners: 5,
     color: const Color(0xFF7E57C2),
@@ -62,6 +88,10 @@ final List<ShapeItem> shapesList = [
     name: 'Hexagon',
     description: 'A hexagon has 6 sides.',
     simpleFact: '6 Sides',
+    formulas: [
+      ShapeFormula(title: 'Perimeter', formula: 'P = 6s'),
+      ShapeFormula(title: 'Area', formula: 'A = (3√3/2)s²'),
+    ],
     sides: 6,
     corners: 6,
     color: const Color(0xFF26A69A),
@@ -70,6 +100,10 @@ final List<ShapeItem> shapesList = [
     name: 'Heptagon',
     description: 'A heptagon has 7 sides.',
     simpleFact: '7 Sides',
+    formulas: [
+      ShapeFormula(title: 'Perimeter', formula: 'P = 7s'),
+      ShapeFormula(title: 'Area', formula: 'A = (7/4)s² cot(180°/7)'),
+    ],
     sides: 7,
     corners: 7,
     color: const Color(0xFFFFA726),
@@ -78,6 +112,10 @@ final List<ShapeItem> shapesList = [
     name: 'Octagon',
     description: 'An octagon has 8 sides.',
     simpleFact: '8 Sides',
+    formulas: [
+      ShapeFormula(title: 'Perimeter', formula: 'P = 8s'),
+      ShapeFormula(title: 'Area', formula: 'A = 2(1+√2)s²'),
+    ],
     sides: 8,
     corners: 8,
     color: const Color(0xFFEF5350),
@@ -86,6 +124,10 @@ final List<ShapeItem> shapesList = [
     name: 'Rhombus',
     description: 'A rhombus has 4 equal slanted sides.',
     simpleFact: 'Diamond Shape',
+    formulas: [
+      ShapeFormula(title: 'Area', formula: 'A = ½(d₁ × d₂)'),
+      ShapeFormula(title: 'Perimeter', formula: 'P = 4s'),
+    ],
     sides: 4,
     corners: 4,
     color: const Color(0xFF5C6BC0),
@@ -94,6 +136,10 @@ final List<ShapeItem> shapesList = [
     name: 'Parallelogram',
     description: 'Opposite sides are parallel.',
     simpleFact: 'Parallel',
+    formulas: [
+      ShapeFormula(title: 'Area', formula: 'A = b × h'),
+      ShapeFormula(title: 'Perimeter', formula: 'P = 2(a + b)'),
+    ],
     sides: 4,
     corners: 4,
     color: const Color(0xFF8D6E63),
@@ -102,6 +148,10 @@ final List<ShapeItem> shapesList = [
     name: 'Trapezium',
     description: 'A trapezium has one pair of parallel sides.',
     simpleFact: '1 Parallel Pair',
+    formulas: [
+      ShapeFormula(title: 'Area', formula: 'A = ½(a + b)h'),
+      ShapeFormula(title: 'Perimeter', formula: 'P = a + b + c + d'),
+    ],
     sides: 4,
     corners: 4,
     color: const Color(0xFF78909C),
@@ -112,6 +162,11 @@ final List<ShapeItem> shapesList = [
     name: 'Cube',
     description: 'A cube has 6 square faces.',
     simpleFact: 'Box Shape',
+    formulas: [
+      ShapeFormula(title: 'Volume', formula: 'V = s³'),
+      ShapeFormula(title: 'Surface Area', formula: 'A = 6s²'),
+      ShapeFormula(title: 'Diagonal', formula: 'd = s√3'),
+    ],
     sides: 6,
     corners: 8,
     color: const Color(0xFF5C6BC0),
@@ -122,6 +177,11 @@ final List<ShapeItem> shapesList = [
     name: 'Cuboid',
     description: 'A cuboid is a box like a book.',
     simpleFact: 'Box',
+    formulas: [
+      ShapeFormula(title: 'Volume', formula: 'V = l × w × h'),
+      ShapeFormula(title: 'Surface Area', formula: 'A = 2(lw + lh + wh)'),
+      ShapeFormula(title: 'Diagonal', formula: 'd = √(l² + w² + h²)'),
+    ],
     sides: 6,
     corners: 8,
     color: const Color(0xFF42A5F5),
@@ -132,6 +192,10 @@ final List<ShapeItem> shapesList = [
     name: 'Sphere',
     description: 'A sphere is round like a ball.',
     simpleFact: 'Rolls',
+    formulas: [
+      ShapeFormula(title: 'Volume', formula: 'V = (4/3)πr³'),
+      ShapeFormula(title: 'Surface Area', formula: 'A = 4πr²'),
+    ],
     sides: 0,
     corners: 0,
     color: const Color(0xFFFF7043),
@@ -142,6 +206,11 @@ final List<ShapeItem> shapesList = [
     name: 'Cylinder',
     description: 'A cylinder looks like a tin can.',
     simpleFact: 'Can Shape',
+    formulas: [
+      ShapeFormula(title: 'Volume', formula: 'V = πr²h'),
+      ShapeFormula(title: 'Curved Surface', formula: 'A = 2πrh'),
+      ShapeFormula(title: 'Total Surface', formula: 'A = 2πr(r + h)'),
+    ],
     sides: 3,
     corners: 0,
     color: const Color(0xFF26C6DA),
@@ -152,6 +221,11 @@ final List<ShapeItem> shapesList = [
     name: 'Cone',
     description: 'A cone looks like an ice-cream cone.',
     simpleFact: 'Pointy Top',
+    formulas: [
+      ShapeFormula(title: 'Volume', formula: 'V = (1/3)πr²h'),
+      ShapeFormula(title: 'Slant Height', formula: 'l = √(r² + h²)'),
+      ShapeFormula(title: 'Total Surface', formula: 'A = πr(r + l)'),
+    ],
     sides: 2,
     corners: 1,
     color: const Color(0xFFFFA726),
@@ -162,6 +236,11 @@ final List<ShapeItem> shapesList = [
     name: 'Pyramid',
     description: 'A pyramid has triangle faces and a square base.',
     simpleFact: 'Egypt Shape',
+    formulas: [
+      ShapeFormula(title: 'Volume', formula: 'V = (l × w × h) / 3'),
+      ShapeFormula(title: 'Base Area', formula: 'A = l × w'),
+      ShapeFormula(title: 'Total Surface', formula: 'A = lw + l√(w²/4 + h²) + w√(l²/4 + h²)'),
+    ],
     sides: 5,
     corners: 5,
     color: const Color(0xFF8D6E63),
@@ -172,6 +251,10 @@ final List<ShapeItem> shapesList = [
     name: 'Prism',
     description: 'A prism has the same shape on both ends.',
     simpleFact: 'Twin Ends',
+    formulas: [
+      ShapeFormula(title: 'Volume', formula: 'V = B × l'),
+      ShapeFormula(title: 'Surface Area', formula: 'A = 2B + Ph'),
+    ],
     sides: 5,
     corners: 6,
     color: const Color(0xFF7E57C2),
@@ -182,6 +265,11 @@ final List<ShapeItem> shapesList = [
     name: 'Hemisphere',
     description: 'A hemisphere is half of a sphere.',
     simpleFact: 'Half Ball',
+    formulas: [
+      ShapeFormula(title: 'Volume', formula: 'V = (2/3)πr³'),
+      ShapeFormula(title: 'Curved Surface', formula: 'A = 2πr²'),
+      ShapeFormula(title: 'Total Surface', formula: 'A = 3πr²'),
+    ],
     sides: 1,
     corners: 0,
     color: const Color(0xFFEC407A),

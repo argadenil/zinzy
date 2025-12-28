@@ -68,7 +68,6 @@ class ShapesScreen extends StatelessWidget {
   }
 }
 
-
 class ShapePainter extends CustomPainter {
   final String shape;
   final Color color;
