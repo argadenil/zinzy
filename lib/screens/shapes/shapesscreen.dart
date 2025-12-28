@@ -235,20 +235,7 @@ class ShapesScreen extends StatelessWidget {
       body: Stack(
         children: [
           /// 🌈 BACKGROUND IMAGE WITH SATURATION
-          Positioned.fill(
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xFFFFF3E0), // soft peach
-                    Color(0xFFE3F2FD), // soft blue
-                  ],
-                ),
-              ),
-            ),
-          ),
+          Positioned.fill(child: Container(color: Color(0xFFffc10d))),
 
           SafeArea(
             child: Column(
@@ -316,6 +303,7 @@ class ShapeCard extends StatelessWidget {
         decoration: BoxDecoration(
           // 🎨 MATCH CARD BG WITH SHAPE COLOR
           borderRadius: BorderRadius.circular(30),
+          color: shape.color,
           border: Border.all(color: const Color(0xff3c2815), width: 6),
         ),
         child: Column(
@@ -327,10 +315,6 @@ class ShapeCard extends StatelessWidget {
             Container(
               width: 130,
               height: 130,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-              ),
               alignment: Alignment.center,
               child: shape.is3D
                   ? Icon(
@@ -343,8 +327,6 @@ class ShapeCard extends StatelessWidget {
                       painter: ShapePainter(shape.name, shape.color),
                     ),
             ),
-
-            const SizedBox(height: 14),
 
             /// 🏷 SHAPE NAME
             Text(
@@ -552,7 +534,7 @@ class ShapePainter extends CustomPainter {
 
     // Optional: Add a stroke (outline) for the detail view to make it pop
     final strokePaint = Paint()
-      ..color = Colors.black12
+      ..color = Color(0xff3c2815)
       ..style = PaintingStyle.stroke
       ..strokeWidth = isDetail ? 0 : 3
       ..strokeCap = StrokeCap.round;
@@ -597,6 +579,15 @@ class ShapePainter extends CustomPainter {
         path.close();
         break;
 
+      case 'Oval':
+        final rect = Rect.fromCenter(
+          center: center,
+          width: radius * 2.2,
+          height: radius * 1.4,
+        );
+        path.addOval(rect);
+        break;
+
       case 'Pentagon':
         // Calculate 5 points
         for (int i = 0; i < 5; i++) {
@@ -612,60 +603,84 @@ class ShapePainter extends CustomPainter {
         }
         path.close();
         break;
-
-      case 'Star':
-        // 5 pointed star
-        final double innerRadius = radius * 0.4;
-        final double step = math.pi / 5; // 36 degrees
-
-        // Start at top (-90 degrees)
-        path.moveTo(
-          center.dx + radius * math.cos(-math.pi / 2),
-          center.dy + radius * math.sin(-math.pi / 2),
-        );
-
-        for (int i = 1; i <= 10; i++) {
-          double angle = -math.pi / 2 + step * i;
-          double r = (i % 2 == 0)
-              ? radius
-              : innerRadius; // Alternating outer and inner radius
-          path.lineTo(
-            center.dx + r * math.cos(angle),
-            center.dy + r * math.sin(angle),
-          );
+      case 'Hexagon':
+        // Calculate 6 points
+        for (int i = 0; i < 6; i++) {
+          double angle =
+              (math.pi / 3 * i) - math.pi / 2; // Start from top (-90 deg)
+          double x = center.dx + radius * math.cos(angle);
+          double y = center.dy + radius * math.sin(angle);
+          if (i == 0) {
+            path.moveTo(x, y);
+          } else {
+            path.lineTo(x, y);
+          }
         }
         path.close();
         break;
-
-      case 'Heart':
-        // Bezier curve heart
-        final double width = radius * 2.2;
-        final double height = radius * 2.2;
-
-        path.moveTo(center.dx, center.dy + height * 0.25);
-
-        path.cubicTo(
-          center.dx + width / 2,
-          center.dy - height / 2, // Control point 1
-          center.dx + width / 2,
-          center.dy + height / 5, // Control point 2
-          center.dx,
-          center.dy + height * 0.45, // End point (bottom tip)
-        );
-        path.cubicTo(
-          center.dx - width / 2,
-          center.dy + height / 5,
-          center.dx - width / 2,
-          center.dy - height / 2,
-          center.dx,
-          center.dy + height * 0.25,
-        );
+      case 'Heptagon':
+        // Calculate 7 points
+        for (int i = 0; i < 7; i++) {
+          double angle =
+              (2 * math.pi / 7 * i) - math.pi / 2; // Start from top (-90 deg)
+          double x = center.dx + radius * math.cos(angle);
+          double y = center.dy + radius * math.sin(angle);
+          if (i == 0) {
+            path.moveTo(x, y);
+          } else {
+            path.lineTo(x, y);
+          }
+        }
+        path.close();
         break;
-
-      default:
-        // Default to a circle if unknown
-        canvas.drawCircle(center, radius, fillPaint);
-        return;
+      case 'Octagon':
+        // Calculate 8 points
+        for (int i = 0; i < 8; i++) {
+          double angle =
+              (math.pi / 4 * i) - math.pi / 2; // Start from top (-90 deg)
+          double x = center.dx + radius * math.cos(angle);
+          double y = center.dy + radius * math.sin(angle);
+          if (i == 0) {
+            path.moveTo(x, y);
+          } else {
+            path.lineTo(x, y);
+          }
+        }
+        path.close();
+        break;
+      case 'Rhombus':
+        path.moveTo(center.dx, center.dy - radius); // Top
+        path.lineTo(center.dx + radius, center.dy); // Right
+        path.lineTo(center.dx, center.dy + radius); // Bottom
+        path.lineTo(center.dx - radius, center.dy); // Left
+        path.close();
+        break;
+      case 'Parallelogram':
+        path.moveTo(center.dx - radius * 0.6, center.dy - radius); // Top Left
+        path.lineTo(center.dx + radius * 1.2, center.dy - radius); // Top Right
+        path.lineTo(
+          center.dx + radius * 0.6,
+          center.dy + radius,
+        ); // Bottom Right
+        path.lineTo(
+          center.dx - radius * 1.2,
+          center.dy + radius,
+        ); // Bottom Left
+        path.close();
+        break;
+      case 'Trapezium':
+        path.moveTo(center.dx - radius * 1.0, center.dy - radius); // Top Left
+        path.lineTo(center.dx + radius * 1.0, center.dy - radius); // Top Right
+        path.lineTo(
+          center.dx + radius * 0.6,
+          center.dy + radius,
+        ); // Bottom Right
+        path.lineTo(
+          center.dx - radius * 0.6,
+          center.dy + radius,
+        ); // Bottom Left
+        path.close();
+        break;
     }
 
     // Draw the calculated path
