@@ -236,16 +236,20 @@ class ShapesScreen extends StatelessWidget {
         children: [
           /// 🌈 BACKGROUND IMAGE WITH SATURATION
           Positioned.fill(
-            child: ColorFiltered(
-              colorFilter: ColorFilter.matrix(_saturationMatrix(1.5)),
-              child: Image.asset(
-                'assets/images/alphabet_bg.webp',
-                fit: BoxFit.cover,
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFFFFF3E0), // soft peach
+                    Color(0xFFE3F2FD), // soft blue
+                  ],
+                ),
               ),
             ),
           ),
 
-          /// 🧩 FOREGROUND CONTENT
           SafeArea(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -289,37 +293,6 @@ class ShapesScreen extends StatelessWidget {
       ),
     );
   }
-
-  /// 🎨 SATURATION MATRIX
-  static List<double> _saturationMatrix(double saturation) {
-    final double invSat = 1 - saturation;
-    final double r = 0.213 * invSat;
-    final double g = 0.715 * invSat;
-    final double b = 0.072 * invSat;
-
-    return [
-      r + saturation,
-      g,
-      b,
-      0,
-      0,
-      r,
-      g + saturation,
-      b,
-      0,
-      0,
-      r,
-      g,
-      b + saturation,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-    ];
-  }
 }
 
 /// --------------------------------------------------
@@ -341,42 +314,49 @@ class ShapeCard extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          // 🎨 MATCH CARD BG WITH SHAPE COLOR
           borderRadius: BorderRadius.circular(30),
-          border: Border.all(color: Color(0xff3c2815), width: 6),
-          boxShadow: [
-            BoxShadow(
-              color: shape.color.withOpacity(0.2),
-              blurRadius: 15,
-              offset: const Offset(0, 8),
-            ),
-          ],
+          border: Border.all(color: const Color(0xff3c2815), width: 6),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(height: 16),
-            SizedBox(
-              width: 90,
-              height: 90,
+
+            /// 🔍 BIGGER ICON AREA
+            Container(
+              width: 130,
+              height: 130,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+              alignment: Alignment.center,
               child: shape.is3D
                   ? Icon(
                       Icons.view_in_ar_outlined,
-                      size: 90,
+                      size: 120, // ⬅️ BIGGER ICON
                       color: shape.color,
                     )
-                  : CustomPaint(painter: ShapePainter(shape.name, shape.color)),
+                  : CustomPaint(
+                      size: const Size(120, 120),
+                      painter: ShapePainter(shape.name, shape.color),
+                    ),
             ),
-            const SizedBox(height: 12),
+
+            const SizedBox(height: 14),
+
+            /// 🏷 SHAPE NAME
             Text(
               shape.name,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w800,
-                color: Colors.grey[800],
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w900,
+                color: Color(0xff3c2815),
               ),
             ),
+
             const SizedBox(height: 16),
           ],
         ),
