@@ -1,8 +1,9 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_3d_controller/flutter_3d_controller.dart';
 import 'package:zinzy/screens/shapes/shapeItem.dart';
 import 'package:zinzy/screens/shapes/shapePainter.dart';
+import 'package:zinzy/screens/shapes/shapesScreen.dart';
+import 'package:zinzy/screens/shapes/shapesscreen.dart';
 
 class ShapeDetailScreen extends StatefulWidget {
   final ShapeItem shape;
@@ -13,41 +14,15 @@ class ShapeDetailScreen extends StatefulWidget {
   State<ShapeDetailScreen> createState() => _ShapeDetailScreenState();
 }
 
-class _ShapeDetailScreenState extends State<ShapeDetailScreen>
-    with SingleTickerProviderStateMixin {
-  /// 🔄 Fake 3D rotation
-  double _rotX = 0;
-  double _rotY = 0;
-
-  late AnimationController _resetController;
-  late Animation<double> _resetAnim;
-
+class _ShapeDetailScreenState extends State<ShapeDetailScreen> {
   @override
   void initState() {
     super.initState();
-
-    _resetController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 350),
-    );
-
-    _resetAnim = CurvedAnimation(
-      parent: _resetController,
-      curve: Curves.easeOutBack,
-    );
-
-    _resetController.addListener(() {
-      setState(() {
-        _rotX *= (1 - _resetAnim.value);
-        _rotY *= (1 - _resetAnim.value);
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _resetController.dispose();
-    super.dispose();
+    print('@@@ start');
+    for (var f in widget.shape.formulas ?? []) {
+      print('Formula: ${f.title} = ${f.formula}');
+    }
+    print('@@@ end');
   }
 
   @override
@@ -73,6 +48,24 @@ class _ShapeDetailScreenState extends State<ShapeDetailScreen>
             ),
           ),
 
+          /// 🎨 SUBTLE DECOR ELEMENTS
+          Positioned(
+            top: -60,
+            right: -60,
+            child: CircleAvatar(
+              radius: 110,
+              backgroundColor: Colors.white.withOpacity(0.08),
+            ),
+          ),
+          Positioned(
+            top: 120,
+            left: -40,
+            child: CircleAvatar(
+              radius: 70,
+              backgroundColor: Colors.white.withOpacity(0.05),
+            ),
+          ),
+
           SafeArea(
             child: Column(
               children: [
@@ -82,68 +75,65 @@ class _ShapeDetailScreenState extends State<ShapeDetailScreen>
                   child: Padding(
                     padding: const EdgeInsets.only(left: 16, top: 8),
                     child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
                       onTap: () => Navigator.pop(context),
                       child: Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.25),
                           shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.35),
+                          ),
                         ),
                         child: const Icon(
                           Icons.arrow_back_ios_new_rounded,
                           color: Colors.white,
+                          size: 22,
                         ),
                       ),
                     ),
                   ),
                 ),
 
-                /// ================= SHAPE VIEW =================
+                /// --- SHAPE VIEW ---
                 Expanded(
                   flex: 9,
                   child: Center(
                     child: Hero(
                       tag: widget.shape.name,
-                      child: GestureDetector(
-                        onPanUpdate: (details) {
-                          setState(() {
-                            _rotY += details.delta.dx * 0.01;
-                            _rotX -= details.delta.dy * 0.01;
-                          });
-                        },
-                        onPanEnd: (_) {
-                          _resetController.forward(from: 0);
-                        },
-                        child: Transform(
-                          alignment: Alignment.center,
-                          transform: Matrix4.identity()
-                            ..setEntry(3, 2, 0.0015) // perspective
-                            ..rotateX(_rotX)
-                            ..rotateY(_rotY),
-                          child: Container(
-                            width: 260,
-                            height: 260,
-                            child: widget.shape.is3D
-                                ? Flutter3DViewer(
-                                    src: widget.shape.asset!,
-                                    enableTouch: true,
-                                    progressBarColor: Colors.transparent,
-                                  )
-                                : CustomPaint(
-                                    painter: ShapePainter(
-                                      widget.shape.name,
-                                      Colors.amberAccent,
-                                      isDetail: true,
-                                    ),
-                                  ),
-                          ),
+                      child: Container(
+                        width: 260,
+                        height: 260,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: darkerColor.withOpacity(0.35),
+                              blurRadius: 28,
+                              offset: const Offset(0, 12),
+                            ),
+                          ],
                         ),
+                        child: widget.shape.is3D
+                            ? Flutter3DViewer(
+                                src: widget.shape.asset!,
+                                enableTouch: true,
+                                progressBarColor: Colors.transparent,
+                              )
+                            : CustomPaint(
+                                painter: ShapePainter(
+                                  widget.shape.name,
+                                  Colors.amberAccent,
+                                  isDetail: true,
+                                ),
+                              ),
                       ),
                     ),
                   ),
                 ),
 
-                /// ================= INFO CARD =================
+                /// --- INFO CARD ---
                 Expanded(
                   flex: 11,
                   child: Container(
@@ -154,13 +144,21 @@ class _ShapeDetailScreenState extends State<ShapeDetailScreen>
                         topLeft: Radius.circular(48),
                         topRight: Radius.circular(48),
                       ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 20,
+                          offset: Offset(0, -6),
+                        ),
+                      ],
                     ),
                     child: SingleChildScrollView(
-                      padding: const EdgeInsets.fromLTRB(28, 20, 28, 30),
+                      padding: const EdgeInsets.fromLTRB(28, 12, 28, 30),
                       child: Column(
                         children: [
                           /// DRAG HANDLE
                           Container(
+                            margin: const EdgeInsets.symmetric(vertical: 16),
                             width: 48,
                             height: 5,
                             decoration: BoxDecoration(
@@ -168,7 +166,6 @@ class _ShapeDetailScreenState extends State<ShapeDetailScreen>
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          const SizedBox(height: 20),
 
                           /// TITLE
                           Text(
@@ -181,28 +178,60 @@ class _ShapeDetailScreenState extends State<ShapeDetailScreen>
                             ),
                           ),
 
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 14),
 
                           /// DESCRIPTION
                           Text(
                             widget.shape.description,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 16.5,
                               height: 1.6,
+                              fontWeight: FontWeight.w500,
                               color: Colors.blueGrey[600],
                             ),
                           ),
 
-                          const SizedBox(height: 30),
+                          const SizedBox(height: 32),
 
-                          /// FORMULAS
+                          /// FORMULA HEADER
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: mainColor.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Icon(
+                                  Icons.functions_rounded,
+                                  color: mainColor,
+                                  size: 20,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Text(
+                                "Math Formulas",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.blueGrey[800],
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 20),
+
+                          /// FORMULA LIST
                           if (widget.shape.formulas.isNotEmpty)
                             ...widget.shape.formulas.map(
                               (f) => _buildFormulaCard(f, mainColor),
                             )
                           else
                             _buildNoFormulaState(),
+
+                          const SizedBox(height: 30),
                         ],
                       ),
                     ),
@@ -220,37 +249,69 @@ class _ShapeDetailScreenState extends State<ShapeDetailScreen>
   Widget _buildFormulaCard(ShapeFormula item, Color color) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(22),
         color: Colors.white,
+        borderRadius: BorderRadius.circular(22),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
-            blurRadius: 14,
+            blurRadius: 12,
             offset: const Offset(0, 6),
           ),
         ],
+        border: Border.all(
+          color: color.withOpacity(0.12),
+          width: 1.2,
+        ),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             width: 6,
-            height: 48,
+            height: 52,
             decoration: BoxDecoration(
               color: color,
               borderRadius: BorderRadius.circular(6),
             ),
           ),
           const SizedBox(width: 16),
+
           Expanded(
-            child: Text(
-              item.formula,
-              style: const TextStyle(
-                fontSize: 20,
-                fontFamily: 'Courier',
-                fontWeight: FontWeight.w600,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  (item.title ?? '').toUpperCase(),
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[500],
+                    letterSpacing: 1.4,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  item.formula,
+                  softWrap: true,
+                  style: TextStyle(
+                    fontSize: 21,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Courier',
+                    color: Colors.blueGrey[900],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Opacity(
+            opacity: 0.08,
+            child: Icon(
+              Icons.calculate,
+              color: color,
+              size: 36,
             ),
           ),
         ],
@@ -260,14 +321,19 @@ class _ShapeDetailScreenState extends State<ShapeDetailScreen>
 
   Widget _buildNoFormulaState() {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 40),
+      padding: const EdgeInsets.symmetric(vertical: 30),
       child: Column(
         children: [
-          Icon(Icons.check_circle_outline, size: 42, color: Colors.grey[300]),
+          Icon(Icons.check_circle_outline,
+              size: 40, color: Colors.grey[300]),
           const SizedBox(height: 12),
           Text(
             "Just remember the shape!",
-            style: TextStyle(color: Colors.grey[400], fontSize: 16),
+            style: TextStyle(
+              color: Colors.grey[400],
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ],
       ),
