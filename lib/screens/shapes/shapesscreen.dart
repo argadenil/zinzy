@@ -343,6 +343,7 @@ class ShapeCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(30),
+          border: Border.all(color: Color(0xff3c2815), width: 6),
           boxShadow: [
             BoxShadow(
               color: shape.color.withOpacity(0.2),
@@ -361,7 +362,7 @@ class ShapeCard extends StatelessWidget {
               child: shape.is3D
                   ? Icon(
                       Icons.view_in_ar_outlined,
-                      size: 70,
+                      size: 90,
                       color: shape.color,
                     )
                   : CustomPaint(painter: ShapePainter(shape.name, shape.color)),
