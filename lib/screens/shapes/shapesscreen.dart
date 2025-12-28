@@ -215,43 +215,110 @@ final List<ShapeItem> shapesList = [
 /// --------------------------------------------------
 /// SHAPES SCREEN (HOME)
 /// --------------------------------------------------
+/// --------------------------------------------------
+/// SHAPES SCREEN (HOME) – FIXED
+/// --------------------------------------------------
 class ShapesScreen extends StatelessWidget {
   const ShapesScreen({super.key});
+
+  int _crossAxisCount(BuildContext context) {
+    final w = MediaQuery.of(context).size.width;
+    if (w > 900) return 4; // large tablet
+    if (w > 600) return 3; // tablet
+    return 2; // phone
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF3E0), // Very light orange/cream bg
-      appBar: AppBar(
-        title: const Text(
-          'Shapes Fun! 🎈',
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w900,
-            color: Color(0xFF5D4037),
-            letterSpacing: 1.2,
+      backgroundColor: Colors.transparent,
+      body: Stack(
+        children: [
+          /// 🌈 BACKGROUND IMAGE WITH SATURATION
+          Positioned.fill(
+            child: ColorFiltered(
+              colorFilter: ColorFilter.matrix(_saturationMatrix(1.5)),
+              child: Image.asset(
+                'assets/images/alphabet_bg.webp',
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(20),
-        itemCount: shapesList.length,
-        // 2 Columns is better for small kids (bigger touch targets)
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          mainAxisSpacing: 20,
-          crossAxisSpacing: 20,
-          childAspectRatio: 0.85,
-        ),
-        itemBuilder: (context, index) {
-          final shape = shapesList[index];
-          return ShapeCard(shape: shape);
-        },
+
+          /// 🧩 FOREGROUND CONTENT
+          SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// 🔙 CUSTOM BACK BUTTON
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Image.asset(
+                      'assets/images/back_button.webp',
+                      width: 60,
+                      height: 60,
+                    ),
+                  ),
+                ),
+
+                /// 📦 SHAPES GRID
+                Expanded(
+                  child: GridView.builder(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 10,
+                    ),
+                    itemCount: shapesList.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: _crossAxisCount(context),
+                      mainAxisSpacing: 16,
+                      crossAxisSpacing: 16,
+                      childAspectRatio: 0.85,
+                    ),
+                    itemBuilder: (context, index) {
+                      return ShapeCard(shape: shapesList[index]);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
+  }
+
+  /// 🎨 SATURATION MATRIX
+  static List<double> _saturationMatrix(double saturation) {
+    final double invSat = 1 - saturation;
+    final double r = 0.213 * invSat;
+    final double g = 0.715 * invSat;
+    final double b = 0.072 * invSat;
+
+    return [
+      r + saturation,
+      g,
+      b,
+      0,
+      0,
+      r,
+      g + saturation,
+      b,
+      0,
+      0,
+      r,
+      g,
+      b + saturation,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+    ];
   }
 }
 
@@ -287,44 +354,29 @@ class ShapeCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Expanded allows the shape to take up available space
-            Expanded(
-              flex: 3,
-              child: Center(
-                child: SizedBox(
-                  width: 90,
-                  height: 90,
-                  // If 3D, show an Icon representing 3D, else draw the shape
-                  child: shape.is3D
-                      ? Icon(
-                          Icons.view_in_ar_outlined, // Generic 3D icon
-                          size: 70,
-                          color: shape.color,
-                        )
-                      : CustomPaint(
-                          painter: ShapePainter(shape.name, shape.color),
-                          size: const Size(80, 80),
-                        ),
-                ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: 90,
+              height: 90,
+              child: shape.is3D
+                  ? Icon(
+                      Icons.view_in_ar_outlined,
+                      size: 70,
+                      color: shape.color,
+                    )
+                  : CustomPaint(painter: ShapePainter(shape.name, shape.color)),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              shape.name,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w800,
+                color: Colors.grey[800],
               ),
             ),
-            Expanded(
-              flex: 1,
-              child: Column(
-                children: [
-                  Text(
-                    shape.name,
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.grey[800],
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                ],
-              ),
-            ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 16),
           ],
         ),
       ),
