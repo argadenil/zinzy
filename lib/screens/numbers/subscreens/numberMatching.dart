@@ -295,31 +295,6 @@ class _NumberMatchingScreenState extends State<NumberMatchingScreen>
     );
   }
 
-  /// DRAG CARD
-  Widget _buildNumberCard(int number, bool dragging, {bool faded = false}) {
-    return Opacity(
-      opacity: faded ? 0.4 : 1,
-      child: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: dragging ? Colors.orangeAccent : Colors.white,
-          borderRadius: BorderRadius.circular(cardRadius),
-          border: Border.all(color: Colors.deepOrange, width: 3),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 6,
-              offset: Offset(2, 3),
-            ),
-          ],
-        ),
-        child: Text(
-          "$number",
-          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-      ),
-    );
-  }
 
   /// SUCCESS OVERLAY
   Widget _buildSuccessOverlay() {
