@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zinzy/screens/science/subscreens/human_body.dart';
 
 class ScienceScreen extends StatelessWidget {
   const ScienceScreen({super.key});
@@ -118,7 +119,11 @@ class UnitCard extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(24),
         onTap: () {
-          // TODO: Navigate to subtopic screen
+          
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const HumanBodyScreen()),
+          );
         },
         child: Ink(
           decoration: BoxDecoration(
