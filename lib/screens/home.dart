@@ -4,6 +4,7 @@ import 'package:zinzy/screens/alphabet/alphabetScreen.dart';
 import 'package:zinzy/screens/animals/animalScreen.dart';
 import 'package:zinzy/screens/colors/colorsScreen.dart';
 import 'package:zinzy/screens/numbers/numebersScreen.dart';
+import 'package:zinzy/screens/science/science_screen.dart';
 import 'package:zinzy/screens/shapes/shapesScreen.dart';
 import 'package:zinzy/widgets/card.dart';
 import 'package:zinzy/widgets/horizontalCard.dart';
@@ -115,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             "label": "Science",
                             "img": "assets/images/science.webp",
                             "bg": const Color(0xfffda503),
-                            "route": const Alphabet(),
+                            "route": const ScienceScreen(),
                           },
                           {
                             "label": "Games",
