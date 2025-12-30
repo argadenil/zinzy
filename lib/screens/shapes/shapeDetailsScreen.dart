@@ -81,18 +81,12 @@ class _ShapeDetailScreenState extends State<ShapeDetailScreen>
                   alignment: Alignment.centerLeft,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 16, top: 8),
-                    child: GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.25),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.arrow_back_ios_new_rounded,
-                          color: Colors.white,
-                        ),
+                    child: IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: Image.asset(
+                        'assets/images/back_button.webp',
+                        width: 60,
+                        height: 60,
                       ),
                     ),
                   ),
@@ -243,14 +237,30 @@ class _ShapeDetailScreenState extends State<ShapeDetailScreen>
             ),
           ),
           const SizedBox(width: 16),
+
           Expanded(
-            child: Text(
-              item.formula,
-              style: const TextStyle(
-                fontSize: 20,
-                fontFamily: 'Courier',
-                fontWeight: FontWeight.w600,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black54,
+                    fontFamily: 'Courier',
+                  ),
+                ),
+                const SizedBox(height: 6),
+
+                Text(
+                  item.formula,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'Courier',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
