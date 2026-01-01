@@ -330,17 +330,18 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
   }
 
   /// --------------------------------------------------
+  /// --------------------------------------------------
   Widget _tabsGrid() {
     final items = parts.entries.toList();
 
     return GridView.builder(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(12),
       itemCount: items.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 4,
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
-        childAspectRatio: 2.5,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        childAspectRatio: 2.3,
       ),
       itemBuilder: (_, i) {
         final part = items[i].key;
@@ -348,26 +349,47 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
         final active = selectedPart == part;
 
         return GestureDetector(
-          onTap: () => setState(() => selectedPart = part),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 250),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: active
-                    ? [data.color, data.color.withOpacity(0.7)]
-                    : [Colors.white, Colors.white],
+          onTap: () {
+            setState(() => selectedPart = part);
+          },
+          child: AnimatedScale(
+            scale: active ? 1.20 : 1.0,
+            duration: const Duration(milliseconds: 220),
+            curve: Curves.easeOutBack,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 260),
+              curve: Curves.easeOut,
+              decoration: BoxDecoration(
+                color: data.color.withOpacity(active ? 0.85 : 0.60),
+                borderRadius: BorderRadius.circular(26),
+                border: active
+                    ? Border.all(
+                        color: Colors.redAccent,
+                        width: 2,
+                        style: BorderStyle.solid,
+                      )
+                    : Border.all(color: Colors.black, width: 2),
+                boxShadow: [
+                  BoxShadow(
+                    color: active
+                        ? data.color.withOpacity(0.45)
+                        : Colors.black.withOpacity(0.08),
+                    blurRadius: active ? 12 : 6,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
               ),
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: data.color, width: active ? 3 : 2),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              data.label,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.w900,
-                fontSize: 12,
-                color: active ? Colors.white : data.color,
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(horizontal: 6),
+              child: Text(
+                data.label,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 15,
+                  color: active ? Colors.white : Colors.black,
+                ),
               ),
             ),
           ),
