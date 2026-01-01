@@ -82,16 +82,16 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
     BodyPart.head: BodyPartData(
       label: "Head",
       description: "Top part of our body.",
-      from: [p(60, 12)],
-      to: [p(80, 12)],
+      from: [p(60, 15)],
+      to: [p(80, 15)],
       color: const Color(0xFF90CAF9),
     ),
 
     BodyPart.hair: BodyPartData(
       label: "Hair",
       description: "Hair grows on head.",
-      from: [p(60, 8)],
-      to: [p(80, 8)],
+      from: [p(60, 10)],
+      to: [p(80, 10)],
       color: const Color(0xFFCE93D8),
     ),
 
@@ -106,9 +106,8 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
     BodyPart.eyes: BodyPartData(
       label: "Eyes",
       description: "Help us see.",
-      from: [p(40, 25), p(60, 25)],
-      to: [p(20, 25), p(80, 25)],
-      isPair: true,
+      from: [p(40, 25)],
+      to: [p(20, 25)],
       color: const Color(0xFF4FC3F7),
     ),
 
@@ -164,34 +163,32 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
       label: "Intestines",
       description: "Absorb nutrients.",
       from: [p(50, 65)],
-      to: [p(80, 65)],
+      to: [p(80, 75)],
       color: const Color(0xFFFFCC80),
     ),
 
     BodyPart.hand: BodyPartData(
       label: "Hand",
       description: "Helps us hold.",
-      from: [p(26, 60)],
-      to: [p(5, 60)],
+      from: [p(26, 65)],
+      to: [p(5, 75)],
       color: const Color(0xFF4DB6AC),
     ),
 
     BodyPart.legs: BodyPartData(
       label: "Legs",
       description: "Help us walk.",
-      from: [p(45, 85), p(55, 85)],
-      to: [p(30, 85), p(70, 85)],
-      isPair: true,
+      from: [p(45, 85)],
+      to: [p(30, 85)],
       color: const Color(0xFF81C784),
     ),
 
     BodyPart.foot: BodyPartData(
       label: "Foot",
       description: "Supports body.",
-      from: [p(46, 90), p(54, 90)],
-      to: [p(30, 98), p(70, 98)],
-      isPair: true,
-      color: const Color(0xFFFFAB91),
+      from: [p(40, 95)],
+      to: [p(20, 90)],
+      color: const Color(0xFF81C784),
     ),
   };
 
@@ -275,7 +272,7 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
               painter: ArrowPainter(
                 from: Offset(data.from[i].dx * w, data.from[i].dy * h),
                 to: Offset(data.to[i].dx * w, data.to[i].dy * h),
-                color: data.color,
+                color: Color(0xFFd26868),
               ),
             ),
 
@@ -285,11 +282,7 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
             child: GestureDetector(
               onTap: () => _showInfo(data),
               child: Column(
-                children: [
-                  _dot(data.color),
-                  const SizedBox(height: 4),
-                  _label(data.label),
-                ],
+                children: [const SizedBox(height: 4), _label(data.label)],
               ),
             ),
           ),
@@ -297,16 +290,6 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
       );
     }).toList();
   }
-
-  Widget _dot(Color color) => Container(
-    width: 18,
-    height: 18,
-    decoration: BoxDecoration(
-      color: color,
-      shape: BoxShape.circle,
-      border: Border.all(color: Colors.white, width: 2),
-    ),
-  );
 
   Widget _label(String text) => ConstrainedBox(
     constraints: const BoxConstraints(maxWidth: 80),
