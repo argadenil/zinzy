@@ -37,7 +37,6 @@ class BodyPartData {
   final String description;
   final List<Offset> from;
   final List<Offset> to;
-  final bool isPair;
   final Color color;
 
   const BodyPartData({
@@ -46,7 +45,6 @@ class BodyPartData {
     required this.from,
     required this.to,
     required this.color,
-    this.isPair = false,
   });
 }
 
@@ -198,35 +196,43 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFFFBB2D),
       body: SafeArea(
-        child: Column(
-          children: [
-            _backButton(),
-            const Text(
-              "Human Body",
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.w900),
-            ),
-            const SizedBox(height: 12),
-
-            /// IMAGE + ARROWS (SAME COORDINATE SPACE)
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.5,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 30),
-                child: LayoutBuilder(
-                  builder: (_, c) {
-                    final w = c.maxWidth;
-                    final h = c.maxHeight;
-
-                    return Stack(
-                      children: [_bodyImage(), ..._buildArrowLayers(w, h)],
-                    );
-                  },
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Image.asset(
+                  'assets/images/back_button.webp',
+                  width: 60,
+                  height: 60,
+                  fit: BoxFit.contain,
                 ),
               ),
-            ),
+              const SizedBox(height: 12),
 
-            Expanded(child: _tabsGrid()),
-          ],
+              /// IMAGE + ARROWS (SAME COORDINATE SPACE)
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 30),
+                  child: LayoutBuilder(
+                    builder: (_, c) {
+                      final w = c.maxWidth;
+                      final h = c.maxHeight;
+
+                      return Stack(
+                        children: [_bodyImage(), ..._buildArrowLayers(w, h)],
+                      );
+                    },
+                  ),
+                ),
+              ),
+
+              Expanded(child: _tabsGrid()),
+            ],
+          ),
         ),
       ),
     );
@@ -291,23 +297,37 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
     }).toList();
   }
 
-  Widget _label(String text) => ConstrainedBox(
-    constraints: const BoxConstraints(maxWidth: 80),
-    child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: Colors.black87,
-        borderRadius: BorderRadius.circular(14),
+  Widget _label(String text) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 96),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: const Color(0xFF2B2B2B), // softer than pure black
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black38,
+              blurRadius: 4,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Text(
+          text,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 13,
+            fontWeight: FontWeight.w600, // better readability for kids
+            height: 1.2,
+          ),
+        ),
       ),
-      child: Text(
-        text,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        textAlign: TextAlign.center,
-        style: const TextStyle(color: Colors.white, fontSize: 12),
-      ),
-    ),
-  );
+    );
+  }
 
   /// --------------------------------------------------
   Widget _tabsGrid() {
