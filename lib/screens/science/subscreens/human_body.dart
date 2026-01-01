@@ -66,128 +66,132 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
   /// --------------------------------------------------
   /// BODY PART DATA
   /// --------------------------------------------------
-  final Map<BodyPart, BodyPartData> parts = {
+  Offset p(double xPercent, double yPercent) {
+    return Offset(xPercent / 100, yPercent / 100);
+  }
+
+  Map<BodyPart, BodyPartData> get parts => {
     BodyPart.all: BodyPartData(
       label: "All",
       description: "Learn all body parts",
       from: [],
       to: [],
-      color: Color(0xFF6A5AE0),
+      color: const Color(0xFF6A5AE0),
     ),
 
     BodyPart.head: BodyPartData(
       label: "Head",
       description: "Top part of our body.",
-      from: [Offset(0.50, 0.12)],
-      to: [Offset(0.80, 0.12)],
-      color: Color(0xFF90CAF9),
+      from: [p(60, 12)],
+      to: [p(80, 12)],
+      color: const Color(0xFF90CAF9),
     ),
 
     BodyPart.hair: BodyPartData(
       label: "Hair",
       description: "Hair grows on head.",
-      from: [Offset(0.50, 0.08)],
-      to: [Offset(0.80, 0.05)],
-      color: Color(0xFFCE93D8),
+      from: [p(60, 8)],
+      to: [p(80, 8)],
+      color: const Color(0xFFCE93D8),
     ),
 
     BodyPart.brain: BodyPartData(
       label: "Brain",
       description: "Helps us think.",
-      from: [Offset(0.50, 0.14)],
-      to: [Offset(0.20, 0.08)],
-      color: Color(0xFFFF8A65),
+      from: [p(50, 14)],
+      to: [p(20, 8)],
+      color: const Color(0xFFFF8A65),
     ),
 
     BodyPart.eyes: BodyPartData(
       label: "Eyes",
       description: "Help us see.",
-      from: [Offset(0.46, 0.22), Offset(0.54, 0.22)],
-      to: [Offset(0.20, 0.22), Offset(0.80, 0.22)],
+      from: [p(40, 25), p(60, 25)],
+      to: [p(20, 25), p(80, 25)],
       isPair: true,
-      color: Color(0xFF4FC3F7),
+      color: const Color(0xFF4FC3F7),
     ),
 
     BodyPart.neck: BodyPartData(
       label: "Neck",
       description: "Connects head to body.",
-      from: [Offset(0.50, 0.28)],
-      to: [Offset(0.80, 0.30)],
-      color: Color(0xFFA1887F),
+      from: [p(50, 40)],
+      to: [p(80, 30)],
+      color: const Color(0xFFA1887F),
     ),
 
     BodyPart.chest: BodyPartData(
       label: "Chest",
       description: "Protects heart & lungs.",
-      from: [Offset(0.50, 0.36)],
-      to: [Offset(0.80, 0.36)],
-      color: Color(0xFF81C784),
+      from: [p(55, 50)],
+      to: [p(80, 50)],
+      color: const Color(0xFF81C784),
     ),
 
     BodyPart.heart: BodyPartData(
       label: "Heart",
       description: "Pumps blood.",
-      from: [Offset(0.48, 0.40)],
-      to: [Offset(0.20, 0.42)],
-      color: Color(0xFFE57373),
+      from: [p(48, 50)],
+      to: [p(20, 42)],
+      color: const Color(0xFFE57373),
     ),
 
     BodyPart.lungs: BodyPartData(
       label: "Lungs",
       description: "Help us breathe.",
-      from: [Offset(0.52, 0.38)],
-      to: [Offset(0.80, 0.34)],
-      color: Color(0xFF81D4FA),
+      from: [p(55, 50)],
+      to: [p(80, 50)],
+      color: const Color(0xFF81D4FA),
     ),
 
     BodyPart.liver: BodyPartData(
       label: "Liver",
       description: "Cleans our blood.",
-      from: [Offset(0.48, 0.46)],
-      to: [Offset(0.20, 0.48)],
-      color: Color(0xFFBCAAA4),
+      from: [p(48, 56)],
+      to: [p(20, 56)],
+      color: const Color(0xFFBCAAA4),
     ),
 
     BodyPart.stomach: BodyPartData(
       label: "Stomach",
       description: "Digests food.",
-      from: [Offset(0.52, 0.50)],
-      to: [Offset(0.80, 0.52)],
-      color: Color(0xFFFFB74D),
+      from: [p(52, 60)],
+      to: [p(80, 60)],
+      color: const Color(0xFFFFB74D),
     ),
 
     BodyPart.intestines: BodyPartData(
       label: "Intestines",
       description: "Absorb nutrients.",
-      from: [Offset(0.50, 0.56)],
-      to: [Offset(0.80, 0.58)],
-      color: Color(0xFFFFCC80),
+      from: [p(50, 65)],
+      to: [p(80, 65)],
+      color: const Color(0xFFFFCC80),
     ),
 
     BodyPart.hand: BodyPartData(
       label: "Hand",
       description: "Helps us hold.",
-      from: [Offset(0.26, 0.52)],
-      to: [Offset(0.05, 0.60)],
-      color: Color(0xFF4DB6AC),
+      from: [p(26, 60)],
+      to: [p(5, 60)],
+      color: const Color(0xFF4DB6AC),
     ),
 
     BodyPart.legs: BodyPartData(
       label: "Legs",
       description: "Help us walk.",
-      from: [Offset(0.46, 0.72), Offset(0.54, 0.72)],
-      to: [Offset(0.30, 0.90), Offset(0.70, 0.90)],
+      from: [p(45, 85), p(55, 85)],
+      to: [p(30, 85), p(70, 85)],
       isPair: true,
-      color: Color(0xFF81C784),
+      color: const Color(0xFF81C784),
     ),
 
     BodyPart.foot: BodyPartData(
       label: "Foot",
       description: "Supports body.",
-      from: [Offset(0.46, 0.90), Offset(0.54, 0.90)],
-      to: [Offset(0.30, 0.98), Offset(0.70, 0.98)],
+      from: [p(46, 90), p(54, 90)],
+      to: [p(30, 98), p(70, 98)],
       isPair: true,
-      color: Color(0xFFFFAB91),
+      color: const Color(0xFFFFAB91),
     ),
   };
 
