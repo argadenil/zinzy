@@ -74,7 +74,8 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
       description: "Learn all body parts",
       from: [],
       to: [],
-      color: const Color(0xFF6A5AE0),
+      // A bright Royal Blue (High contrast vs yellow)
+      color: const Color(0xFF2979FF),
     ),
 
     BodyPart.head: BodyPartData(
@@ -82,7 +83,8 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
       description: "Top part of our body.",
       from: [p(60, 15)],
       to: [p(80, 15)],
-      color: const Color(0xFF90CAF9),
+      // Vibrant Orange (Darker than background to stand out)
+      color: const Color(0xFFFF6D00),
     ),
 
     BodyPart.hair: BodyPartData(
@@ -90,7 +92,8 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
       description: "Hair grows on head.",
       from: [p(60, 10)],
       to: [p(80, 10)],
-      color: const Color(0xFFCE93D8),
+      // Deep Purple (Fun, high contrast)
+      color: const Color(0xFFAA00FF),
     ),
 
     BodyPart.brain: BodyPartData(
@@ -98,7 +101,8 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
       description: "Helps us think.",
       from: [p(50, 14)],
       to: [p(20, 8)],
-      color: const Color(0xFFFF8A65),
+      // Hot Pink (Playful, distinct from Heart red)
+      color: const Color(0xFFFF4081),
     ),
 
     BodyPart.eyes: BodyPartData(
@@ -106,7 +110,8 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
       description: "Help us see.",
       from: [p(40, 25)],
       to: [p(20, 25)],
-      color: const Color(0xFF4FC3F7),
+      // Teal/Cyan (Very clear against yellow)
+      color: const Color(0xFF00BFA5),
     ),
 
     BodyPart.neck: BodyPartData(
@@ -114,7 +119,8 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
       description: "Connects head to body.",
       from: [p(50, 40)],
       to: [p(80, 30)],
-      color: const Color(0xFFA1887F),
+      // Indigo (Solid, stabilizing color)
+      color: const Color(0xFF3D5AFE),
     ),
 
     BodyPart.chest: BodyPartData(
@@ -122,7 +128,8 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
       description: "Protects heart & lungs.",
       from: [p(55, 50)],
       to: [p(80, 50)],
-      color: const Color(0xFF81C784),
+      // Soft Blue
+      color: const Color(0xFF42A5F5),
     ),
 
     BodyPart.heart: BodyPartData(
@@ -130,7 +137,8 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
       description: "Pumps blood.",
       from: [p(48, 50)],
       to: [p(20, 42)],
-      color: const Color(0xFFE57373),
+      // Bright Cherry Red (Classic Heart color)
+      color: const Color(0xFFFF1744),
     ),
 
     BodyPart.lungs: BodyPartData(
@@ -138,7 +146,8 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
       description: "Help us breathe.",
       from: [p(55, 50)],
       to: [p(80, 50)],
-      color: const Color(0xFF81D4FA),
+      // Sky Blue (Airy feeling)
+      color: const Color(0xFF00E5FF),
     ),
 
     BodyPart.liver: BodyPartData(
@@ -146,7 +155,8 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
       description: "Cleans our blood.",
       from: [p(48, 56)],
       to: [p(20, 56)],
-      color: const Color(0xFFBCAAA4),
+      // Deep Violet
+      color: const Color(0xFF7C4DFF),
     ),
 
     BodyPart.stomach: BodyPartData(
@@ -154,7 +164,8 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
       description: "Digests food.",
       from: [p(52, 60)],
       to: [p(80, 60)],
-      color: const Color(0xFFFFB74D),
+      // Coral/Salmon (Warm but distinct from red)
+      color: const Color(0xFFFF9100),
     ),
 
     BodyPart.intestines: BodyPartData(
@@ -162,7 +173,8 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
       description: "Absorb nutrients.",
       from: [p(50, 65)],
       to: [p(80, 75)],
-      color: const Color(0xFFFFCC80),
+      // Magenta
+      color: const Color(0xFFD500F9),
     ),
 
     BodyPart.hand: BodyPartData(
@@ -170,7 +182,8 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
       description: "Helps us hold.",
       from: [p(26, 65)],
       to: [p(5, 75)],
-      color: const Color(0xFF4DB6AC),
+      // Mint/Kelly Green (Avoids olive/muddy greens)
+      color: const Color(0xFF00C853),
     ),
 
     BodyPart.legs: BodyPartData(
@@ -178,7 +191,8 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
       description: "Help us walk.",
       from: [p(45, 85)],
       to: [p(30, 85)],
-      color: const Color(0xFF81C784),
+      // Azure Blue
+      color: const Color(0xFF2962FF),
     ),
 
     BodyPart.foot: BodyPartData(
@@ -186,7 +200,8 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
       description: "Supports body.",
       from: [p(40, 95)],
       to: [p(20, 90)],
-      color: const Color(0xFF81C784),
+      // Emerald Green
+      color: const Color(0xFF00B0FF),
     ),
   };
 
