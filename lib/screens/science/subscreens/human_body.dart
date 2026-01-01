@@ -317,60 +317,64 @@ class _HumanBodyScreenState extends State<HumanBodyScreen> {
     );
   }
 
-  /// --------------------------------------------------
-  /// --------------------------------------------------
   Widget _tabsGrid() {
     final items = parts.entries.toList();
 
     return GridView.builder(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
       itemCount: items.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        mainAxisSpacing: 12,
-        crossAxisSpacing: 12,
-        childAspectRatio: 2.5,
+        mainAxisSpacing: 14,
+        crossAxisSpacing: 14,
+        childAspectRatio: 2.7,
       ),
       itemBuilder: (_, i) {
         final part = items[i].key;
         final data = items[i].value;
         final active = selectedPart == part;
 
-        return GestureDetector(
-          onTap: () {
-            setState(() => selectedPart = part);
+        return TweenAnimationBuilder<double>(
+          tween: Tween(begin: 1, end: active ? 1.05 : 1),
+          duration: const Duration(milliseconds: 220),
+          curve: Curves.easeOutBack,
+          builder: (_, scale, child) {
+            return Transform.scale(scale: scale, child: child);
           },
-          child: Container(
-            decoration: BoxDecoration(
-              color: active ? data.color : Colors.blueGrey,
-              borderRadius: BorderRadius.circular(26),
-              border: Border.all(color: Colors.black, width: 2),
-              boxShadow: [
-                BoxShadow(
-                  color: active
-                      ? data.color.withOpacity(0.45)
-                      : Colors.black.withOpacity(0.08),
-                  blurRadius: active ? 12 : 6,
-                  offset: const Offset(0, 6),
+          child: GestureDetector(
+            onTap: () => setState(() => selectedPart = part),
+            child: Container(
+              decoration: BoxDecoration(
+                color: active ? data.color : Colors.white.withOpacity(0.85),
+                borderRadius: BorderRadius.circular(32),
+                border: Border.all(
+                  color: active ? Colors.black : Colors.black54,
+                  width: active ? 3 : 2,
                 ),
-              ],
-            ),
-            alignment: Alignment.center,
-            padding: const EdgeInsets.symmetric(horizontal: 6),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text(
-                  data.label,
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 15,
-                    color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: active
+                        ? data.color.withOpacity(0.45)
+                        : Colors.black.withOpacity(0.12),
+                    blurRadius: active ? 14 : 6,
+                    offset: const Offset(0, 6),
                   ),
+                ],
+              ),
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                data.label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: active ? 16 : 14,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.black87,
+                  letterSpacing: 0.3,
                 ),
-              ],
+              ),
             ),
           ),
         );
