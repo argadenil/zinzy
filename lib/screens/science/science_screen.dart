@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zinzy/screens/science/subscreens/human_body.dart';
+import 'package:zinzy/screens/science/subscreens/life_science_screen.dart';
 
 class ScienceScreen extends StatelessWidget {
   const ScienceScreen({super.key});
@@ -103,9 +104,6 @@ class AppGradients {
   static const ocean = [Color(0xff36D1DC), Color(0xff3d9aab)];
 }
 
-////////////////////////////////////////////////////////
-/// 🧩 UNIT CARD (NO ANIMATION)
-////////////////////////////////////////////////////////
 class UnitCard extends StatelessWidget {
   final ScienceUnit unit;
 
@@ -119,11 +117,48 @@ class UnitCard extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(24),
         onTap: () {
-          
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const HumanBodyScreen()),
-          );
+          switch (unit.title) {
+            case "Human Body":
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const HumanBodyScreen()),
+              );
+              break;
+            case "Life Science":
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const LifeScienceScreen()),
+              );
+              break;
+            case "Matter":
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (_) => const MatterScreen()),
+              // );
+              break;
+            case "Force":
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (_) => const ForceScreen()),
+              // );
+              break;
+            case "Earth":
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (_) => const EarthScreen()),
+              // );
+              break;
+            case "Environment":
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (_) => const EnvironmentScreen()),
+              // );
+              break;
+            // Add more cases for other units if needed
+            default:
+              // For now, do nothing for other units
+              break;
+          }
         },
         child: Ink(
           decoration: BoxDecoration(
