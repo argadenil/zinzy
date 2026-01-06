@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:zinzy/screens/science/subscreens/human_body.dart';
+import 'package:zinzy/screens/science/subscreens/earth_screen.dart';
+import 'package:zinzy/screens/science/subscreens/environment_screen.dart';
+import 'package:zinzy/screens/science/subscreens/force_screen.dart';
+import 'package:zinzy/screens/science/subscreens/human_body_screen.dart';
 import 'package:zinzy/screens/science/subscreens/life_science_screen.dart';
+import 'package:zinzy/screens/science/subscreens/matter_screen.dart';
 
 class ScienceScreen extends StatelessWidget {
   const ScienceScreen({super.key});
@@ -131,28 +135,28 @@ class UnitCard extends StatelessWidget {
               );
               break;
             case "Matter":
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (_) => const MatterScreen()),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const MatterScreen()),
+              );
               break;
             case "Force":
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (_) => const ForceScreen()),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ForceScreen()),
+              );
               break;
             case "Earth":
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (_) => const EarthScreen()),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const EarthScreen()),
+              );
               break;
             case "Environment":
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (_) => const EnvironmentScreen()),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const EnvironmentScreen()),
+              );
               break;
             // Add more cases for other units if needed
             default:
